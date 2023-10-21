@@ -9,8 +9,8 @@ import theCMS from '../cms/netlify/cms'
  * General Site configurations
  */
 export default {
-  siteName: 'Awake',
-  tagline: 'A Nuxt.js Theme for Netlify CMS',
+  siteName: 'Ecocity',
+  tagline: 'Transparent review and rewards for int\'l sustainability projects seeking support.',
   featureImage: '/uploads/home-hero.jpg',
   logo: 'logo-component', // 'logo-component', // or '/logo.svg' for regular image
   googleAnalytics: {
@@ -31,13 +31,8 @@ export default {
       link: '/categories'
     },
     {
-      name: 'Github Repo',
-      link: 'https://github.com/danielkellyio/awake-template',
-      target: '_blank'
-    },
-    {
-      name: 'Awake+ Premium',
-      link: 'https://awake-premium-lp.netlify.com/',
+      name: 'Github Repos',
+      link: 'https://github.com/biomassives',
       target: '_blank'
     }
   ],
@@ -61,7 +56,7 @@ export default {
   disqus: {
     on: true,
     loadingStrategy: 'button', // Options: onload, lazy, button
-    siteShortName: 'blog-danielkelly-io' // 'blog-danielkelly-io'
+    siteShortName: 'ecocommunity-dao' // 'blog-danielkelly-io'
   },
 
   // Newsletter Subscribe
@@ -74,7 +69,7 @@ export default {
     mailchimp: {
       on: true,
       formAction:
-        'https://danielkelly.us3.list-manage.com/subscribe/post?u=d3c2e762b66a2353d0bc29bf3&amp;id=2abeaa06e0'
+        'https://scdhub.us7.list-manage.com/subscribe/post?u=9793533008f558091af54dc45&amp;id=3ca89d34e8&amp;f_id=008682e2f0'
     },
     custom: {
       on: false,
