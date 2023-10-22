@@ -14,7 +14,7 @@ export default {
   featureImage: '/uploads/home-hero.jpg',
   logo: 'logo-component', // 'logo-component', // or '/logo.svg' for regular image
   googleAnalytics: {
-    on: true,
+    on: false,
     id: process.env.GOOGLE_ANALYTICS_ID
   },
   mainMenu: [
@@ -37,12 +37,12 @@ export default {
     }
   ],
   hero: {
-    theme: 'dark' // options: mist, light, dark
+    theme: 'mist' // options: mist, light, dark
   },
 
   // Main Layout/Style
   layout: {
-    width: 'contained', // Options: contained, full
+    width: 'full', // Options: contained, full
     theme: 'one-column' // Options: one-column, sidebar-right, sidebar-left
   },
 
@@ -54,7 +54,7 @@ export default {
 
   // Disqus
   disqus: {
-    on: true,
+    on: false,
     loadingStrategy: 'button', // Options: onload, lazy, button
     siteShortName: 'ecocommunity-dao' // 'blog-danielkelly-io'
   },
