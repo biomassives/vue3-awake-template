@@ -19,24 +19,24 @@ export default {
   },
   mainMenu: [
     {
-      name: 'Eco Ops Checkins',
+      name: 'Project Checkin',
       link: '/about'
     },
     {
-      name: 'Methods',
+      name: 'Learn',
       link: '/methods'
     },
     {
-      name: 'Verification',
+      name: 'Verify',
       link: '/verifiction'
     },
     {
-      name: 'rewards',
-      link: '/rewards'
+      name: 'Build Reports',
+      link: '/reports'
     },
     {
-      name: 'SCD Hub',
-      link: 'https://scdhub.org',
+      name: 'Sell Biodiversity Credits',
+      link: '/rewards',
       target: '_blank'
     }
   ],
