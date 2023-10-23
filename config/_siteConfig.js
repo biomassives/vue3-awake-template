@@ -9,7 +9,7 @@ import theCMS from '../cms/netlify/cms'
  * General Site configurations
  */
 export default {
-  siteName: 'Ecocity',
+  siteName: 'Ecocity project review portal',
   tagline: 'Transparent review and rewards for int\'l sustainability projects seeking support.',
   featureImage: '/uploads/home-hero.jpg',
   logo: 'logo-component', // 'logo-component', // or '/logo.svg' for regular image
@@ -19,20 +19,24 @@ export default {
   },
   mainMenu: [
     {
-      name: 'About',
+      name: 'Eco Ops Checkins',
       link: '/about'
     },
     {
-      name: 'Contact',
-      link: '/contact'
+      name: 'Methods',
+      link: '/methods'
     },
     {
-      name: 'Categories',
-      link: '/categories'
+      name: 'Verification',
+      link: '/verifiction'
     },
     {
-      name: 'Github Repos',
-      link: 'https://github.com/biomassives',
+      name: 'rewards',
+      link: '/rewards'
+    },
+    {
+      name: 'SCD Hub',
+      link: 'https://scdhub.org',
       target: '_blank'
     }
   ],
