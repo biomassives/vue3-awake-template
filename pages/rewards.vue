@@ -1,9 +1,9 @@
 <template>
-  <div id="contact-page" class="page-wrapper contact-page content-page">
+  <div id="rewards-page" class="page-wrapper contact-page rewards-page">
     <site-hero
-      title="Contact Us"
-      subtitle="Example Contact Page"
-      image="/uploads/contact-hero.jpg"
+      title="Eco Ops Rewards"
+      subtitle="rewards Page"
+      image="/uploads/rewards-hero.jpg"
     ></site-hero>
     <main-section theme="sidebar-right">
       <template v-slot:default>
