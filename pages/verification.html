@@ -2,8 +2,8 @@
   <div id="verification-page" class="page-wrapper verification-page verification-page">
     <site-hero
       title="Verification"
-      subtitle="Example Contact Page"
-      image="/uploads/contact-hero.jpg"
+      subtitle="Eco Ops Verification Page"
+      image="/uploads/Verification-hero.jpg"
     ></site-hero>
     <main-section theme="sidebar-right">
       <template v-slot:default>
@@ -33,24 +33,22 @@
                   </strong>
                 </p>
                 <p>
-                  This form doesn't actually work but would be easy enough to
-                  slap an action on to have it post wherever you'd like. Or put
-                  the netlify attribute on it and have netlify handle all your
-                  form submissions...
+                  This Verification form doesn't works by
+                  associating each form with submission your  actions...
                 </p>
               </div>
             </article>
           </div>
           <div class="tile is-parent is-8">
             <article class="tile is-child box">
-              <contact-form />
+              <verification-form />
             </article>
           </div>
         </div>
       </template>
       <template v-slot:sidebar>
         <h3 class="subtitle is-4">
-          Latest Posts
+          Latest Checkins
         </h3>
         <!-- Latest Posts -->
         <posts-grid :per-row="1" :number="2" />
@@ -59,13 +57,13 @@
   </div>
 </template>
 <script>
-import ContactForm from '~/components/ContactForm'
+import VerificationForm from '~/components/VerificationForm'
 export default {
   head() {
     return {
-      title: `Contact | ${this.$siteConfig.siteName}`
+      title: `Verification | ${this.$siteConfig.siteName}`
     }
   },
-  components: { ContactForm }
+  components: { VerificationForm }
 }
 </script>
