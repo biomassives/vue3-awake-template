@@ -8,38 +8,52 @@
     <main-section theme="sidebar-right">
       <template v-slot:default>
         <div class="content">
-          <h3>Fake Heading</h3>
+          <h3>About Ecocity</h3>
           <p>
             <strong>
-              Edit this page in<code>/pages/about.vue</code>to fit your needs.
+              Reality testing the <code>Sustainable Community Development</code> goals of SCD Hub.
             </strong>
           </p>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci
-            eligendi impedit inventore ipsa laboriosam libero magnam modi odio,
-            sunt temporibus. Distinctio doloremque eum magni nostrum quasi
-            ratione rem repudiandae sit!
+            Digging deeper into community solutions. !
           </p>
 
-          <h3>Another Fake Heading</h3>
+          <h3>Support for Birds and Pollinators</h3>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci
-            eligendi impedit inventore ipsa laboriosam libero magnam modi odio,
-            sunt temporibus. Distinctio doloremque eum magni nostrum quasi
-            ratione rem repudiandae sit!
+            Biodiversity support can be done in many ways.  Migratory birds suffer mortality pressures due to collisions with glass,
+            housecat predaction (4 billioon / year in USA alone)!  
           </p>
           <quote-card />
-          <h3>Still More Fake Content</h3>
+          <h3>Bee Safe Neighborhoods</h3>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci
-            eligendi impedit inventore ipsa laboriosam libero magnam modi odio,
-            sunt temporibus. Distinctio doloremque eum magni nostrum quasi
-            ratione rem repudiandae sit! Lorem ipsum dolor sit amet, consectetur
-            adipisicing elit.
-            <strong>Alias aut facere harum ipsam</strong> quibusdam quidem
-            quisquam saepe? Alias architecto blanditiis consequatur consequuntur
-            dicta ipsa iste modi provident, quod, similique veritatis.
+             Neighborhood blocks can act as very powerful buffers against pesticides on bees, butterflies. and other pollinators.
+             <strong> the importance of these pollinators for the future of human and animal consumable crops cannot be known after they are lost</strong>   
+            Accordingly, the b
           </p>
+          <quote-card />
+          <h3>Tree Care Lifecycle</h3>
+          <p>
+             All roles are important in the human-tree relationship.  Caring for a tree requires a lifecycle approach such that the soil, water, recognition of the tree's ecosystem's intinsic right to exist and 
+            thrive.  
+          </p>
+
+
+          <quote-card />
+          <h3>Mapping Informal Disposal Sitesr</h3>
+          <p>
+             All areas of the Earth have living things in the environmenet. Plastic fires cause soot and chemicals harmful to human and ecosystem health. Mapping informal disposal sites allows us to stand together
+            in creating solutions in enforcement, circular economy development, new economies like composting, vermiposting, mycocomposting, insect farming, plastics chipping and moulding, important youth employment 
+            and mentor-menree relationships.
+          </p>
+          <quote-card />
+          <h3>Performing Ecosystem Viability Asements</h3>
+          <p>
+             All areas of the Earth have living things in the environmenet.
+          </p>
+
+
+          
+          
         </div>
 
         <div class="tile is-ancestor">
