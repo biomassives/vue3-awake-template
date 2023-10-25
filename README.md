@@ -1,4 +1,6 @@
-Awake is a Nuxt.js template for generating a beautifully robust static site with blog. 
+Ecocity.com is using Awake is a Nuxt.js template for generating a beautifully robust static site with blog. 
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/7c6c2a99-dc9e-422b-87f2-60ffedc0addd/deploy-status)](https://app.netlify.com/sites/calm-crumble-be9e75/deploys)
 
 # Features
 
