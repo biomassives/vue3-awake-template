@@ -11,7 +11,7 @@ import theCMS from '../cms/netlify/cms'
 export default {
   siteName: 'Ecocity project review portal',
   tagline: 'Transparent review and rewards for int\'l sustainability projects seeking support.',
-  featureImage: '/uploads/home-hero.jpg',
+  featureImage: '/uploads/home-hero.webp',
   logo: 'logo-component', // 'logo-component', // or '/logo.svg' for regular image
   googleAnalytics: {
     on: false,
