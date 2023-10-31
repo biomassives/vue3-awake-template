@@ -11,7 +11,7 @@ import theCMS from '../cms/netlify/cms'
 export default {
   siteName: 'Ecocity project review portal',
   tagline: 'Transparent review and rewards for int\'l sustainability projects seeking support.',
-  featureImage: '/uploads/home-hero.png',
+  featureImage: '/uploads/home-hero.jpg',
   logo: 'logo-component', // 'logo-component', // or '/logo.svg' for regular image
   googleAnalytics: {
     on: false,
@@ -23,19 +23,19 @@ export default {
       link: '/about'
     },
     {
-      name: 'Learn',
+      name: 'Techniques',
       link: '/methods'
     },
     {
-      name: 'Verify',
+      name: 'Verification',
       link: '/verifiction'
     },
     {
-      name: 'Build Reports',
+      name: 'Biodiversity Action SBTs',
       link: '/reports'
     },
     {
-      name: 'Sell Biodiversity Credits',
+      name: 'Project Portal',
       link: '/rewards',
       target: '_blank'
     }
