@@ -1,5 +1,5 @@
 ---
-name: About Awake
+name: About Eco Ops
 image: /logo.svg
 ---
-All about the Awake Nuxt Template
+All about About Eco Ops Checkin Metadata Templates
