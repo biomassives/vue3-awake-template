@@ -1,36 +1,25 @@
 ---
-title: ResourceGrid.vue
-subtitle: Easily Display Grid of Posts/Categories Throughout the Site
+title: Waste Stream Mapping
+subtitle: Goal: Improve environment map plastics and organics to upcycle & restore land
 category:
-  - About Awake
-author: Daniel Kelly
-date: 2019-08-02T04:27:56.800Z
-featureImage: /uploads/resource-grid-hero.jpg
+  - About Eco Ops
+author: Greg Willson
+date: 2023-11-20T04:20:11.800Z
+featureImage: /uploads/home-hero.jpg
 ---
-The `ResourceGrid` powers the grid display of both posts and categories in the Awake template. It's a powerful, fast, and flexible component to grab a grid of any size or content when you need it.
+The `Eco Ops app` powers the grid displays are built from the following data structures. any size content can be used, with a metadata key set for thumbnails, title, author, tags, category, project, and milestone.
 
 | Prop     | Description                                          | Type   | Default           |
 | -------- | ---------------------------------------------------- | ------ | ----------------- |
-| perRow   | how many resources to displayed per row              | Number | 3                 |
-| number   | total number of resources to display                 | Number | all (lazy loaded) |
-| category | for posts filters posts only in supplied category(s) | Array  | \[]               |
-| resource | the resource to be retrieved and displayed           | String | Required          |
+| garbMap   | garbage related resource map item              | Number | 3                 |
+| waterMap   | water related resource map item                 | Number | all (lazy loaded) |
+| farmMap | farm practice set as a goal for climate credit  | Array  | \[]               |
+| prodMap | the resource being produced into something           | String | Required          |
+| tramsportMap | the resource being moved from point a to b           | String | Required          |
+| storageMap | the resource stored, and placed in specific location           | String | Required          |
+| handsMap | the human contact with items of interest in project           | String | Required          |
 
-There are 2 simple wrappers built around the `ResourceGrid` for easily displaying a categories grid or a posts grid, easily enough they are `CategoriesGrid` and `PostsGrid`.
 
-## Examples
-```
-<--! All posts in grid with 3 per row lazy loaded until no more-->
-<posts-grid />
-
-<--! 3 posts in grid in single row -->
-<posts-grid :number="3" />
-
-<--! 3 posts in grid in single row in category-1 (exactly how related posts at end of single post is accomplished) -->
-<posts-grid :number="3" :category="['category-1']" />
-
-<--! All categories in grid with 3 per row lazy loaded until no more-->
-<categories-grid />
 
 <--! etc -->
 ```
