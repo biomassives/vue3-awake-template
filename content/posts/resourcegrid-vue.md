@@ -1,6 +1,6 @@
 ---
 title: Waste Stream Mapping
-subtitle: Goal: Improve environment map plastics and organics to upcycle & restore land
+subtitle: Goal- Improve environment map plastics and organics to upcycle & restore land
 category:
   - About Eco Ops
 author: Greg Willson
