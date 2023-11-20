@@ -1,6 +1,6 @@
 ---
-title: Light CSS Footprint
-subtitle: Purge CSS Bundles Only the Required CSS
+title: Soil Quality and Site Cleanups
+subtitle: Assessing local environment by mapping images related to solid waste, air and water pollution
 category:
   - About Awake
 author: Daniel Kelly
