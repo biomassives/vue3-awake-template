@@ -7,11 +7,21 @@ author: Daniel Kelly
 date: 2019-07-29T17:30:16.858Z
 featureImage: /uploads/purge-css-hero.jpg
 ---
-Typically the convenience of a CSS framework like Bulma comes at the cost of sending loads of unused css to the browser increasing load times and hindering user experience. So just don't use Bulma (or Bootstrap, Tailwind, or otherwise) right? No, that can't be the answer. These frameworks add to the designer's experience and ability to quickly turn around a finished design. 
 
-Enter [Purge CSS](https://www.purgecss.com/). Purge CSS crawls through your html and css comparing them and removing any unused selectors from your stylesheets at build time so that they can be as slim as possible. So all those useful classes that Bulma has but you just aren't using right now won't slow down your site. And then maybe you decide to use one of them in the future. BOOM, it's there next time you compile with no thought on your part. 
+# Site 
 
-Since Awake is built on the JAM Stack, it can easily take advantage of this technology and so Purge CSS is baked right in. It's that simple. Use Bulma to your hearts content without the bloat.
+Enter site data with each post metadata is described as follows: 
+
+# Soil Quality
+
+Soil quality is assessed by visual, olfactory, effect on water, if burning of trash is done there, types of toxic trash present, nutrient loading, algae, saltation, odor, history
+
+#  Site Cleanup
+
+Mapping data for a site is specifically defined by location lat, location long, location altitude, location title, event description, time, tag, author, group, org, url 
+
+
+
 
 
 
