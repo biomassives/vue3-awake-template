@@ -7,6 +7,7 @@
         height: 100%;
       "
     >
+    </div>
     <main-section theme="one-column">
       <template v-slot:default>
         <!-- All Posts -->
