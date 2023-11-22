@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <img :src="require('./assets/kigi.gif')"/>
+        <img :src="require('/_nuxt/uploads//kigi.gif')"/>
     </div>
 </template>
     
