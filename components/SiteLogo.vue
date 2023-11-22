@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <img :src="require('/assets/upload/kigi.png')"/>
+        <img :src="require('/assets/uploads/kigi.png')"/>
     </div>
 </template>
     
