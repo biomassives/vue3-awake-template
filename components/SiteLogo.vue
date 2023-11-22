@@ -1,11 +1,11 @@
 <template>
     <div id="app">
-        <img :src="url('~@/assets/uploads/kigi.png')"/>
+        <img :src="require('~@/assets/uploads/kigi.png')"/>
     </div>
 </template>
     
 <script>
-    export default {
+    export SiteLogo {
     }
 </script>
     
