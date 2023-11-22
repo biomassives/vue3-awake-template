@@ -1,14 +1,12 @@
 <template>
   <div id="home-page" class="page-wrapper home-page">
-    <site-hero :title="title" :subtitle="subtitle" :image="featureImage">
-      <button
-        v-if="$siteConfig.newsletter.on"
-        class="button is-primary"
-        @click="$eventBus.$emit('modal-triggered', 'newsletter-modal')"
-      >
-        Subscribe To Newsletter
-      </button>
-    </site-hero>
+     <div
+      class="p-5 text-center bg-image"
+      style="
+        background-image: url('https://ecocity.com/_nuxt/uploads/5aea195-1024.jpg');
+        height: 100%;
+      "
+    >
     <main-section theme="one-column">
       <template v-slot:default>
         <!-- All Posts -->
