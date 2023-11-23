@@ -6,7 +6,7 @@
   >
     <div class="navbar-brand">
       <nuxt-link class="navbar-item" to="/">
-        <site-logo v-if="$siteConfig.logo === 'logo-component'" />
+        
         <img
           v-else
           :src="$siteConfig.logo"
