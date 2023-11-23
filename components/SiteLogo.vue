@@ -5,7 +5,7 @@
 </template>
     
 <script>
-    export export default {
+    export default {
       name: 'SiteLogo' 
     }
 </script>
