@@ -3,8 +3,11 @@
      <div
       class="p-5 text-center bg-image"
       style="
-        background-image: url('https://ecocity.com/_nuxt/uploads/5aea195-1024.jpg');
-        height: 100%;
+         background-image: url('https://ecocity.com/_nuxt/uploads/5aea195-1024.jpg');
+         height: 100%;
+         background-position: center;
+         background-repeat: no-repeat;
+         background-size: cover;
       "
     >
     </div>
