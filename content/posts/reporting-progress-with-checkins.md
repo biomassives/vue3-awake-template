@@ -1,6 +1,6 @@
 ---
-title: Reporting Progress with Eco Ops
-subtitle: Transparency is the key
+title: Eco Ops Decentralized FOSS Reporting Progress
+subtitle: Divital Transparency and Trusted Validation are key
 category:
   - About Awake
 author: Daniel Kelly
