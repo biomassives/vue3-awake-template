@@ -8,7 +8,7 @@ category:
   - Decentralized approach
 author: G Willson
 date: 2019-08-02T04:27:56.800Z
-featureImage: /uploads/resource-grid-hero.jpg
+featureImage: /uploads/ecocity_wgpIzRUDczoN1bK--6--ykc5b.png
 ---
 
 
