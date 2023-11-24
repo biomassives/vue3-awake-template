@@ -24,21 +24,6 @@
       }"
     >
       <ul class="navbar-end">
-        <li
-          v-for="item in $siteConfig.mainMenu"
-          :key="item.link"
-          class="navbar-item"
-          @click="active = false"
-        >
-          <component
-            :is="item.link.startsWith('http') ? 'a' : 'nuxt-link'"
-            :href="item.link"
-            :to="item.link"
-            :target="item.target ? item.target : '_self'"
-          >
-            {{ item.name }}
-          </component>
-        </li>
         <li class="navbar-item site-search-wrapper">
           <site-search />
         </li>
@@ -60,9 +45,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.navbar-item img {
-  max-height: 2rem;
-}
+
 .site-search-wrapper {
   transform: translateX(5px);
   @media (max-width: 1023px) {
@@ -73,7 +56,5 @@ export default {
   height: auto;
 }
 
-.navbar-menu a {
-  display: block;
-}
+
 </style>
