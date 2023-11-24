@@ -5,15 +5,7 @@
     aria-label="main navigation"
   >
     <div class="navbar-brand">
-      <nuxt-link class="navbar-item" to="/">
-        
-        <img
-          v-else
-          :src="$siteConfig.logo"
-          :alt="$siteConfig.siteName"
-          class="logo"
-        />
-      </nuxt-link>
+
       <hamburger-button @click="active = !active" />
     </div>
 
