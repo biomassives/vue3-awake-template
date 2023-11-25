@@ -1,5 +1,7 @@
 <template>
   <div id="home-page" class="page-wrapper home-page">
+    
+    <main-section theme="one-column">
      <div
       class="p-5 text-center bg-image"
       style="
@@ -11,7 +13,6 @@
       "
     >
     </div>
-    <main-section theme="one-column">
       <template v-slot:default>
         <!-- All Posts -->
         <posts-grid />
