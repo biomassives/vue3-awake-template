@@ -3,9 +3,9 @@ title: Soil Quality and Site Cleanups
 subtitle: Assessing local environment by mapping images related to solid waste, air and water pollution
 category:
   - About Awake
-author: Daniel Kelly
-date: 2019-07-29T17:30:16.858Z
-featureImage: /uploads/purge-css-hero.jpg
+author: Greg Willson
+date: 2023-11-24T17:30:16.858Z
+featureImage: /uploads/kenya-farmers-drought-colour.png
 ---
 
 # Site 
