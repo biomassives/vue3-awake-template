@@ -1,6 +1,6 @@
 ---
-title: Eco Ops Decentralized FOSS Reporting Progress
-subtitle: Divital Transparency and Trusted Validation are key
+title: Eco Ops Decentralized FOSS Reporting Process
+subtitle: Project Transparency, Training and Review make the Eco Ops Biodiversity Credit Worth Supporting
 category:
   - About Awake
 author: Daniel Kelly
