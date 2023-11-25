@@ -1,5 +1,5 @@
 ---
-title: method.vue
+title: Milestones & goal setting, checkins. fundraising, & reports
 subtitle: Easily Display Grid of your Eco Ops Checkin data on this site
 category:
   - About Eco Ops Checkins
