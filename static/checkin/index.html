@@ -1,57 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eco-Ops Check-In Form with Map</title>
+	<base target="_top">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<title>Quick Start - Leaflet</title>
+	
+	<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
 
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.3/dist/leaflet.css"
-    integrity="sha512-xOdj3+WgvC2F8j1v+hfDqP9S8v8x9lrqqT28T4vI4zh9cSk2V1d+boFcMknez/HOd/l1Bm/J2v3H7el1pPQ="
-    crossorigin="">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-  <script src="https://unpkg.com/leaflet@1.8.3/dist/leaflet.js"
-    integrity="sha512-0M2nJuz+ar2+dM/UXMsD/EoBvErHhSYy7+hVqCWOe4xFuGaR8+h+Y+d9AoPc+s+yOV2e58Q7A+m9U26M5rV"
-    crossorigin=""></script>
+	<style>
+		html, body {
+			height: 100%;
+			margin: 0;
+		}
+		.leaflet-container {
+			height: 400px;
+			width: 600px;
+			max-width: 100%;
+			max-height: 100%;
+		}
+	</style>
+
+	
 </head>
 <body>
-  <div id="map" style="height: 400px;"></div>
 
-  <form action="#">
-    <label for="description">Description</label>
-    <textarea id="description" name="description" rows="5"></textarea>
 
-    <label for="locationName">Location Name</label>
-    <input type="text" id="locationName" name="locationName" placeholder="Enter location name">
 
-    <label for="locationCoordinates">Location Coordinates (Latitude, Longitude)</label>
-    <input type="text" id="locationCoordinates" name="locationCoordinates" placeholder="Enter coordinates, e.g., 39.7392, -105.0037">
+<div id="map" style="width: 600px; height: 400px;"></div>
+<script>
 
-    <button type="submit">Submit</button>
-  </form>
+	const map = L.map('map').setView([51.505, -0.09], 13);
 
-  <script>
-    // Create a map instance
-    var map = L.map('map', {
-      center: [39.7392, -105.0037],
-      zoom: 13
-    });
+	const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		maxZoom: 19,
+		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+	}).addTo(map);
 
-    // Add a tile layer
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://openstreetmap.org/">OpenStreetMap</a> contributors'
-    }).addTo(map);
+	const marker = L.marker([51.5, -0.09]).addTo(map)
+		.bindPopup('<b>Hello world!</b><br />I am a popup.').openPopup();
 
-    // Create a marker to mark the selected location
-    var marker = L.marker([39.7392, -105.0037]);
-    marker.addTo(map);
+	const circle = L.circle([51.508, -0.11], {
+		color: 'red',
+		fillColor: '#f03',
+		fillOpacity: 0.5,
+		radius: 500
+	}).addTo(map).bindPopup('I am a circle.');
 
-    // Handle location selection on map
-    map.on('click', function(event) {
-      var coordinates = event.latlng;
-      marker.setLatLng(coordinates);
+	const polygon = L.polygon([
+		[51.509, -0.08],
+		[51.503, -0.06],
+		[51.51, -0.047]
+	]).addTo(map).bindPopup('I am a polygon.');
 
-      document.getElementById('locationCoordinates').value = coordinates.lat + ',' + coordinates.lng;
-    });
-  </script>
+
+	const popup = L.popup()
+		.setLatLng([51.513, -0.09])
+		.setContent('I am a standalone popup.')
+		.openOn(map);
+
+	function onMapClick(e) {
+		popup
+			.setLatLng(e.latlng)
+			.setContent(`You clicked the map at ${e.latlng.toString()}`)
+			.openOn(map);
+	}
+
+	map.on('click', onMapClick);
+
+</script>
+
+
+
 </body>
 </html>
