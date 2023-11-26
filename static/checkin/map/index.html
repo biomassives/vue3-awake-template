@@ -37,7 +37,7 @@
 
             var paintpolygonControlTR = L.control.paintPolygon({position:'topright'}).addTo(map);
             var paintpolygonControlBR = L.control.paintPolygon({position:'bottomright', menu: {eraseAll: false}}).addTo(map);
-            var paintpolygonControlBL = L.control.paintPolygon({position:'bottomleft', menu: {size: false, eraseAll: false}}).addTo(map);
+            var paintpolygonControlBL = L.control.paintPolygon({position:'bottomleft', menu: {size: false, startDraw: false}}).addTo(map);
         </script>
     </body>
 </html>
