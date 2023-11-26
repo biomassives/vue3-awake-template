@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eco-Ops Check-In Form with Map</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.3/dist/leaflet.css"
+    integrity="sha512-xOdj3+WgvC2F8j1v+hfDqP9S8v8x9lrqqT28T4vI4zh9cSk2V1d+boFcMknez/HOd/l1Bm/J2v3H7el1pPQ="
+    crossorigin="">
+
+  <script src="https://unpkg.com/leaflet@1.8.3/dist/leaflet.js"
+    integrity="sha512-0M2nJuz+ar2+dM/UXMsD/EoBvErHhSYy7+hVqCWOe4xFuGaR8+h+Y+d9AoPc+s+yOV2e58Q7A+m9U26M5rV"
+    crossorigin=""></script>
+</head>
+<body>
+  <div id="map" style="height: 400px;"></div>
+
+  <form action="#">
+    <label for="description">Description</label>
+    <textarea id="description" name="description" rows="5"></textarea>
+
+    <label for="locationName">Location Name</label>
+    <input type="text" id="locationName" name="locationName" placeholder="Enter location name">
+
+    <label for="locationCoordinates">Location Coordinates (Latitude, Longitude)</label>
+    <input type="text" id="locationCoordinates" name="locationCoordinates" placeholder="Enter coordinates, e.g., 39.7392, -105.0037">
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <script>
+    // Create a map instance
+    var map = L.map('map', {
+      center: [39.7392, -105.0037],
+      zoom: 13
+    });
+
+    // Add a tile layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://openstreetmap.org/">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Create a marker to mark the selected location
+    var marker = L.marker([39.7392, -105.0037]);
+    marker.addTo(map);
+
+    // Handle location selection on map
+    map.on('click', function(event) {
+      var coordinates = event.latlng;
+      marker.setLatLng(coordinates);
+
+      document.getElementById('locationCoordinates').value = coordinates.lat + ',' + coordinates.lng;
+    });
+  </script>
+</body>
+</html>
