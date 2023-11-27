@@ -1,5 +1,5 @@
 ---
-title: verification.vue
+title: How qualifying projects are verified
 subtitle: By becoming a verifier of local projects in your community. 
 category:
   - About Eco Ops Checkins
