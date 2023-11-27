@@ -5,7 +5,7 @@
     aria-label="main navigation"
   >
     <div class="navbar-brand">
-
+      <img src="/ecocity.gif" style="display: inline-block;">
       <hamburger-button @click="active = !active" />
     </div>
 
