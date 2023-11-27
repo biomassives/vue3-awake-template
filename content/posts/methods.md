@@ -7,7 +7,7 @@ category:
   - Trainer Materials 
   - Decentralized approach
 author: G Willson
-date: 2019-08-02T04:27:56.800Z
+date: 2023-11-02T04:27:56.800Z
 featureImage: /uploads/ecocity_wgpIzRUDczoN1bK--6--ykc5b.png
 ---
 
