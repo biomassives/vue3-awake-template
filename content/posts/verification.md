@@ -9,7 +9,7 @@ category:
   - Peer networking
 author: G Willson
 date: 2023-10-30T04:27:56.800Z
-featureImage: /uploads/offering_witness_to_a_drought.gif
+featureImage: /uploads/offering_witness_to_a_drought.webp
 ---
 
 verification is a simple process of providing a review of where a project is at relative to pre-defined 
