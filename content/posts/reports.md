@@ -8,7 +8,7 @@ category:
   - Decentralized approach
 author: G Willson
 date: 2019-08-02T04:27:56.800Z
-featureImage: /uploads/image_drought_kenya2.avif
+featureImage: /uploads/image_drought_kenya2a.jpg
 
 ---
 The `EcoOpsReport` is the heart of our transparency efforts.
