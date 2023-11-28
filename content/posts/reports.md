@@ -8,7 +8,8 @@ category:
   - Decentralized approach
 author: G Willson
 date: 2019-08-02T04:27:56.800Z
-featureImage: /uploads/resource-grid-hero.jpg
+featureImage: /uploads/image_drought_kenya2.webp
+
 ---
 The `EcoOpsReport` is the heart of our transparency efforts.
 
