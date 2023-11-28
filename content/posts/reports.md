@@ -1,5 +1,5 @@
 ---
-title: reports.vue
+title: Eco Ops Report Generation Methodology
 subtitle: Eco Ops Reports Generated from User Checkins
 category:
   - Eco Ops Checkins Test Mumbai and Nairobi testnets Chain data test for updated user SBT - Biodiversity Preservation & Restoration Token Exchange System
@@ -11,7 +11,7 @@ date: 2019-08-02T04:27:56.800Z
 featureImage: /uploads/image_drought_kenya2a.jpg
 
 ---
-The `EcoOpsReport` is the heart of our transparency efforts.
+The `EcoOpsReport` is the heart of our transparency efforts.   When metadata inscribed images  are supplied to nft.storage, bit-torrent, pinata,  storj, and other self hosted systems, ensuring that this carbon credit style compensation model is transparent, and easily accessed.  Ecocity.com supplies a verification list, of CID's for persistent IPFS objects, so that verifying a project you may be considering volunteering, making a loan, or or donation recipients to can be verified.
 
 | Prop     | Description                                          | Type   | Default           |
 | -------- | ---------------------------------------------------- | ------ | ----------------- |
