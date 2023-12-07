@@ -130,4 +130,26 @@
     const fileInput = document.getElementById('fileInput');
     const selectedFile = fileInput.files[0];
 
+    // Get polygon points and zoom level
+    const polygonPoints = drawnItems.getLayers()[0]?.getLatLngs() || [];
+    const zoomLevel = map.getZoom();
 
+    // Include polygon points and zoom level in the submission JSON
+    const submissionData = {
+      userInput,
+      selectedFile,
+      polygonPoints,
+      zoomLevel,
+    };
+
+    // Handle the submission data as needed
+    console.log('Submission Data:', submissionData);
+
+    // Hide the input container after submission
+    const inputContainer = document.getElementById('input-container');
+    inputContainer.style.display = 'none';
+  }
+</script>
+
+</body>
+</html>
