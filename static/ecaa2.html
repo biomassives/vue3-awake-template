@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eco Ops Kathmandu</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-draw/dist/leaflet.draw.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap">
+  <style>
+    body {
+      background-color: #f0f0f0; /* Light gray background color */
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+    }
+
+    #header {
+      text-align: center;
+      padding: 10px;
+      background-color: #4CAF50; /* Green header color */
+      color: white;
+      font-size: 24px;
+      font-family: 'Montserrat', sans-serif; /* New font for header */
+    }
+
+    #map-container {
+      position: relative;
+      height: 600px;
+    }
+
+    #map {
+      width: 100%;
+      height: 100%;
+    }
+
+    .map-overlay {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      padding: 10px;
+      background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+      border: 2px solid #4CAF50; /* Green border */
+      border-radius: 10px;
+      z-index: 1000;
+    }
+
+    #input-container {
+      position: absolute;
+      top: 70px;
+      right: 20px;
+      padding: 10px;
+      background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+      border: 2px solid #4CAF50; /* Green border */
+      border-radius: 10px;
+      z-index: 1000;
+      display: none;
+    }
+
+    #close-btn {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      cursor: pointer;
+      font-size: 20px;
+    }
+
+    @media only screen and (max-width: 600px) {
+      #input-container {
+        top: 120px; /* Adjust the top position for narrower screens */
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div id="header">Eco Ops Kathmandu</div>
+
+<div id="map-container">
+  <div id="map"></div>
+  <div id="map-overlay" class="map-overlay"></div>
+  <div id="input-container">
+    <div id="close-btn" onclick="closeInputContainer()">×</div>
+    <label for="userInput">नोट: लेख्नुहोस् वा अपलोड गर्नुहोस्:</label>
+    <textarea id="userInput" rows="4" cols="50"></textarea>
+    <input type="file" id="fileInput" accept="image/*, audio/*">
+    <button onclick="submitUserInput()">पेश गर्नुहोस्</button>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-draw"></script>
+<script>
+  // आफूले लेख्नुभएको कुरा, तस्वीरहरू र तात्कालिक प्राथमिकताहरूसहित नागरिकहरूले कसैपनि क्षेत्र चेक-इन गर्दा कसैपनि व्यक्तिगत विवरण अपलोड गर्न सक्छन्। यो कुरा उनीहरूलाई नक्कली स्थानमा प्रतिस्थापन गर्ने र विशेष प्रकारको बुर्ज र उनीहरूले गरेको काममा पुनरावृत्ति गर्न उत्साहित गर्दछ।
+
+  // Initialize the map
+  const map = L.map('map').setView([27.7172, 85.3240], 12);
+
+  // Add the tile layer (OpenStreetMap)
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(map);
+
+  // Add Leaflet Draw functionality
+  const drawnItems = new L.FeatureGroup();
+  map.addLayer(drawnItems);
+
+  const drawControl = new L.Control.Draw({
+    draw: {
+      polygon: true,
+      polyline: false,
+      rectangle: false,
+      circle: false,
+      marker: false,
+    },
+    edit: {
+      featureGroup: drawnItems,
+      remove: true,
+    },
+  });
+  map.addControl(drawControl);
+
+  // Event listener for drawing and editing
+  map.on('draw:created', function (e) {
+    const type = e.layerType;
+    const layer = e.layer;
+
+    if (type === 'polygon') {
+      drawnItems.clearLayers(); // Only allow one polygon at a time
+      drawnItems.addLayer(layer);
+    }
+
+    // इनपुट कन्टेनर देखाउनुहोस्
+    const inputContainer = document.getElementById('input-container');
+    inputContainer.style.display = 'block';
+  });
+
+  map.on('draw:edited', function () {
+    // Update the edited polygon if needed
+    // You can access the edited polygon using drawnItems.getLayers()[0]
+  });
+
+  function submitUserInput() {
+    const userInput = document.getElementById('userInput').value;
+    const fileInput = document.getElementById('fileInput');
+    const selectedFile = fileInput.files[0];
+
+    // Get polygon points and zoom level
+    const polygonPoints = drawnItems.getLayers()[0]?.getLatLngs() || [];
+    const zoomLevel = map.getZoom();
+
+    // Include polygon points and zoom level in the submission JSON
+    const submissionData = {
+      userInput,
+      selectedFile,
+      polygonPoints,
+      zoomLevel,
+    };
+
+    // Handle the submission data as needed
+    console.log('Submission Data:', submissionData);
+
+    // इनपुट कन्टेनरलाई पेस गरेकोपछ पछि लुकाउनुहोस्
+    closeInputContainer();
+  }
+
+  function closeInputContainer() {
+    // इनपुट कन्टेनरलाई लुकाउनुहोस्
+    const inputContainer = document.getElementById('input-container');
+    inputContainer.style.display = 'none';
+  }
+</script>
+
+</body>
+</html>
+
