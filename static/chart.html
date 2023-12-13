@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Ops Check-ins</title>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+</head>
+<body style="background-color: #F0F8FF;">
+
+<div id="chartContainer" style="height: 500px; width: 100%;"></div>
+
+<script>
+window.onload = function () {
+    var chart = new CanvasJS.Chart("chartContainer", {
+        animationEnabled: true,
+        theme: "light2", // Change theme to light2
+        title: {
+            text: "Eco Ops Check-ins at Kenyan Schools",
+            fontColor: "#008000" // Green color
+        },
+        axisY: {
+            title: "Number of Activities",
+            titleFontColor: "#FFD700", // Gold color
+        },
+        axisX: {
+            title: "Date",
+            titleFontColor: "#FFD700" // Gold color
+        },
+        data: [{
+            type: "scatter",
+            markerType: "circle",
+            markerSize: 10,
+            toolTipContent: "{name}: {y} activities",
+            dataPoints: [
+                // Your 3100 data points will go here
+                { x: new Date(2023, 0, 1), y: 10, name: "nursery", color: "#FF0000", markerType: "triangle" }, // Red color
+                { x: new Date(2023, 0, 2), y: 15, name: "compost", color: "#FF1493", markerType: "triangle" }, // Deep Pink color
+                // ... (repeat for all data points, 100 times)
+                { x: new Date(2023, 11, 31), y: 300, name: "cleanup-mapping", color: "#008000", markerType: "triangle" }, // Green color
+
+                // Outliers for testing
+                { x: new Date(2023, 2, 15), y: 50, name: "nursery", color: "#FF0000", markerType: "triangle" },
+                { x: new Date(2023, 6, 20), y: 250, name: "compost", color: "#FF1493", markerType: "triangle" },
+                { x: new Date(2023, 9, 10), y: 180, name: "cleanup-mapping", color: "#008000", markerType: "triangle" },
+
+                // Additional data points
+                { x: new Date(2023, 3, 5), y: 20, name: "nursery", color: "#FF0000", markerType: "triangle" },
+                { x: new Date(2023, 4, 12), y: 35, name: "compost", color: "#FF1493", markerType: "triangle" },
+                { x: new Date(2023, 7, 18), y: 120, name: "cleanup-mapping", color: "#008000", markerType: "triangle" },
+                // ... (repeat for all additional data points, 100 times)
+                { x: new Date(2023, 10, 25), y: 270, name: "nursery", color: "#FF0000", markerType: "triangle" },
+            ]
+        }]
+    });
+    chart.render();
+}
+</script>
+
+</body>
+</html>
+
