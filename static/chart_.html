@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Ops Check-ins with Map</title>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+</head>
+<body style="background-color: #F0F8FF;">
+
+<div id="chartContainer" style="height: 500px; width: 70%; float: left;"></div>
+<div id="mapContainer" style="height: 500px; width: 30%; float: right;"></div>
+
+<script>
+window.onload = function () {
+    // CanvasJS Chart
+    var chart = new CanvasJS.Chart("chartContainer", {
+        animationEnabled: true,
+        theme: "light2",
+        title: {
+            text: "Eco Ops Check-ins at Kenyan Schools",
+            fontColor: "#008000"
+        },
+        axisY: {
+            title: "Number of Activities",
+            titleFontColor: "#FFD700",
+        },
+        axisX: {
+            title: "Date",
+            titleFontColor: "#FFD700"
+        },
+        data: [{
+            type: "scatter",
+            markerType: "circle",
+            markerSize: 10,
+            toolTipContent: "{name}: {y} activities",
+            dataPoints: [
+                // ... (Your 3100 data points)
+            ]
+        }]
+    });
+    chart.render();
+
+    // Leaflet Map Overlay
+    var map = L.map('mapContainer').setView([-1.2921, 36.8219], 10); // Nairobi, Kenya coordinates
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Add some sample markers
+    L.marker([-1.2921, 36.8219]).addTo(map)
+        .bindPopup('Nairobi, Kenya');
+
+    L.marker([-1.286389, 36.817223]).addTo(map)
+        .bindPopup('Another Location');
+
+    // You can add more markers or customize as needed.
+}
+</script>
+
+</body>
+</html>
+
