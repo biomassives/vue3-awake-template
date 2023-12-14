@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Progress Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #F0F8FF; /* Light blue background */
+        }
+        h1 {
+            color: #008000; /* Green color for the title */
+        }
+        .checkin-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #fff;
+        }
+        .map-container {
+            height: 300px;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+<body>
+
+<h1>Project Progress Report</h1>
+
+<div id="projectProgress"></div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+window.onload = function () {
+    // Fetch JSON data
+    fetch('your_data.json')
+        .then(response => response.json())
+        .then(data => {
+            // Process the fetched data
+            displayProjectProgress(data);
+        })
+        .catch(error => console.error('Error fetching JSON:', error));
+
+    // Function to display project progress
+    function displayProjectProgress(projectProgressData) {
+        var projectProgressContainer = document.getElementById("projectProgress");
+
+        projectProgressData.forEach(function (checkin) {
+            var checkinCard = document.createElement("div");
+            checkinCard.className = "checkin-card";
+
+            checkinCard.innerHTML = `
+                <h2>Check-in ID: ${checkin.check_in_id}</h2>
+                <p><strong>Individual ID:</strong> ${checkin.individual_id}</p>
+                <p><strong>Time:</strong> ${checkin.time}</p>
+                <p><strong>Location:</strong> ${checkin.location.name}</p>
+                <p><strong>Project Name:</strong> ${checkin.location.project_name}</p>
+                <p><strong>Area of Land:</strong> ${checkin.location.area_of_land} square meters</p>
+                <p><strong>Description:</strong> ${checkin.location.description}</p>
+                <p><strong>Project Level of Development:</strong> ${checkin.location.project_level_of_development}</p>
+                <div class="map-container" id="map-${checkin.check_in_id}"></div>
+            `;
+
+            projectProgressContainer.appendChild(checkinCard);
+
+            // Add map to each check-in card
+            var map = L.map(`map-${checkin.check_in_id}`).setView([checkin.location.latitude, checkin.location.longitude], 14);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Add a marker for the check-in location
+            L.marker([checkin.location.latitude, checkin.location.longitude]).addTo(map)
+                .bindPopup(`${checkin.location.name} - ${checkin.location.project_name}`);
+        });
+    }
+}
+</script>
+
+</body>
+</html>
+

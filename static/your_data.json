@@ -1,0 +1,90 @@
+[
+  {
+    "check_in_id": "12345",
+    "individual_id": "XYZ789",
+    "time": "2023-10-01T09:30:00",
+    "location": {
+      "latitude": -1.2921,
+      "longitude": 36.8219,
+      "name": "Machakos Boys High School",
+      "project_name": "Composting Project",
+      "project_map_polygon": [ ],
+      "area_of_land": 2000,
+      "description": "Initiating composting project near the school cafeteria",
+      "project_level_of_development": "In Progress"
+    },
+    "activity": "composting",
+    "data": {
+      "compost_bin_installed": true,
+      "food_scraps_composted": 15,
+      "composting_workshop_attended": true,
+      "volunteer_hours": 2
+    }
+  },
+  {
+    "check_in_id": "56789",
+    "individual_id": "ABC456",
+    "time": "2023-10-05T11:45:00",
+    "location": {
+      "latitude": -1.9154,
+      "longitude": 36.7993,
+      "name": "Oloolaimutia Girls' Secondary School",
+      "project_name": "Water Quality Mapping Project",
+      "project_map_polygon": [  ],
+      "area_of_land": 1500,
+      "description": "Monitoring water quality in the nearby river",
+      "project_level_of_development": "Completed"
+    },
+    "activity": "water_quality_mapping",
+    "data": {
+      "water_quality_site_monitored": true,
+      "water_quality_tests_conducted": 3,
+      "volunteer_hours": 1.5
+    }
+  },
+  {
+    "check_in_id": "90123",
+    "individual_id": "DEF123",
+    "time": "2023-10-10T14:15:00",
+    "location": {
+      "latitude": -1.4426,
+      "longitude": 36.9770,
+      "name": "Kitengela Secondary School",
+      "project_name": "Individual Mentoring Program",
+      "project_map_polygon": [ ],
+      "area_of_land": 1800,
+      "description": "Conducting mentoring session on Sustainable Agriculture",
+      "project_level_of_development": "In Progress"
+    },
+    "activity": "individual_mentoring",
+    "data": {
+      "student_id": "ABC123",
+      "mentor_id": "DEF456",
+      "session_topic": "Sustainable Agriculture",
+      "session_date": "2023-10-25",
+      "session_duration_minutes": 45
+    }
+  },
+  {
+    "check_in_id": "34782",
+    "individual_id": "GHI789",
+    "time": "2023-10-15T16:30:00",
+    "location": {
+      "latitude": -1.1400,
+      "longitude": 37.0130,
+      "name": "Mwala Girls' Secondary School",
+      "project_name": "School Information Update",
+      "project_map_polygon": [  ],
+      "area_of_land": 2200,
+      "description": "Constructing a new greenhouse for the nursery garden",
+      "project_level_of_development": "Planned"
+    },
+    "activity": "school_information_update",
+    "data": {
+      "update_type": "infrastructure",
+      "update_description": "New greenhouse constructed for nursery garden",
+      "update_date": "2023-10-15"
+    }
+  }
+]
+
