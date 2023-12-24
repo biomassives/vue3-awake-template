@@ -7,19 +7,20 @@ author: Greg Willson
 date: 2023-11-20T04:20:11.800Z
 featureImage: /uploads/home-hero.jpg
 ---
-The `Eco Ops app` powers the grid displays are built from the following data structures. any size content can be used, with a metadata key set for thumbnails, title, author, tags, category, project, and milestone.
+The 'Eco Ops app' uses the following data formats for compiling project data.  We are currently testing with data written to ipfs via nft.storage  24 Dec 2024
+Please check out https://ecocity.com/kath4b to use the current data input tool.
 
 | Prop     | Description                                          | Type   | Default           |
 | -------- | ---------------------------------------------------- | ------ | ----------------- |
-| garbMap   | garbage related resource map item              | Number | 3                 |
-| waterMap   | water related resource map item                 | Number | all (lazy loaded) |
-| farmMap | farm practice set as a goal for climate credit  | Array  | \[]               |
-| prodMap | the resource being produced into something           | String | Required          |
-| tramsportMap | the resource being moved from point a to b           | String | Required          |
-| storageMap | the resource stored, and placed in specific location           | String | Required          |
-| handsMap | the human contact with items of interest in project           | String | Required          |
+| garbageMap   | garbage related resource map item              | Number | location, time, mapper, group, project, photo(s), video(s), url, info url |
+| wqMap   | water quality related resource map item                 | Number | location, time, mapper, group, project, photo(s), video(s), url, info url |
+| farmMap | farm practice set as a goal for climate credit  | Array  | activity, milestone, compensation method, location, time, time duration, mapper, group, project, photo(s), video(s), url, info url |
+| productMap | the resource being produced making use of circular           | String | activity, location, time, retail value of item, number of items, project, photo(s), video(s), url, info url |
+| transportMap | the resource being moved from point a to b           | String | activity, driver pay, payment receipt, receiving location, source location, departure time, arrval time, group, project, photo(s), video(s), url, info url |
+| storageMap | the resource stored, and placed in specific location           | String | activity, driver pay, payment receipt, receiving location, source location, departure time, arrval time, group, project, photo(s), video(s), url, info url |
+| sourceMap | source of items of interest in project | String | item name, item provider, material cost, unit of measure, payment receipt, recieving location, source location, group, project, photo(s), video(s), url, info url |
+| cleaningMap | the human contact with items of interest in project | String | activity, service provider, cleaning pay, payment receipt, receiving location, source location, departure time, arrval time, group, project, photo(s), video(s), url, info url |
 
 
 
-<--! etc -->
 ```
