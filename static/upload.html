@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>eCo oPs Checkin Uploader</title>
+  <title>Eco Ops Checkin Uploader</title>
   <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
 
@@ -148,6 +148,17 @@
         <a :href="cidResponse.url" target="_blank" class="text-blue-500">View File</a>
       </div>
     </div>
+
+    <canvas id="drawingCanvas" width="800" height="600"></canvas>
+    <div>
+        <button id="newLayerButton">New Layer</button>
+        <input type="color" id="colorPicker">
+        <button id="animateButton">Animate</button>
+        <!-- Add more controls as needed -->
+    </div>
+
+
+    
   </div>
 
   <script>
@@ -256,6 +267,83 @@
   });
 
 
+
+document.addEventListener('DOMContentLoaded', function() {
+    const canvas = document.getElementById('drawingCanvas');
+    const ctx = canvas.getContext('2d');
+    let isDrawing = false;
+    let layers = [];
+    let currentLayer;
+    let currentColor = '#000000'; // Default color
+
+    // Initialize a new layer
+    function newLayer() {
+        const layer = document.createElement('canvas');
+        layer.width = canvas.width;
+        layer.height = canvas.height;
+        layers.push(layer);
+        currentLayer = layer;
+    }
+
+    // Drawing logic
+    canvas.addEventListener('mousedown', (e) => {
+        isDrawing = true;
+        ctx.beginPath();
+        ctx.moveTo(e.offsetX, e.offsetY);
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+        if (isDrawing) {
+            ctx.lineTo(e.offsetX, e.offsetY);
+            ctx.strokeStyle = currentColor;
+            ctx.stroke();
+        }
+    });
+
+    canvas.addEventListener('mouseup', () => {
+        isDrawing = false;
+    });
+
+    // Handle color change
+    document.getElementById('colorPicker').addEventListener('change', (e) => {
+        currentColor = e.target.value;
+    });
+
+    // Handle new layer creation
+    document.getElementById('newLayerButton').addEventListener('click', newLayer);
+
+    // Initialize the first layer
+    newLayer();
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const canvas = document.getElementById('drawingCanvas');
+    const ctx = canvas.getContext('2d');
+    // ... [other variables and functions] ...
+
+    function animateLayers() {
+        let currentFrame = 0;
+        const animationInterval = setInterval(() => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(layers[currentFrame], 0, 0);
+
+            currentFrame++;
+            if (currentFrame >= layers.length) {
+                currentFrame = 0;
+            }
+        }, 1000); // Change 1000 to the desired frame rate (1000ms = 1 frame per second)
+
+        // Optional: Stop the animation after a certain time
+        // setTimeout(() => clearInterval(animationInterval), 10000); // Stop after 10 seconds
+    }
+
+    // Event listener for the animate button
+    document.getElementById('animateButton').addEventListener('click', animateLayers);
+});
+
+
+
+    
 
 
 
