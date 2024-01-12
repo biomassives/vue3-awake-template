@@ -17,7 +17,9 @@
         </div>
       </div>
     </div>
-    <div>
+  </section>
+
+      <div>
         <h1 class="title animated fadeInUp">
           {{ title }}
         </h1>
@@ -25,7 +27,8 @@
           {{ subtitle }}
         </h2>
       </div>
-  </section>
+
+
 </template>
 <script>
 export default {
