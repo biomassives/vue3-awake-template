@@ -99,6 +99,8 @@
   <script src="https://unpkg.com/@turf/turf"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/localforage/dist/localforage.min.js"></script>
+
 </head>
 <body class="bg-gray-100 p-8">
   <div id="app" class="max-w-2xl mx-auto bg-white p-8 rounded shadow">
@@ -192,7 +194,10 @@
    </div>
 </body>
 
-  <script>
+
+
+<script>
+
     // Initialize Leaflet map
     const map = L.map('map').setView([0, 0], 2); // Default view, you may adjust this
 
@@ -219,6 +224,50 @@
     });
 
     map.addControl(drawControl);
+
+  
+  // Initialize LocalForage
+  localforage.config({
+    name: 'EcoOpsApp',
+    storeName: 'mapData',
+  });
+
+  // Function to save map data
+  function saveMapData(layer) {
+    const data = {
+      latLng: layer.getLatLng(),
+      label: document.getElementById('labelText').value,
+    };
+
+    localforage.setItem('mapData', data).then(function () {
+      console.log('Map data saved successfully!');
+    }).catch(function (err) {
+      console.error('Error saving map data:', err);
+    });
+  }
+
+  // Load map data on initialization
+  function loadMapData() {
+    localforage.getItem('mapData').then(function (data) {
+      if (data) {
+        const layer = L.marker(data.latLng).addTo(featureGroup);
+        layer.bindPopup(data.label).openPopup();
+      }
+    }).catch(function (err) {
+      console.error('Error loading map data:', err);
+    });
+  }
+
+  // Add drawn features to the feature group and save data
+  map.on('draw:created', function (e) {
+    const layer = e.layer;
+    featureGroup.addLayer(layer);
+    updateCoordinatesField(layer);
+    saveMapData(layer); // Save data when a new point is created
+  });
+
+  // Call loadMapData on initialization
+  loadMapData();
 
     // Add drawn features to the feature group
     map.on('draw:created', function (e) {
