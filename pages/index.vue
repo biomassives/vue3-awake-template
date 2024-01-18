@@ -13,6 +13,41 @@
       "
     >
     </div>
+      <div class=midheader>
+<button>
+    Cycle</button>
+<button>
+    Recycle</button>
+<button>
+    Conserve</button>
+<button>
+    Harvest</button>
+<button>
+    Generate</button>
+<button>
+    Compost</button>
+<button>
+    Preserve</button>
+<button>
+    Plant</button>
+<button>
+    Educate</button>
+<button>
+    Share</button>
+<button>
+    Reduce</button>
+<button>
+    Protect</button>
+<button>
+    Sustain</button>
+<button>
+    Reuse</button>
+<button>
+    Save</button>
+<button>
+    Nurture</button>
+</div>
+        
       <template v-slot:default>
         <!-- All Posts -->
         <posts-grid />
