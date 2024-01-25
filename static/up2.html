@@ -72,6 +72,8 @@
           cidResponse: null,
           checkinData: {
             description: '',
+            latitude: null,  // Added latitude
+            longitude: null, // Added longitude
             // Add other metadata fields as needed
           },
           uploading: false,
@@ -147,6 +149,9 @@
         this.uploadError = 'Geolocation is not supported by this browser.';
       }
     },
+   
+
+        
         
         getFileObjectURL(file) {
           if (typeof URL !== 'undefined' && typeof URL.createObjectURL === 'function') {
