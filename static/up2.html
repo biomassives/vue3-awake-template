@@ -23,8 +23,12 @@
         <!-- Add fields for metadata -->
         <input type="text" v-model="checkinData.description" placeholder="Description" class="mb-2 p-2 border rounded-md">
         <!-- more input fields for ecocity and exotopia metadata related group project milestones  & achievements -->
-
-      
+        
+        <!-- Display coordinates -->
+        <div v-if="checkinData.latitude && checkinData.longitude" class="mb-4">
+            <p><strong>Latitude:</strong> {{ checkinData.latitude }}</p>
+            <p><strong>Longitude:</strong> {{ checkinData.longitude }}</p>
+        </div>
       
       </form>
 
