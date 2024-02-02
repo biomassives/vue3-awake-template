@@ -2,16 +2,11 @@ function createThumbnail(file, container) {
     const reader = new FileReader();
 
     reader.onload = function(e) {
-        // Remove EXIF data or manipulate the image as needed for privacy
-        EXIF.getData(e.target.result, function() {
-            // This function can modify the image data to remove EXIF
-            // For demonstration, we're not modifying the image data here
-
-            const img = document.createElement('img');
-            img.className = 'thumbnail';
-            img.src = this.src; // Assuming the EXIF manipulation does not change the source
-            container.appendChild(img);
-        });
+        // Directly creating an image thumbnail without EXIF data manipulation
+        const img = document.createElement('img');
+        img.className = 'thumbnail';
+        img.src = e.target.result; // Use the FileReader result as the image source
+        container.appendChild(img);
     };
 
     reader.readAsDataURL(file);
