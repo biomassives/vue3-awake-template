@@ -20,3 +20,22 @@ async function uploadFiles() {
         alert('Failed to upload files to IPFS.');
     }
 }
+
+async function uploadToIPFS(file) {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    // Replace 'ipfs_api_endpoint' with your actual IPFS upload endpoint
+    const response = await fetch('ipfs_api_endpoint', {
+        method: 'POST',
+        body: formData,
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to upload to IPFS');
+    }
+
+    const data = await response.json();
+    return data.hash; // Assuming the API responds with a JSON object containing the file hash
+}
+
