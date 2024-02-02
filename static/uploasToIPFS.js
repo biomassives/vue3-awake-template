@@ -1,3 +1,47 @@
+function createThumbnail(file, container) {
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+        // Remove EXIF data or manipulate the image as needed for privacy
+        EXIF.getData(e.target.result, function() {
+            // This function can modify the image data to remove EXIF
+            // For demonstration, we're not modifying the image data here
+
+            const img = document.createElement('img');
+            img.className = 'thumbnail';
+            img.src = this.src; // Assuming the EXIF manipulation does not change the source
+            container.appendChild(img);
+        });
+    };
+
+    reader.readAsDataURL(file);
+}
+
+function compileAndUploadMetadata(files) {
+    const metadata = files.map((file, index) => {
+        return {
+            name: file.name,
+            type: file.type,
+            order: index + 1, // Assuming the order is based on the user's arrangement
+            // Include any other relevant metadata here
+        };
+    });
+
+    const metadataFile = new Blob([JSON.stringify(metadata)], {type: 'application/json'});
+
+    // Upload the metadata file to IPFS
+    uploadToIPFS(metadataFile).then(hash => {
+        console.log(`Metadata IPFS Hash: ${hash}`);
+        // You might want to display this hash or use it in further processing
+    }).catch(error => {
+        console.error('Error uploading metadata to IPFS:', error);
+    });
+}
+
+
+
+
+
 async function uploadFiles() {
     const file1 = document.getElementById('fileInput1').files[0];
     const file2 = document.getElementById('fileInput2').files[0];
