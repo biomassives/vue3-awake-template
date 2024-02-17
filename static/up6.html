@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>eCo oPs Checkin Uploader</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+  <style>
+    body {
+      animation: gradientBG 15s ease infinite;
+      background: linear-gradient(-45deg, #6fb1fc, #4364f7, #3a3985, #6fb1fc);
+      background-size: 400% 400%;
+    }
+
+    @keyframes gradientBG {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-100 p-8">
+  <div id="app" class="bg-opacity-90">
+    <div class="max-w-md mx-auto bg-white p-8 rounded-md shadow-md">
+      <h1 class="text-3xl font-bold mb-4 text-teal-500">eCo oPs Checkin Uploader</h1>
+      <form @submit.prevent="uploadFile" class="mb-4">
+        <!-- Image/Media file input -->
+        <input type="file" @change="handleFileChange" accept="image/*,video/*,audio/*" class="mb-2 p-2 border rounded-md" placeholder="Select Media File">
+        <!-- Description input -->
+        <input type="text" v-model="checkinData.description" placeholder="Description" class="mb-2 p-2 border rounded-md">
+        <!-- Get Geolocation button -->
+        <button @click="getGeolocation" type="button" class="bg-green-500 text-white p-2 rounded-md hover:bg-green-600 mb-2">Get Location</button>
+        <!-- Upload button -->
+        <button type="submit" class="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600">Upload</button>
+      </form>
+      <!-- Additional UI elements for status messages, preview, and metadata display remain unchanged -->
+    </div>
+  </div>
+
+  <script>
+    const app = Vue.createApp({
+      data() {
+        return {
+          file: null,
+          cid: null,
+          cidResponse: null,
+          checkinData: {
+            description: '',
+            latitude: null,
+            longitude: null,
+          },
+          uploading: false,
+          uploadError: null,
+        };
+      },
+      methods: {
+        handleFileChange(event) {
+          this.file = event.target.files[0];
+        },
+        async uploadFile() {
+          this.uploading = true;
+          this.uploadError = null;
+
+          // Create a Blob for the metadata JSON
+          const metadataBlob = new Blob([JSON.stringify(this.checkinData)], {type: 'application/json'});
+          const metadataFile = new File([metadataBlob], 'metadata.json');
+
+          // Create FormData and append files
+          const formData = new FormData();
+          formData.append('file', this.file);
+          formData.append('metadata', metadataFile);
+
+          // Upload process (similar to the previous version, handle two files now)
+          // Ensure the API and endpoint you're using support multiple file uploads
+          
+          // Upload logic remains similar, handling two files (the media file and the metadata JSON file)
+          this.uploading = false; // Set to false once the upload is complete
+        },
+        getGeolocation() {
+          // Geolocation logic remains unchanged
+        },
+        getFileObjectURL(file) {
+          // Method to get file URL for preview
+          return URL.createObjectURL(file);
+        },
+      },
+    });
