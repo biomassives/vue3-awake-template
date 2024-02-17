@@ -96,8 +96,7 @@
           // This includes all data from checkinData, such as description, latitude, and longitude
           formData.append('metadata', JSON.stringify(this.checkinData));
           
-          const apiKey = 'YOUR_NFT_STORAGE_API_KEY'; // Ensure you replace this with your actual NFT.storage API key
-        
+          const apiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDZhRmQ5M0JiNzQwM2RlQ2Y4NGVmRWRCRjlBNUFkNWM5RUQ1YjhFRjQiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY0NzU1NTQ4NTA4MSwibmFtZSI6Inlvb2NhdHMifQ.aZot4G1rrH-ED9tXIV9VAa3OCS87g6nBQEM1paBiIxI'; // Replace with your NFT.storage API key        
           try {
             const response = await fetch('https://api.nft.storage/upload', {
               method: 'POST',
