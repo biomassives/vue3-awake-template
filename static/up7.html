@@ -58,14 +58,29 @@
         };
       },
       methods: {
-        handleMediaFileChange(event) {
-          this.mediaFile = event.target.files[0];
-        },
+  handleMediaFileChange(event) {
+      this.mediaFile = event.target.files;
+
+      // Preview image
+      if (this.mediaFile[0]) {
+        const fileReader = new FileReader();
+        fileReader.onload = (e) => {
+          this.imagePreview = e.target.result;
+          document.getElementById('image-preview').querySelector('img').src = this.imagePreview;  // Set image source
+          document.getElementById('image-preview').querySelector('img').style.display = 'block'; // Show image
+        };
+        fileReader.readAsDataURL(this.mediaFile[0]);
+        } else {
+          this.imagePreview = ''; // Clear preview if no file selected
+          document.getElementById('image-preview').querySelector('img').style.display = 'none'; 
+         }
+       },
         generateMetadataFile() {
           const metadata = JSON.stringify(this.checkinData);
           const blob = new Blob([metadata], { type: 'application/json' });
           this.metadataFile = new File([blob], 'metadata.json');
         },
+        
  async uploadFile() {
     if (!this.mediaFile) { // Ensure at least one media file is selected
         this.uploadError = 'Please select at least one media file.';
