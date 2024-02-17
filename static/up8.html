@@ -36,6 +36,14 @@
           <p><strong>Latitude:</strong> {{ checkinData.latitude }}</p>
           <p><strong>Longitude:</strong> {{ checkinData.longitude }}</p>
         </div>
+        <div v-if="cid" class="mt-4">
+          <p class="text-lg">Upload Successful!</p>
+          <p><strong>CID:</strong> {{ cid }}</p>
+          <p>Access your file: <a :href="`https://ipfs.io/ipfs/${cid}`" target="_blank" class="text-blue-500">View Uploaded Content</a></p>
+        </div>
+
+
+        
       </form>
     </div>
   </div>
@@ -80,15 +88,16 @@
             this.uploadError = 'Please select a media file.';
             return;
           }
-
+        
           this.uploading = true;
           this.uploadError = null;
-
+        
           const formData = new FormData();
           formData.append('file', this.mediaFile);
-          // Assuming the metadata is to be included within the same form data
+          // Include the metadata in the same form data
           formData.append('metadata', JSON.stringify(this.checkinData));
-
+        
+          // Use your actual API key here
           const apiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDZhRmQ5M0JiNzQwM2RlQ2Y4NGVmRWRCRjlBNUFkNWM5RUQ1YjhFRjQiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY0NzU1NTQ4NTA4MSwibmFtZSI6Inlvb2NhdHMifQ.aZot4G1rrH-ED9tXIV9VAa3OCS87g6nBQEM1paBiIxI'; // Replace with your NFT.storage API key          
           try {
             const response = await fetch('https://api.nft.storage/upload', {
@@ -98,13 +107,16 @@
               },
               body: formData,
             });
-
+        
             if (!response.ok) {
               throw new Error(`Failed to upload file. HTTP status: ${response.status}`);
             }
-
+        
             const result = await response.json();
-            this.cid = result.value.cid;
+            this.cid = result.value.cid; // Store the CID from the response
+        
+            // Optionally, update cidResponse if you need to display additional info
+            this.cidResponse = result;
           } catch (error) {
             console.error('Error uploading file:', error);
             this.uploadError = 'Upload failed. Please try again later.';
@@ -112,6 +124,10 @@
             this.uploading = false;
           }
         },
+
+
+
+
         getGeolocation() {
           if ("geolocation" in navigator) {
             navigator.geolocation.getCurrentPosition(
