@@ -31,6 +31,10 @@
         <button type="submit" class="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600">Upload</button>
         <button @click="getGeolocation" type="button" class="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600">Get Location</button>
         <!-- Display coordinates only if available -->
+        <div id="image-preview">
+            <img src="" alt="Preview of the selected image" style="max-width: 300px; display: none;"> 
+        </div>
+        
         <div v-if="checkinData.latitude && checkinData.longitude" class="mb-4">
           <p><strong>Latitude:</strong> {{ checkinData.latitude }}</p>
           <p><strong>Longitude:</strong> {{ checkinData.longitude }}</p>
