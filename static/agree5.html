@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Ops Uploader</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Custom styles to handle the accordion content */
+        #accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.2s ease-out;
+        }
+        .bounce-close {
+            transition: max-height 0.5s cubic-bezier(0.1, 0.7, 1.0, 0.1);
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center h-screen bg-gray-100">
+    <div id="app" class="w-full max-w-xs">
+        <form id="uploadForm" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+                    Username
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Username">
+            </div>
+            <div class="mb-4">
+                <button type="button" id="toggleAccordion" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    Read Agreement
+                </button>
+                <p class="text-xs text-gray-600 mt-2">You must agree to the Terms and Conditions to use the system.</p>
+            </div>
+            <div id="accordion" class="mb-4">
+                <div id="accordion-content" class="border p-4">
+                    <!-- Your terms and conditions content goes here -->
+                    <div class="text-center mt-4">
+                        <button type="button" id="agreeButton" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" disabled>
+                            I Agree
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center justify-between">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit" disabled>
+                    Upload
+                </button>
+            </div>
+        </form>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const accordionContent = document.getElementById('accordion-content');
+            const agreeButton = document.getElementById('agreeButton');
+            const uploadButton = document.querySelector('form button[type="submit"]');
+
+            document.getElementById('toggleAccordion').addEventListener('click', function() {
+                // Toggle max-height to open/close accordion
+                const isOpen = accordionContent.style.maxHeight && accordionContent.style.maxHeight !== '0px';
+                accordionContent.style.maxHeight = isOpen ? '0' : `${accordionContent.scrollHeight}px`;
+                if (isOpen) {
+                    accordionContent.classList.add('bounce-close');
+                } else {
+                    accordionContent.classList.remove('bounce-close');
+                }
+            });
+
+            accordionContent.addEventListener('scroll', function() {
+                // Enable "I Agree" button when scrolled to bottom
+                const isScrolledToBottom = accordionContent.scrollTop + accordionContent.clientHeight >= accordionContent.scrollHeight;
+                agreeButton.disabled = !isScrolledToBottom;
+            });
+
+            agreeButton.addEventListener('click', function() {
+                // Close accordion when "I Agree" is clicked
+                accordionContent.style.maxHeight = '0';
+                accordionContent.classList.add('bounce-close');
+                uploadButton.disabled = false; // Enable the upload button
+            });
+        });
+    </script>
+</body>
+</html>
