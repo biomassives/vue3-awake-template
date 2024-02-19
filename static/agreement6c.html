@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Ops Uploader</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Custom styles to handle the accordion content */
+        #accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.2s ease-out;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center h-screen bg-gray-100">
+    <div id="app" class="w-full max-w-xs">
+        <form @submit.prevent="submitForm" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+                    Username
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Username" v-model="username">
+            </div>
+            <div class="mb-4">
+                <button type="button" @click="toggleAccordion" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    Read Agreement
+                </button>
+                <p class="text-xs text-gray-600 mt-2">You must agree to the Terms and Conditions to use the system.</p>
+            </div>
+            <div id="accordion" class="mb-4">
+                <div id="accordion-content" class="border p-4">
+                    <p class="text-sm text-gray-500">
+                        Terms and conditions content goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc et convallis suscipit, nisl ipsum faucibus lorem, at pharetra magna nulla at nisi. Scroll to the bottom to agree.
+                    </p>
+                    <!-- The rest of your terms and conditions content should go here -->
+                    <div class="text-center mt-4">
+                        <button type="button" @click="agreeToTerms = true" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" :disabled="!isScrolledToBottom">
+                            I Agree
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center justify-between">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit" :disabled="!agreeToTerms">
+                    Upload
+                </button>
+            </div>
+        </form>
+    </div>
+    <script src="https://unpkg.com/vue@3"></script>
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    username: '',
+                    agreeToTerms: false,
+                    isScrolledToBottom: false
+                }
+            },
+            methods: {
+                submitForm() {
+                    alert("Form submitted!");
+                },
+                toggleAccordion() {
+                    const accordionContent = document.getElementById('accordion-content');
+                    if(accordionContent.style.maxHeight){
+                        accordionContent.style.maxHeight = null;
+                    } else {
+                        accordionContent.style.maxHeight = accordionContent.scrollHeight + "px";
+                    }
+                },
+                checkScroll() {
+                    const accordionContent = document.getElementById('accordion-content');
+                    this.isScrolledToBottom = accordionContent.scrollHeight - accordionContent.scrollTop === accordionContent.clientHeight;
+                }
+            },
+            mounted() {
+                // When the component is mounted, attach the scroll event listener
+                const accordionContent = document.getElementById('accordion-content');
+                accordionContent.addEventListener('scroll', this.checkScroll);
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
+
+
