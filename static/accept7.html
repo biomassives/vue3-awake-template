@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Ops Uploader</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .transition-max-height {
+            transition: max-height 0.5s ease-out;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center h-screen bg-gray-100">
+    <div id="app" class="w-full max-w-xs">
+        <form @submit.prevent="submitForm" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+                    Username
+                </label>
+                <input v-model="username" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Username">
+            </div>
+            <div class="mb-4">
+                <button @click="toggleAccordion" type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    Read Agreement
+                </button>
+                <p class="text-xs text-gray-600 mt-2">You must agree to the Terms and Conditions to use the system.</p>
+            </div>
+            <div id="accordion" class="mb-4 overflow-hidden transition-max-height" :style="{ 'max-height': maxHeight }">
+                <div class="border p-4">
+                    <!-- Terms and Conditions Content -->
+                    <div class="text-center mt-4">
+                        <button @click="agreeAndCloseAccordion" type="button" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" :disabled="!isScrolledToBottom">
+                            I Agree
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center justify-between">
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" :disabled="!agreeToTerms">
+                    Upload
+                </button>
+            </div>
+        </form>
+    </div>
+    <script src="https://unpkg.com/vue@3"></script>
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    username: '',
+                    agreeToTerms: false,
+                    isScrolledToBottom: false,
+                    maxHeight: '0px',
+                };
+            },
+            methods: {
+                toggleAccordion() {
+                    this.maxHeight = this.maxHeight === '0px' ? '1000px' : '0px'; // Set a large max-height to ensure content is shown
+                },
+                agreeAndCloseAccordion() {
+                    this.agreeToTerms = true;
+                    this.maxHeight = '0px';
+                },
+                submitForm() {
+                    // Handle form submission, like sending data to a server
+                    console.log("Form submitted with username:", this.username);
+                }
+            },
+            mounted() {
+                const accordion = this.$el.querySelector('#accordion');
+                accordion.addEventListener('scroll', () => {
+                    const scrollHeight = accordion.scrollHeight;
+                    const scrollTop = accordion.scrollTop;
+                    const clientHeight = accordion.clientHeight;
+                    this.isScrolledToBottom = scrollTop + clientHeight >= scrollHeight;
+                });
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
