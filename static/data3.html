@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Dashboard Timeline</title>
+  <!-- Tailwind CSS CDN -->
+  <link href="https://unpkg.com/tailwindcss@^2.0/dist/tailwind.min.css" rel="stylesheet">
+  <!-- Vue Cute Timeline CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/vue-cute-timeline@1.2.10/dist/index.css">
+  <!-- Vue 3 CDN -->
+  <script src="https://unpkg.com/vue@3"></script>
+</head>
+<body>
+  <div id="app" class="m-8">
+    <cute-timeline :data="activities" />
+  </div>
+
+  <script>
+    const { createApp, defineAsyncComponent } = Vue;
+
+    const activitiesData = {
+      "activities": [
+        {
+          "date": "2024-02-20",
+          "type": "Watering",
+          "description": "Watered the community garden",
+          "icon": "watering-can.png",
+          "color": "#3498db"
+        },
+        {
+          "date": "2024-02-18",
+          "type": "Planting",
+          "description": "Replanted native trees in the local park",
+          "icon": "tree.png",
+          "color": "#2ecc71"
+        },
+        {
+          "date": "2024-02-15",
+          "type": "Composting",
+          "description": "Managed composting efforts for neighborhood",
+          "icon": "compost.png",
+          "color": "#9b59b6"
+        },
+        {
+          "date": "2024-02-12",
+          "type": "Education",
+          "description": "Held a talk on sustainability with student groups",
+          "icon": "education.png",
+          "color": "#f1c40f"
+        },
+        {
+          "date": "2024-02-10",
+          "type": "Recycling",
+          "description": "Assisted in improving the school cafeteria's compost and recycle diversion rate",
+          "icon": "recycling.png",
+          "color": "#e67e22"
+        } 
+      ]
+    };
+
+    createApp({
+      data() {
+        return {
+          activities: activitiesData.activities
+        };
+      },
+      components: {
+        'cute-timeline': defineAsyncComponent(() =>
+          import('https://unpkg.com/vue-cute-timeline@1.2.10/dist/index.esm.js')
+        )
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>
