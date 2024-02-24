@@ -13,6 +13,11 @@
   </div>
 
   <script>
+
+    import { createApp } from 'vue'; 
+    import CuteTimeline from 'vue-cute-timeline'; // Assuming you have it installed
+
+    
     const { createApp } = Vue;
 
     // ... (your activities data) ...
@@ -68,13 +73,11 @@ createApp({
           activities: activitiesData.activities
         };  
   },
-  components: {
-    'cute-timeline': defineComponent({ 
-      setup() {
-        return () => import('https://unpkg.com/vue-cute-timeline@1/dist/index.esm.js');
-      }
-    })
-  }
+components: {
+  'cute-timeline': Vue.defineAsyncComponent(() =>
+    import('https://unpkg.com/vue-cute-timeline@1/dist/index.esm.js')
+  )
+}
 }).mount('#app');
     
 
