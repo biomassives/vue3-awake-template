@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eco Activities Visualization</title>
+  <!-- Import Vue 3 -->
+  <script src="https://unpkg.com/vue@3"></script>
+  <!-- Import CSS for vue-cute-timeline -->
+  <link rel="stylesheet" href="https://unpkg.com/vue-cute-timeline@1/dist/index.css">
+</head>
+<body>
+  <div id="app">
+    <cute-timeline :data="activities" />
+  </div>
+
+  <script type="module">
+    import { createApp } from 'https://unpkg.com/vue@3';
+    import CuteTimeline from 'https://unpkg.com/vue-cute-timeline@1/dist/index.esm.js';
+
+    const app = createApp({
+      data() {
+        return {
+          activities: [
+    {
+      "date": "2024-02-20",
+      "type": "Watering",
+      "description": "Watered the community garden",
+      "icon": "watering-can.png",
+      "color": "#3498db"
+    },
+    {
+      "date": "2024-02-18",
+      "type": "Planting",
+      "description": "Replanted native trees in the local park",
+      "icon": "tree.png",
+      "color": "#2ecc71"
+    },
+    {
+      "date": "2024-02-15",
+      "type": "Composting",
+      "description": "Managed composting efforts for neighborhood",
+      "icon": "compost.png",
+      "color": "#9b59b6"
+    },
+    {
+      "date": "2024-02-12",
+      "type": "Education",
+      "description": "Held a talk on sustainability with student groups",
+      "icon": "education.png",
+      "color": "#f1c40f"
+    },
+    {
+      "date": "2024-02-10",
+      "type": "Recycling",
+      "description": "Assisted in improving the school cafeteria's compost and recycle diversion rate",
+      "icon": "recycling.png",
+      "color": "#e67e22"
+    }      
+    ]
+        };
+      }
+    });
+
+    // Register the CuteTimeline component with the Vue 3 app instance
+    app.component('cute-timeline', CuteTimeline);
+
+    // Mount the Vue app
+    app.mount('#app');
+  </script>
+</body>
+</html>
