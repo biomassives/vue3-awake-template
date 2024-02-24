@@ -5,10 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Eco Activities Visualization</title>
   <script src="https://unpkg.com/vue@3"></script>
-  <script src="https://unpkg.com/vue-cute-timeline@1.2.10/dist/index.esm.js"></script> 
   <link rel="stylesheet" href="https://unpkg.com/vue-cute-timeline@1.2.10/dist/index.css"> 
-  
-
 </head>
 <body>
   <div id="app">
@@ -16,7 +13,8 @@
   </div>
 
   <script>
-    const activitiesData = {
+    const { createApp } = Vue;
+  const activitiesData = {
   "userName": "EcoWarrior123",
   "activities": [
     {
@@ -57,13 +55,18 @@
     ]
     };
 
-    Vue.createApp({
+    createApp({
       data() {
         return {
           activities: activitiesData.activities
         };
+      },
+      components: {
+        'cute-timeline': Vue.defineAsyncComponent(() =>
+          import('https://unpkg.com/vue-cute-timeline@1/dist/index.esm.js')
+        )
       }
-    }).component('cute-timeline', CuteTimeline).mount('#app');
+    }).mount('#app');
   </script>
 </body>
 </html>
