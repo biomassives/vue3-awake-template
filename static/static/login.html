@@ -1,0 +1,80 @@
+<button @click="connectPhantom">Connect Phantom</button>
+<button @click="connectSolflare">Connect Solflare</button>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Ops Geolocation</title>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/vue@3"></script>
+</head>
+<body class="flex items-center justify-center h-screen bg-gray-100">
+    <div id="app" class="w-full max-w-sm p-6 bg-white rounded-lg shadow-md">
+        <h1 class="text-2xl font-bold mb-4">Eco Ops Location</h1>
+        <button @click="getUserLocation" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Get Location
+        </button>
+
+        <div v-if="locationInfo" class="mt-4">
+            <p>Latitude: {{ locationInfo.latitude }}</p>
+            <p>Longitude: {{ locationInfo.longitude }}</p>
+        </div>
+
+        <div v-if="geolocationError" class="mt-4 text-red-600">
+            {{ geolocationError }}
+        </div>
+
+        <div v-if="showVpnWarning" class="mt-4 bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded">
+            <p>Consider using a VPN for enhanced privacy.</p>
+        </div>
+    </div>
+
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    locationInfo: null,
+                    geolocationError: null,
+                    showVpnWarning: false 
+                }
+            },
+            methods: {
+                getUserLocation() {
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(
+                            this.handleGeolocationSuccess,
+                            this.handleGeolocationError
+                        );
+                    } else {
+                        this.geolocationError = 'Geolocation not supported';
+                    }
+                },
+                handleGeolocationSuccess(position) {
+                    this.locationInfo = {
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude
+                    };
+                    this.showVpnWarning = !this.showVpnWarning; // Placeholder for VPN detection logic
+                },
+                handleGeolocationError(error) {
+                    switch(error.code) {
+                        case error.PERMISSION_DENIED:
+                            this.geolocationError = "Location access denied.";
+                            break;
+                        case error.POSITION_UNAVAILABLE: 
+                            this.geolocationError = "Location information unavailable.";
+                            break;
+                        case error.TIMEOUT:
+                            this.geolocationError = "Location request timed out.";
+                            break;
+                        default:
+                            this.geolocationError = "An unknown error occurred.";
+                            break;
+                    }
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
