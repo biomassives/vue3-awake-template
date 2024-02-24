@@ -51,7 +51,7 @@
                     </p>
                     <!-- The rest of your terms and conditions content should go here -->
                     <div class="text-center mt-4">
-                        <button type="button" @click="agreeToTerms = true" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" :disabled="!isScrolledToBottom">
+                        <button type="button" @click="agreeToTerms = true,toggleAccordion()" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" :disabled="!isScrolledToBottom">
                             I Agree
                         </button>
                     </div>
