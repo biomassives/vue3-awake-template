@@ -57,18 +57,27 @@
     ]
     };
 
-    createApp({
-      data() {
-        return {
+
+
+
+import { defineComponent } from 'vue';
+
+createApp({
+  data() { 
+          return {
           activities: activitiesData.activities
-        };
-      },
-      components: {
-        'cute-timeline': Vue.defineAsyncComponent(() =>
-          import('https://unpkg.com/vue-cute-timeline@1/dist/index.esm.js')
-        )
+        };  
+  },
+  components: {
+    'cute-timeline': defineComponent({ 
+      setup() {
+        return () => import('https://unpkg.com/vue-cute-timeline@1/dist/index.esm.js');
       }
-    }).mount('#app');
+    })
+  }
+}).mount('#app');
+    
+
   </script>
 </body>
 </html>
