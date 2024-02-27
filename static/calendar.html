@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Ops Chekin Calendar</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const monthSelector = document.getElementById('month');
+            const daysContainer = document.querySelector('.days-container');
+            const monthDisplay = document.querySelector('.month-display');
+            let events = {};
+
+            // Fetch event data
+            fetch('event_proposals.json') // Adjust the path to your JSON file
+                .then(response => response.json())
+                .then(data => {
+                    events = data;
+                    updateCalendar();
+                });
+
+            monthSelector.addEventListener('change', updateCalendar);
+
+            function updateCalendar() {
+                const month = monthSelector.value;
+                const year = new Date().getFullYear(); // Assuming current year for simplicity
+                const daysInMonth = new Date(year, month, 0).getDate();
+                daysContainer.innerHTML = ''; // Clear existing days
+
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const dayDiv = document.createElement('div');
+                    dayDiv.className = 'py-2 text-center text-sm';
+                    dayDiv.textContent = day;
+                    daysContainer.appendChild(dayDiv);
+
+                    // Check if there's an event on this day
+                    if (events[monthSelector.options[monthSelector.selectedIndex].text] && events[monthSelector.options[monthSelector.selectedIndex].text].some(event => event.day === day)) {
+                        const eventDetails = events[monthSelector.options[monthSelector.selectedIndex].text].find(event => event.day === day);
+                        dayDiv.className += ` ${eventDetails.color}`;
+                        dayDiv.title = eventDetails.event;
+                    }
+                }
+
+                monthDisplay.textContent = `${monthSelector.options[monthSelector.selectedIndex].text} ${year}`;
+            }
+        });
+    </script>
+</head>
+<body>
+    <div class="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+
+      <b>Eco Ops Chekin Calendar</b>
+        <div class="flex flex-col bg-white shadow-lg rounded-lg overflow-hidden">
+            <div class="px-4 py-5 bg-white">
+                <label for="month" class="block text-sm font-medium text-gray-700">Select Month</label>
+                <select id="month" name="month" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                    <option value="1">January</option>
+                    <option value="2">February</option>
+                    <option value="3">March</option>
+                    <option value="4">April</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+            </div>
+            <div class="flex justify-between items-center px-4 py-2 bg-gray-50">
+                <h3 class="text-lg leading-6 font-medium text-gray-900 month-display">
+                    Month Year
+                </h3>
+            </div>
+            <div class="px-4 py-5 bg-white grid grid-cols-7 gap-4">
+                <div class="text-center">Sun</div>
+                <div class="text-center">Mon</div>
+                <div class="text-center">Tue</div>
+                <div class="text-center">Wed</div>
+                <div class="text-center">Thu</div>
+                <div class="text-center">Fri</div>
+                <div class="text-center">Sat</div>
+                <div class="days-container py-2 text-center text-sm grid grid-cols-7 gap-4">
+                    <!-- Days will be added here by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
