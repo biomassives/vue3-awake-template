@@ -1,0 +1,89 @@
+<div id="app">
+  <canvas id="ecoGoalsChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const { createApp } = Vue;
+
+createApp({
+  data() {
+    return {
+      ecoGoalsData: [],
+    };
+  },
+  mounted() {
+    this.fetchData();
+  },
+  methods: {
+    async fetchData() {
+      try {
+        const response = await axios.get('https://ecocity.com/ot6.json');
+        this.ecoGoalsData = response.data;
+        this.createChart();
+      } catch (error) {
+        console.error('Fetching data failed:', error);
+      }
+    },
+    processData() {
+      const themes = this.ecoGoalsData.reduce((acc, {theme}) => {
+        acc[theme] = (acc[theme] || 0) + 1;
+        return acc;
+      }, {});
+      return {
+        labels: Object.keys(themes),
+        datasets: [{
+          data: Object.values(themes),
+          backgroundColor: [
+            '#0d3b66', // Deep midnight blue for winter nights
+            '#faf0ca', // Soft winter sun
+            '#6e5773', // Eclipse shadow
+            '#0d3b66', // Winter night
+            '#faf0ca', // Winter sun
+            '#6e5773', // Eclipse
+            '#0d3b66', // Deep midnight blue for winter nights
+            '#faf0ca', // Soft winter sun
+            '#6e5773', // Eclipse shadow
+            '#d45d79', // Early spring blossoms
+            '#ea9085', // Warmth of the spring sun
+            // Additional colors
+          ],
+        }]
+      };
+    },
+    createChart() {
+      const chartData = this.processData();
+      const ctx = document.getElementById('ecoGoalsChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'pie',
+        data: chartData,
+        options: {
+        responsive: true,
+        plugins: {
+            tooltip: {
+            callbacks: {
+                label: function(context) {
+                // Assuming you have an array of additional details matching each theme
+                const details = [
+                    "Detail for Theme 1: More analysis...",
+                    "Detail for Theme 2: More analysis...",
+                    // Corresponding details for each theme
+                ];
+                const label = context.dataset.labels[context.dataIndex];
+                const detail = details[context.dataIndex];
+                return `${label}: ${context.parsed} goals. ${detail}`;
+                }
+            }
+            }
+        }
+        // Additional options here
+        }
+      });
+    }
+  }
+}).mount('#app');
+
+
+</script>
