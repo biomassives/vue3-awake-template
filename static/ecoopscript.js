@@ -1,24 +1,30 @@
-// Sample data structure from the "ot6.json" file
-const data = [
-    {"theme": "Organic Farming", "goal": "Start an organic vegetable patch in your backyard.", "date": "2025-01-17", "location": "City Park"},
-    // Add more items as needed
-];
+document.addEventListener('DOMContentLoaded', function() {
+    var modal = document.getElementById('modalOverlay');
+    var learnMoreBtn = document.getElementById('learnMoreBtn');
 
-function showModal() {
-    document.getElementById('modalOverlay').style.display = 'flex';
-}
+    // Function to show the modal
+    function showModal() {
+        modal.style.display = 'flex';
+    }
 
-function closeModal() {
-    document.getElementById('modalOverlay').style.display = 'none';
-}
+    // Function to close the modal
+    function closeModal() {
+        modal.style.display = 'none';
+    }
 
-window.onload = function() {
-    const timeline = document.getElementById('timeline');
-    data.forEach(item => {
-        if (item.theme === "Organic Farming") {
-            const entry = document.createElement('div');
-            entry.innerHTML = `<h3>${item.goal}</h3><p>Date: ${item.date} - Location: ${item.location}</p>`;
-            timeline.appendChild(entry);
-        }
-    });
-};
+    // Attach event listeners
+    learnMoreBtn.addEventListener('click', showModal);
+    modal.addEventListener('click', closeModal); // Assuming you want to close the modal when clicking outside
+
+    // Fetch the JSON data from the same directory
+    fetch('ot6.json')
+        .then(response => response.json())
+        .then(data => {
+            console.log(data); // Process your data here
+            // For example, populate the timeline based on the fetched data
+        })
+        .catch(error => console.error('Error fetching the JSON file:', error));
+
+    // Optionally, show the modal on page load
+    showModal();
+});
