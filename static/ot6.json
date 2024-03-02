@@ -1,0 +1,86 @@
+[
+    {
+        "theme": "Organic Farming",
+        "goal": "Start an organic vegetable patch in your backyard.",
+        "group": "Eco Warriors",
+        "date": "2025-01-17",
+        "location": "City Park",
+        "advisor_reviewer_contact": "advisor@example.com",
+        "wallet_addresses": {
+            "solana": "SolanaPlaceholderAddress",
+            "ether": "EthereumPlaceholderAddress",
+            "rmrk": "RMRKPlaceholderAddress",
+            "algorand": "AlgorandPlaceholderAddress"
+        }
+    },
+    {
+        "theme": "Transitioning Agriculture",
+        "goal": "Implement crop rotation and companion planting in local farms.",
+        "group": "Nature Protectors",
+        "date": "2024-07-07",
+        "location": "Local School",
+        "advisor_reviewer_contact": "advisor@example.com",
+        "wallet_addresses": {
+            "solana": "SolanaPlaceholderAddress",
+            "ether": "EthereumPlaceholderAddress",
+            "rmrk": "RMRKPlaceholderAddress",
+            "algorand": "AlgorandPlaceholderAddress"
+        }
+    },
+    {
+        "theme": "Working with Forests",
+        "goal": "Learn about sustainable forest management and agroforestry.",
+        "group": "Nature Protectors",
+        "date": "2025-01-05",
+        "location": "Community Garden",
+        "advisor_reviewer_contact": "advisor@example.com",
+        "wallet_addresses": {
+            "solana": "SolanaPlaceholderAddress",
+            "ether": "EthereumPlaceholderAddress",
+            "rmrk": "RMRKPlaceholderAddress",
+            "algorand": "AlgorandPlaceholderAddress"
+        }
+    },
+    {
+        "theme": "Permaculture Designs",
+        "goal": "Apply permaculture principles in your gardening practices.",
+        "group": "Green Thumbs",
+        "date": "2025-02-04",
+        "location": "Community Garden",
+        "advisor_reviewer_contact": "advisor@example.com",
+        "wallet_addresses": {
+            "solana": "SolanaPlaceholderAddress",
+            "ether": "EthereumPlaceholderAddress",
+            "rmrk": "RMRKPlaceholderAddress",
+            "algorand": "AlgorandPlaceholderAddress"
+        }
+    },
+    {
+        "theme": "Rooftop and Local Water Filtration",
+        "goal": "Conduct a workshop on building and maintaining local water filtration systems.",
+        "group": "Nature Protectors",
+        "date": "2025-02-23",
+        "location": "Community Garden",
+        "advisor_reviewer_contact": "advisor@example.com",
+        "wallet_addresses": {
+            "solana": "SolanaPlaceholderAddress",
+            "ether": "EthereumPlaceholderAddress",
+            "rmrk": "RMRKPlaceholderAddress",
+            "algorand": "AlgorandPlaceholderAddress"
+        }
+    },
+    {
+        "theme": "Solar Energy Utilization",
+        "goal": "Organize a solar panel installation training for homeowners.",
+        "group": "Nature Protectors",
+        "date": "2024-12-08",
+        "location": "City Park",
+        "advisor_reviewer_contact": "advisor@example.com",
+        "wallet_addresses": {
+            "solana": "SolanaPlaceholderAddress",
+            "ether": "EthereumPlaceholderAddress",
+            "rmrk": "RMRKPlaceholderAddress",
+            "algorand": "AlgorandPlaceholderAddress"
+        }
+    }
+]
