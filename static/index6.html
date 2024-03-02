@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Ops Portal</title>
+    <link rel="stylesheet" href="path/to/wow.js/animate.css">
+    <script src="path/to/wow.js/wow.min.js"></script>
+</head>
+<body>
+    <div id="popupOverlay">
+       
+              <!-- Popup Overlay Trigger -->
+        
+              <!-- Popup Overlay -->
+              <div v-if="showModal" class="modal-overlay" @click="showModal = false">
+                  <div class="modal-content" @click.stop>
+                      <h2>Eco Ops Project by SCD Hub</h2>
+                      <p>This data portal is a part of the eco ops project by SCD Hub, a USA 501(c)(3) not-for-profit organization dedicated to sustainable community development. Through this portal, we aim to share insights and data on organic farming and other sustainable practices to foster a global community of informed and engaged citizens.</p>
+                      <button @click="showModal = false">Close</button>
+                  </div>
+              </div>
+
+    </div>
+
+    <button @click="showModal = true">Learn More About Eco Ops</button>
+
+
+    <div class="timeline">
+        <!-- Dynamically generated timeline entries will go here -->
+    </div>
+
+    <script src="wowr.js"></script>
+</body>
+</html>
