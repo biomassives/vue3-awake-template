@@ -1,7 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
     var modal = document.getElementById('modalOverlay');
     var learnMoreBtn = document.getElementById('learnMoreBtn');
-    var closeModalBtn = document.querySelector('closeModalBtn'); // Ensure this selector matches your button
+    var closeModalBtn = document.querySelector('.closeModalBtn'); // Ensure this selector matches your button
+    closeModalBtn.addEventListener('click', closeModal);
     
     // Function to show the modal
     function showModal() {
