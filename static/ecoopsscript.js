@@ -1,7 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
     var modal = document.getElementById('modalOverlay');
     var learnMoreBtn = document.getElementById('learnMoreBtn');
-
+    var closeModalBtn = document.querySelector('.closeModalBtn'); // Ensure this selector matches your button
+    
     // Function to show the modal
     function showModal() {
         modal.style.display = 'flex';
@@ -14,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Attach event listeners
     learnMoreBtn.addEventListener('click', showModal);
+    closeModalBtn.addEventListener('click', closeModal); // Attach listener to your close button
     modal.addEventListener('click', closeModal); // Assuming you want to close the modal when clicking outside
 
     // Fetch the JSON data from the same directory
