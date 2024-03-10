@@ -5,7 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eco Ops Portal</title>
     <link rel="stylesheet" href="styles.css">
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.0/mermaid.min.js" integrity="sha512-gx05X612uoaolzJ5Ee/786b3th+qzAm90TOvRwZJwnE8yr0sHQG8eLxdR0/Hbqc2IFh2mWHzzXk79g3atNSwsQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script type="module">
+        // https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.0/mermaid.min.js" integrity="sha512-gx05X612uoaolzJ5Ee/786b3th+qzAm90TOvRwZJwnE8yr0sHQG8eLxdR0/Hbqc2IFh2mWHzzXk79g3atNSwsQ==" crossorigin="anonymous" referrerpolicy="no-referrer"
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@9/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true});
+    </script>
+    
         <script src="ecoopsscript.js" defer></script>
 
 </head>
@@ -20,15 +26,15 @@
 
             <div class="text-gray-700 font-sans text-lg p-4 bg-white shadow-md rounded">
                 <p>This data portal is a part of the eco ops project by SCD Hub, a USA 501(c)(3) not-for-profit organization dedicated to sustainable community development.</p>
-              <mermaid>
-                zenuml
-                Alice->Bob: Hello Bob, how are you?
-                Bob->Alice: Not so good :(
-                opt {
-                  Bob->Alice: Thanks for asking
-                }
-              </mermaid>
-            
+
+                <pre class="mermaid">                  
+                    zenuml
+                        Alice->Bob: Hello Bob, how are you?
+                        Bob->Alice: Not so good :(
+                        opt {
+                          Bob->Alice: Thanks for asking
+                        }
+                </pre>
             
             </div>
 
