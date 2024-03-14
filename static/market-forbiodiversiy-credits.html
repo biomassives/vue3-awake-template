@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market for Biodiversity Credits</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+</head>
+<body>
+    <div class="mermaid">
+        flowchart TD
+            A[Eco Projects Validation] --> |Validate Projects| B[Biodiversity Credit Issuance]
+            B --> C[Credit Registry]
+            C --> D[Credit Marketplace]
+            D --> E[Buy Credits]
+            E --> F[Corporate Buyers]
+            D --> G[Individual Buyers]
+            E --> H[Invest in Conservation Projects]
+            H --> I[Project Implementation]
+            I --> J[Monitoring and Reporting]
+            J --> K[Reinvestment or Profit Sharing]
+            B --> L[Generate Additional Credits]
+            L --> C
+
+            A --> M[Training for Project Developers]
+            M --> A
+    </div>
+</body>
+</html>
