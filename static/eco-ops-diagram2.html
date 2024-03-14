@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Ops Program Enhanced Flow</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+</head>
+<body>
+    <div class="mermaid">
+        flowchart TD
+            A[Volunteers] -->|Register/Log In| B[System]
+            B --> |Select Tasks/Projects| C[Tasks and Projects]
+            C --> |Submit Work| D[Verification Process]
+            D --> |Approve| E[Rewards System]
+            E --> |Claim Rewards| A
+            D --> |Reject| C
+            E --> |Monitor & Report| F[Admins]
+            C --> |Report Progress| G[Community Dashboard]
+            G --> |View Tasks and Progress| H[Public Users]
+            I[Reviewers] -->|Review & Approve Projects| J[EcoCity Projects Portal]
+            C -->|Submit for Review| I
+            K[Trainings] -->|Mandatory for Volunteers| C
+            K -->|Training for Reviewers| I
+            L[Check-ins] -->|Earn through Check-ins| M[Worldbridger One NFT Aftermarket Portal]
+            A -->|Perform Check-ins| L
+            E --> |Access to NFT Rewards| L
+            L -->|Sell or Trade NFTs| M
+            J -->|Showcase Approved Projects| H
+            K -->|Training for Farmers| N[Farmers]
+            K -->|Training for School Groups| O[School Groups]
+            K -->|Training for Recycling Centers| P[Recycling and Upcycling Centers]
+
+            class L bigBox;
+
+            style L fill:#f9f,stroke:#333,stroke-width:4px
+    </div>
+</body>
+</html>
