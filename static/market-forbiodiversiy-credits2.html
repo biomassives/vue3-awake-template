@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Biodiversity Market Model</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tippy.js/6.2.7/tippy.css" integrity="sha384-FAvJTJ2O2Kktn8c9PQJy/KR1kZ6NTtFgI8eWRkvW5PzFJAeH1yJ+XKjZ0+ZI5y5M" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tippy.js/6.2.7/tippy-bundle.umd.min.js" integrity="sha384-kz2FZ3T8BTVKaKpx3HdL2IL5N+D7+v5QFC/2ZurpJwF2jUerqL+KFIjc/ipVnJ32" crossorigin="anonymous"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <style>
+        .mermaid {
+            width: 70%;
+            float: left;
+        }
+        .info-panel {
+            width: 30%;
+            float: right;
+            padding: 10px;
+            box-sizing: border-box;
+            display: none; /* Hide by default, show on hover or selection */
+        }
+        @media (max-width: 768px) {
+            .mermaid, .info-panel {
+                float: none;
+                width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="mermaid">
+        flowchart TD
+            A[Eco Projects Validation] --> |Validate Projects| B[Biodiversity Credit Issuance]
+            B --> C[Credit Registry]
+            C --> D[Credit Marketplace]
+            D --> E[Buy Credits]
+            E --> F[Corporate Buyers]
+            D --> G[Individual Buyers]
+            E --> H[Invest in Conservation Projects]
+            H --> I[Project Implementation]
+            I --> J[Monitoring and Reporting]
+            J --> K[Reinvestment or Profit Sharing]
+            B --> L[Generate Additional Credits]
+            L --> C
+
+            A --> M[Training for Project Developers]
+            M --> A
+</div>
+
+<div class="info-panel" id="infoPanel">
+    <h3>Information Panel</h3>
+    <p>Details about the selected component will appear here.</p>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const nodes = document.querySelectorAll('.mermaid svg g');
+        nodes.forEach(node => {
+            // Assuming the text content of the node is unique and can be used to identify it
+            const nodeContent = node.textContent.trim();
+            let tooltipContent = '';
+            switch(nodeContent) {
+                case 'Node A':
+                    tooltipContent = 'Information specific to Node A.';
+                    break;
+                case 'Node B':
+                    tooltipContent = 'Details about Node B and its significance.';
+                    break;
+                case 'Node C':
+                    tooltipContent = ''; // No tooltip for Node C
+                    break;
+                default:
+                    tooltipContent = 'General information about this node.';
+            }
+
+            if (tooltipContent) {
+                tippy(node, {
+                    content: tooltipContent,
+                    allowHTML: true,
+                    interactive: true,
+                    placement: 'right',
+                    onShow(instance) {
+                        document.getElementById('infoPanel').innerHTML = instance.props.content;
+                        document.querySelector('.info-panel').style.display = 'block';
+                    },
+                    onHide() {
+                        document.querySelector('.info-panel').style.display = 'none';
+                    },
+                });
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
