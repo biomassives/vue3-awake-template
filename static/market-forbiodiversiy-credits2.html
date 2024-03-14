@@ -55,44 +55,58 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const nodes = document.querySelectorAll('.mermaid svg g');
-        nodes.forEach(node => {
-            // Assuming the text content of the node is unique and can be used to identify it
-            const nodeContent = node.textContent.trim();
-            let tooltipContent = '';
-            switch(nodeContent) {
-                case 'Node A':
-                    tooltipContent = 'Information specific to Node A.';
-                    break;
-                case 'Node B':
-                    tooltipContent = 'Details about Node B and its significance.';
-                    break;
-                case 'Node C':
-                    tooltipContent = ''; // No tooltip for Node C
-                    break;
-                default:
-                    tooltipContent = 'General information about this node.';
-            }
+    // Configure Mermaid first
+    mermaid.initialize({
+        startOnLoad: false
+    });
 
-            if (tooltipContent) {
-                tippy(node, {
-                    content: tooltipContent,
-                    allowHTML: true,
-                    interactive: true,
-                    placement: 'right',
-                    onShow(instance) {
-                        document.getElementById('infoPanel').innerHTML = instance.props.content;
-                        document.querySelector('.info-panel').style.display = 'block';
-                    },
-                    onHide() {
-                        document.querySelector('.info-panel').style.display = 'none';
-                    },
-                });
-            }
-        });
+    // After DOM Content Loaded
+    document.addEventListener('DOMContentLoaded', function () {
+        // Render Mermaid diagrams manually to control the timing
+        mermaid.init(undefined, '.mermaid');
+
+        // Wait a bit for the Mermaid diagrams to render
+        setTimeout(function() {
+            // Now select nodes
+            const nodes = document.querySelectorAll('.mermaid svg g');
+            nodes.forEach(node => {
+                // Assuming the text content of the node is unique and can be used to identify it
+                const nodeContent = node.textContent.trim();
+                let tooltipContent = '';
+                switch(nodeContent) {
+                    case 'Node A':
+                        tooltipContent = 'Information specific to Node A.';
+                        break;
+                    case 'Node B':
+                        tooltipContent = 'Details about Node B and its significance.';
+                        break;
+                    case 'Node C':
+                        tooltipContent = ''; // No tooltip for Node C
+                        break;
+                    default:
+                        tooltipContent = 'General information about this node.';
+                }
+
+                if (tooltipContent) {
+                    tippy(node, {
+                        content: tooltipContent,
+                        allowHTML: true,
+                        interactive: true,
+                        placement: 'right',
+                        onShow(instance) {
+                            document.getElementById('infoPanel').innerHTML = instance.props.content;
+                            document.querySelector('.info-panel').style.display = 'block';
+                        },
+                        onHide() {
+                            document.querySelector('.info-panel').style.display = 'none';
+                        },
+                    });
+                }
+            });
+        }, 500); // Adjust timeout as needed based on actual rendering time
     });
 </script>
+
 
 </body>
 </html>
