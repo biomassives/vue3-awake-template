@@ -12,7 +12,14 @@ featureImage: /uploads/ecocity_wgpIzRUDczoN1bK--6--ykc5b.png
 ---
 ## Eco Ops System Structure - March 16 2024
 
+- project workflow from volunteer registration, task selection, project completion and rewards. 
+
+  The second chart focuses specifically on , and how these tasks fit into the broader eco project check-ins.
+
+
 #  Chart 1: General volunteer activities, project selection, and the rewards system
+
+general process for all volunteers and projects, including training, review, and reporting mechanisms
 
 flowchart TD
     A[Volunteers] -->|Register/Log In| B[System]
@@ -49,9 +56,9 @@ flowchart TD
     style L fill:#f9f,stroke:#333,stroke-width:4px
 
 
-
-
 # Chart 2: Eco Mapping and Environmental Monitoring
+
+Eco mapping and environmental monitoring tasks, detailing the process for submitting data on trash burn areas, cyanobacteria, and anaerobic conditions
 
 flowchart TD
     A[Volunteers] --> |Register| B[System]
@@ -87,6 +94,9 @@ flowchart TD
 
     class M bigBox;
     style M fill:#f9f,stroke:#333,stroke-width:4px
+
+
+
 
 
 
