@@ -9,42 +9,41 @@
 </head>
 <body>
     <div class="mermaid">
-        flowchart TD
-            A --> |Register | B 
-            B --> |Select Tasks| C
-            C --> |Submit Work| D 
-            D --> |Approve| E 
-            E --> |Rewards| A
-            D --> |Reject| C 
-            E --> |Report| F
-            C --> |Progress| G 
-            G --> |View Tasks| H 
-            I-->|Review Projects| J
-            C-->|Submit for Review| I
-            K-->|Training for Volunteers| C
-            K-->|Training for Reviewers| I
-            L -->|Earn | M
-            A -->|Check-ins| L
-            E --> |Access NFTs| L
-            L -->|Trade NFTs| M 
-            J -->|Showcase| H
-            K -->|Training for Farmers| N 
-            K -->|Training for School Groups| O
-            K -->|Training for Recycling Centers| P
-            J -->|Buy Credits| Q
-             C --> |Climate Impact Analysis|  
-             C --> |Health Impact Analysis|
-             Climate Impact Analysis -->|Vulnerability Assessment
-             Health Impact Analysis -->|Vulnerability Assessment     
-             Vulnerability Assessment --> |J
-             Vulnerability Assessment --> |K 
+flowchart TD
+    A --> |Register | B 
+    B --> |Select Tasks| C
+    C --> |Submit Work| D 
+    D --> |Approve| E 
+    E --> |Rewards| A
+    D --> |Reject| C 
+    E --> |Report| F
+    C --> |Progress| G 
+    G --> |View Tasks| H 
+    I-->|Review Projects| J
+    C-->|Submit for Review| I
+    K-->|Training for Volunteers| C
+    K-->|Training for Reviewers| I
+    L -->|Earn | M
+    A -->|Check-ins| L
+    E --> |Access NFTs| L
+    L -->|Trade NFTs| M 
+    J -->|Showcase| H
+    K -->|Training for Farmers| N 
+    K -->|Training for School Groups| O
+    K -->|Training for Recycling Centers| P
+    J -->|Buy Credits| Q
+    C --> |Climate Impact Analysis|  
+    C --> |Health Impact Analysis| 
+    Climate Impact Analysis -->|Vulnerability Assessment
+    Health Impact Analysis -->|Vulnerability Assessment     
+    Vulnerability Assessment --> |J
+    Vulnerability Assessment --> |K 
+            
+               class L bigBox;
+               style L fill:#f9f,stroke:#333,stroke-width:4px
 
 
-
-
-            class L bigBox;
-
-            style L fill:#f9f,stroke:#333,stroke-width:4px
+        
     </div>
 </body>
 </html>
