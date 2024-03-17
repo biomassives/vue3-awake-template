@@ -70,9 +70,26 @@
             "eco-ops-diagram3.md",
             "eco-ops-diagram4.md"
         ];
-        
-        // Assuming you've created your spheres and they are in an array called 'spheres' 
-        const spheres = [sphereGeometry1, sphereGeometry2, sphereGeometry3, sphereGeometry4];
+
+
+            
+            
+            // Sphere Geometries (You already have this part)
+            const sphereGeometry1 = new THREE.SphereGeometry(1, 32, 32);
+            // ... other sphere geometries
+            
+            // Materials (Optional - We'll use a basic material)
+            const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0x999999 }); 
+            
+            // Create Sphere Meshes
+            const sphere1 = new THREE.Mesh(sphereGeometry1, sphereMaterial);
+            const sphere2 = new THREE.Mesh(sphereGeometry2, sphereMaterial);
+            const sphere3 = new THREE.Mesh(sphereGeometry3, sphereMaterial);
+            const sphere4 = new THREE.Mesh(sphereGeometry4, sphereMaterial);
+            
+            // Array of Spheres
+            const spheres = [sphere1, sphere2, sphere3, sphere4]; 
+
         
         // 4. For each chart: 
         chartFiles.forEach((file, index) => {
