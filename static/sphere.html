@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mermaid Sphere Visualization</title>
+    <script src="https://cdn.tailwindcss.com"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r147/three.min.js"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script> </head>
+<body>
+
+    <div id="canvas-container">
+        <div id="three-js-container" class="w-full h-screen"></div>
+
+        <canvas id="chart-canvas-1" style="display: none;"></canvas>
+        <canvas id="chart-canvas-2" style="display: none;"></canvas>
+        <canvas id="chart-canvas-3" style="display: none;"></canvas>
+        <canvas id="chart-canvas-4" style="display: none;"></canvas>
+    </div>
+  
+      
+    <script type="module">
+      
+        import * as THREE from 'three'; // Assuming ES Modules
+        
+        const container = document.getElementById('three-js-container');
+        
+        // 1. Scene, Camera, Renderer Setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        container.appendChild(renderer.domElement);
+        
+        // 2. Sphere Geometries (adjust radii for concentric effect)
+        const sphereGeometry1 = new THREE.SphereGeometry(1, 32, 32);
+        const sphereGeometry2 = new THREE.SphereGeometry(0.8, 32, 32);
+        const sphereGeometry3 = new THREE.SphereGeometry(0.6, 32, 32);
+        const sphereGeometry4 = new THREE.SphereGeometry(0.4, 32, 32);
+        
+        // 3. Define your Mermaid Charts (replace with your actual charts)
+        const chart1 = `graph TD
+            A[Start] --> B{Process A}
+            B --> C{Process B}`;
+        
+        const chart2 = `graph TD
+            D[Start] --> E{Process C}
+            E --> F{Process D}`;
+        
+        const chart3 = `graph TD
+            G[Start] --> H{Process E}
+            H --> I{Process F}`;
+        
+        const chart4 = `graph TD
+            J[Start] --> K{Process G}
+            K --> L{Process H}`;
+        
+        // ** Important: Call mermaid.initialize after chart definition**
+        mermaid.initialize({ startOnLoad: true });
+        // 4. For each chart:
+        
+        // File paths (adjust as needed)
+        const chartFiles = [
+            "eco-oops-diagram1.md",
+            "eco-oops-diagram2.md",
+            "eco-oops-diagram3.md",
+            "eco-oops-diagram4.md"
+        ];
+        
+        // Assuming you've created your spheres and they are in an array called 'spheres' 
+        const spheres = [sphereGeometry1, sphereGeometry2, sphereGeometry3, sphereGeometry4];
+        
+        // 4. For each chart: 
+        chartFiles.forEach((file, index) => {
+            fetch(file) // Fetch the .md file
+                .then(response => response.text())
+                .then(chartText => {
+                    const canvas = document.getElementById(`chart-canvas-${index + 1}`); 
+        
+                    // 4.1 Render Mermaid chart to hidden canvas
+                    mermaid.render(`chart-${index + 1}`, chartText, svgCode => {
+                        canvas.innerHTML = svgCode; 
+        
+                        // 4.2 Create a texture 
+                        const texture = new THREE.CanvasTexture(canvas);
+        
+                        // 4.3 Create a material 
+                        const material = new THREE.MeshBasicMaterial({ map: texture }); 
+        
+                        // 4.4 Apply material to the sphere
+                        const sphere = new THREE.Mesh(spheres[index], material);
+                        scene.add(sphere); 
+                    });            
+                });
+        });
+        
+        // 5. Set up animation loop 
+        function animate() {
+            requestAnimationFrame(animate); 
+        
+            // Rotate your spheres here (e.g., spheres[0].rotation.y += 0.01)
+        
+            renderer.render(scene, camera);
+        }
+        animate(); // Start the animation loop
+        
+        
+       
+    </script>
+</body>
+</html>
