@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Carousel Prototype</title>
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
+</head>
+<body class="bg-gray-100">
+    <!-- Swiper -->
+    <div class="swiper-container my-8">
+        <div class="swiper-wrapper">
+            <!-- Example Slide -->
+            <div class="swiper-slide flex justify-center items-center bg-gray-300" style="height: 300px;">
+                <span class="text-xl font-semibold">Slide 1</span>
+            </div>
+            <div class="swiper-slide flex justify-center items-center bg-gray-400" style="height: 300px;">
+                <span class="text-xl font-semibold">Slide 2</span>
+            </div>
+            <div class="swiper-slide flex justify-center items-center bg-gray-500" style="height: 300px;">
+                <span class="text-xl font-semibold">Slide 3</span>
+            </div>
+        </div>
+        <!-- Pagination -->
+        <div class="swiper-pagination"></div>
+        <!-- Navigation buttons -->
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+    </div>
+
+    <!-- Swiper JS -->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <!-- Initialize Swiper -->
+    <script>
+        var swiper = new Swiper('.swiper-container', {
+            loop: true,
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+        });
+    </script>
+</body>
+</html>
