@@ -1,0 +1,33 @@
+
+graph TD
+    A[Trainings] -->|Volunteer rewards | B[Training for Verifiers]
+    A -->|Specialized Training| C[Training for Farmers]
+    A -->|Verifier /Trainer| D[Providing useful reviews]
+    A -->|Education Programs| E[Training for School Groups]
+    A -->|Operational Skills| F[Training for Recycling Centers]
+
+    B --> F[Biodiversity Conservation Methods]
+    C --> G[Sustainable Farming Techniques]
+    D --> H[Guiding participants toward successes]
+    E --> I[Environmental Education & Awareness]
+    F --> J[Waste Management & Recycling Practices]
+
+    F -->|Outcome: Habitat Restoration| J{{"Biodiversity Credits"}}
+    G -->|Outcome: Improved Soil Health| K{{"Ecosystem Resilience Builder Credits"}}
+    H -->|Outcome: Informed Youth| J
+    I -->|Outcome: Reduced Ocean Pollution| K
+
+    J -.->|Land & Biological| L[Support Biodiversity Credits Market]
+    K -.->|Food Supply & Ocean| M[Contribute to Ecosystem Resilience]
+
+    L -->|Verification Process| N[Carbon Credit Verification]
+    M --> N
+
+    N -->|Integration Process| O[Carbon Credit Market Integration]
+    O -->|Economic Incentive| P[Trade & Sell Verified Credits]
+
+    P -->|Revenue Generation| Q[Reinvestment in Community Projects]
+    Q -->|Sustainable Development Goal| A
+
+    class L bigBox;
+    style L fill:#f9f,stroke:#333,stroke-width:4px
