@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Ops Volunteer Visualization</title>
+    <style>
+        /* Add your CSS styling here */
+        .chart-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .chart {
+            border: 1px solid #ccc;
+            margin: 10px;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Eco Ops Volunteer Activities Visualization</h1>
+
+<div class="chart-container">
+    <div class="chart" id="pieChart">
+        <h2>Volunteer Roles Distribution</h2>
+        <!-- Pie chart will be appended here -->
+    </div>
+
+    <div class="chart" id="ganttChart">
+        <h2>Project Activity Timeline</h2>
+        <!-- Gantt chart will be appended here -->
+    </div>
+</div>
+
+<!-- D3.js library -->
+<script src="https://d3js.org/d3.v6.min.js"></script>
+
+<script>
+// Insert the pie chart code here
+// Ensure you select the 'pieChart' div for appending the SVG
+// Example: d3.select('#pieChart').append('svg')...
+
+
+// Assuming `tasks` is an array of objects with startDate, endDate, and taskName properties
+
+// Set dimensions
+const ganttWidth = 800;
+const ganttHeight = tasks.length * 30; // Example height calculation
+
+// Create time scales
+const xScale = d3.scaleTime()
+    .domain([d3.min(tasks, d => d.startDate), d3.max(tasks, d => d.endDate)])
+    .range([0, ganttWidth]);
+
+// Modify this line to select the 'ganttChart' div for appending the SVG
+const ganttSvg = d3.select('#ganttChart').append('svg')
+    .attr('width', ganttWidth)
+    .attr('height', ganttHeight)
+    .append('g');
+
+// Draw bars for tasks
+ganttSvg.selectAll('.task')
+    .data(tasks)
+    .enter()
+    .append('rect')
+    .attr('x', d => xScale(d.startDate))
+    .attr('y', (d, i) => i * 30)
+    .attr('width', d => xScale(d.endDate) - xScale(d.startDate))
+    .attr('height', 20) // Example height of a task bar
+    .attr('fill', 'steelblue');
+
+  
+</script>
+
+</body>
+</html>
