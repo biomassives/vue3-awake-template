@@ -103,7 +103,27 @@
             requestAnimationFrame(animate); 
         
             // Rotate your spheres here (e.g., spheres[0].rotation.y += 0.01)
-        
+
+
+            // Sphere Group Creation (after you've created your spheres)
+            const sphereGroup = new THREE.Group();
+            sphereGroup.add(...spheres); // Add all spheres to the group
+            scene.add(sphereGroup);
+
+
+            function onMouseMove(event) {
+                if (!isDragging) return; 
+            
+                // ... (your deltaX, deltaY calculation) ...
+            
+                sphereGroup.rotation.y += deltaX * rotationSpeed;  // Rotate the group
+                sphereGroup.rotation.x += deltaY * rotationSpeed; 
+            
+                // ... (rest of your onMouseMove code) ...
+            }
+
+
+                
             renderer.render(scene, camera);
         }
         animate(); // Start the animation loop
