@@ -21,25 +21,21 @@
       
     <script type="module">
 
-            // Import THREE from the CDN URL directly
-            import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.module.js';
+        import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.module.js';
+        const container = document.getElementById('three-js-container');
         
-            const container = document.getElementById('three-js-container');
-            
-            // 1. Scene, Camera, Renderer Setup
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-            const renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(container.clientWidth, container.clientHeight);
-            container.appendChild(renderer.domElement);
-            
-            // 2. Sphere Geometries (adjust radii for concentric effect)
-            const sphereGeometry1 = new THREE.SphereGeometry(1, 32, 32);
-            const sphereGeometry2 = new THREE.SphereGeometry(0.8, 32, 32);
-            const sphereGeometry3 = new THREE.SphereGeometry(0.6, 32, 32);
-            const sphereGeometry4 = new THREE.SphereGeometry(0.4, 32, 32);
-            
-
+        // 1. Scene, Camera, Renderer Setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        container.appendChild(renderer.domElement);
+        
+        // 2. Sphere Geometries (adjust radii for concentric effect)
+        const sphereGeometry1 = new THREE.SphereGeometry(1, 32, 32);
+        const sphereGeometry2 = new THREE.SphereGeometry(0.8, 32, 32);
+        const sphereGeometry3 = new THREE.SphereGeometry(0.6, 32, 32);
+        const sphereGeometry4 = new THREE.SphereGeometry(0.4, 32, 32);
 
         
         // 3. Define your Mermaid Charts (replace with your actual charts)
@@ -71,12 +67,7 @@
             "eco-ops-diagram4.md"
         ];
 
-
-            
-            
-            // Sphere Geometries (You already have this part)
-            const sphereGeometry1 = new THREE.SphereGeometry(1, 32, 32);
-            // ... other sphere geometries
+             
             
             // Materials (Optional - We'll use a basic material)
             const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0x999999 }); 
