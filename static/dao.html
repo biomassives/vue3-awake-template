@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Ops Technical Approach Flow Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({ startOnLoad: true });</script>
+    <style>
+        .content-wrapper .content {
+               height: calc(100vh - 130px); 
+               overflow: auto;
+        }
+    </style>
+</head>
+<body>
+
+  <div class="header">
+    <h2>Eco Ops Technical Approach Flow Chart</h2>
+  </div> 
+  
+    <div class="mermaid">
+        flowchart LR
+            A[User Actions] -->|Track & Verify| B[Biodiversity Credit System]
+            B --> C[Marketplace for Biodiversity Credits]
+            B -->|Reporting & Verification| D[Project Reporting Verification]
+            B --> E[Education & Community Engagement]
+            E -->|Blockchain & ESM NFTs| F[Blockchain Technology]
+            E -->|Debate & Discussion| G[Community-Level Reporting Challenges]
+            
+            subgraph NFT.Storage 
+                N1[ESM NFTs Metadata] -->|IPFS| N2[Decentralized Storage]
+                N2 -- Resilience --> N3[No single point of failure] 
+                N2 -- Immutability --> N4[Tamper-proof]
+                N2 -- Liability Mitigation --> N5 
+                N5 -- Data Ownership --> N6[User/Project Responsibility]
+                N5 -- Legal Jurisdiction --> N7[Separation from Platform]
+            end
+        
+            subgraph Location Systems [Exotopia & Steiner Octals]
+                L1[Precise Location Reference]
+                L2[Unique Identifiers]  --> L3[Blockchain Linkage] 
+                L4[Token Holder Connections]
+                L4 -- Facilitate Collaboration 
+                L4 -- Geographic Marketplaces
+            end
+        
+            subgraph EcoCommunity DAO 
+                D1[GitHub Issues] 
+                D2[Gitcoin Bounties]
+                D3[Decentralized Development]
+                D3 -- Openness
+                D3 -- Community Engagement
+                D3 -- Incentivization
+                D4[EcoCommunity DAO] -- Governs --> D3
+                D4 -- Prioritizes --> D1
+            end 
+    </div>
+</body>
+</html>
