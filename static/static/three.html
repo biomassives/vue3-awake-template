@@ -62,8 +62,21 @@ const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
         scene.add(directionalLight);
 
         // Floating Island - SphereGeometry with a flat top
-        const islandGeometry = new THREE.CylinderGeometry(5, 5, 2, 32, 1, true);
-        const islandMaterial = new THREE.MeshPhongMaterial({ color: 0x228b22, flatShading: true });
+const sphereGeometry = new THREE.SphereGeometry(5, 32, 32);
+
+const loader = new THREE.TextureLoader();
+const texture = loader.load('path/to/your/image.png'); // Replace with your image path
+
+const sphereMaterial = new THREE.MeshBasicMaterial({
+  map: texture,
+  transparent: true,
+  opacity: 0.8, // Adjust opacity for semi-transparency (0 - 1)
+});
+
+const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+
+
+         
         const island = new THREE.Mesh(islandGeometry, islandMaterial);
         island.position.y = 1; // Positioning the island above the "water"
         scene.add(island);
