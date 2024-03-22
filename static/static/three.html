@@ -33,19 +33,7 @@
         const renderer = new THREE.WebGLRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.getElementById('canvas-container').appendChild(renderer.domElement);
-        const sphereGeometry = new THREE.SphereGeometry(5, 32, 32);
-        
-        const loader = new THREE.TextureLoader();
-        const texture = loader.load('path/to/your/image.png'); // Replace with your image path
-        
-        const sphereMaterial = new THREE.MeshBasicMaterial({
-          map: texture,
-          transparent: true,
-          opacity: 0.8, // Adjust opacity for semi-transparency (0 - 1)
-        });
-        
-        const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-        scene.add(sphere);
+
 
         // OrbitControls setup
         const controls = new OrbitControls(camera, renderer.domElement);
@@ -61,19 +49,19 @@
         scene.add(directionalLight);
 
         // Floating Island - SphereGeometry with a flat top
-const sphereGeometry = new THREE.SphereGeometry(5, 32, 32);
-
-const loader = new THREE.TextureLoader();
-const texture = loader.load('path/to/your/image.png'); // Replace with your image path
-
-const sphereMaterial = new THREE.MeshBasicMaterial({
-  map: texture,
-  transparent: true,
-  opacity: 0.8, // Adjust opacity for semi-transparency (0 - 1)
-});
-
-const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-
+        const sphereGeometry = new THREE.SphereGeometry(5, 32, 32);
+        
+        const loader = new THREE.TextureLoader();
+        const texture = loader.load('path/to/your/image.png'); // Replace with your image path
+        
+        const sphereMaterial = new THREE.MeshBasicMaterial({
+          map: texture,
+          transparent: true,
+          opacity: 0.8, // Adjust opacity for semi-transparency (0 - 1)
+        });
+        
+        const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+        
 
          
         const island = new THREE.Mesh(islandGeometry, islandMaterial);
