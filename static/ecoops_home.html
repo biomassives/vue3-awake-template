@@ -18,8 +18,24 @@
     <div class="bg-white rounded-lg p-6 max-w-md mx-auto mt-24">
      </div>
   </div>
+  <div id="modal" class="hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50">
+    <div class="bg-white rounded-lg p-6 max-w-md mx-auto mt-24">
+      <button id="close-modal" class="absolute top-4 right-4">X</button>
+      <h2 class="text-xl font-semibold mb-4" id="modal-title"></h2> 
+      <div id="modal-image-container" class="mb-4">
+        <img id="modal-image" src="" alt="Project Image"> 
+      </div>
+      <p id="modal-text"></p>
+      <a id="image-source" href="#" target="_blank" class="text-sm text-blue-600">Image Source</a> 
+    </div>
+  </div>
 
   <script>
+
+
+
+
+    
 const modalButton = document.querySelector('.modal-button'); 
 const modal = document.getElementById('modal');
 const closeBtn  = document.getElementById('close-modal');
