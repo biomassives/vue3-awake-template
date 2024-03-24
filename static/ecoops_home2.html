@@ -14,17 +14,50 @@
      Explore Eco Projects
   </a>
 
+
+  <h1 class="text-3xl font-bold mb-8">Welcome to Eco Ops!</h1>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-white shadow-md rounded-lg p-6">
+        <h2 class="text-xl font-semibold mb-4">Check-Ins and Data Collection</h2>
+        <p>Record your eco activities, gather valuable data, and contribute to projects.</p>
+        <a href="#" class="inline-block mt-4 bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-md">
+          Start a Check-In
+        </a>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6">
+        <h2 class="text-xl font-semibold mb-4">Project Creation & Management</h2>
+        <p>Create new projects, manage tasks, and track progress towards your goals.</p>
+        <a href="#" class="inline-block mt-4 bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-md">
+          Create a Project
+        </a>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6">
+        <h2 class="text-xl font-semibold mb-4">Reporting and Analytics</h2>
+        <p>Visualize your impact, generate reports, and gain insights into your eco efforts.</p>
+        <a href="#" class="inline-block mt-4 bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-md">
+          View Reports
+        </a>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6">
+        <h2 class="text-xl font-semibold mb-4">Collaboration & Community Engagement</h2>
+        <p>Connect with fellow volunteers, share ideas, and build a strong eco community.</p>
+        <a href="#" class="inline-block mt-4 bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-md">
+          Join the Community
+        </a>
+      </div>
+  </div>
+
   <div id="modal" class="hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50">
     <div class="bg-white rounded-lg p-6 max-w-md mx-auto mt-24">
      </div>
   </div>
-
-
-
-  
   
   <script>
-const featuredProjects = [
+  const featuredProjects = [
   {
     title: "Community Garden Initiative",
     text: "Transforming unused land into vibrant gardens.",
@@ -46,9 +79,6 @@ const featuredProjects = [
   // ... You can add more projects here 
 ];
 
-
-
-  
   const featuredProjectsContainer = document.getElementById('featured-projects');
 
 // Function to create HTML for each project (you'd customize this)
