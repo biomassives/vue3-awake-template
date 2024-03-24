@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eco Ops Modal Example</title>
+  <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet"> </head>
+<body class="container mx-auto p-6"> 
+  
+
+  <h1 class="text-3xl font-bold mb-8">Welcome to Eco Ops!</h1>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-white shadow-md rounded-lg p-6">
+        <h2 class="text-xl font-semibold mb-4">Check-Ins and Data Collection</h2>
+        <p>Record your eco activities, gather valuable data, and contribute to projects.</p>
+        <a href="#" class="inline-block mt-4 bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-md"
+               data-title="Eco Project" 
+               data-text="Discover eco projects and get involved in your community." 
+               data-searchterm="eco project">
+          Start a Check-In
+        </a>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6">
+        <h2 class="text-xl font-semibold mb-4">Project Creation & Management</h2>
+        <p>Create new projects, manage tasks, and track progress towards your goals.</p>
+        <a href="#" class="inline-block mt-4 bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-md"
+               data-title="Eco Project" 
+               data-text="Discover eco projects and get involved in your community." 
+               data-searchterm="eco project">
+          Create a Project
+        </a>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6">
+        <h2 class="text-xl font-semibold mb-4">Reporting and Analytics</h2>
+        <p>Impact reports gain insights into your eco efforts.</p>
+        <a href="#" class="inline-block mt-4 bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-md"
+               data-title="Eco Project" 
+               data-text="Discover eco projects and get involved in your community." 
+               data-searchterm="eco project">
+          View Reports
+        </a>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6">
+        <h2 class="text-xl font-semibold mb-4">Collaboration & Community Engagement</h2>
+        <p>Connect, volunteer, share ideas, and build community.</p>
+        <a href="#" class="inline-block mt-4 bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-md"
+               data-title="Eco Project" 
+               data-text="Discover eco projects and get involved in your community." 
+               data-searchterm="Join the Community">          
+          Join the Community
+        </a>
+      </div>
+  </div>
+
+  <div id="modal" class="hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50">
+    <div class="bg-white rounded-lg p-6 max-w-md mx-auto mt-24">
+     </div>
+  </div>
+  
+  <script>
+  const featuredProjects = [
+  {
+    title: "Community Garden Initiative",
+    text: "Transforming unused land into vibrant gardens.",
+    searchTerm: "community garden",
+    imageUrl: "https://images.unsplash.com/communitygarden.jpg"
+  },
+  {
+    title: "River Cleanup Project",
+    text: "Restoring the health of our local waterways.",
+    searchTerm: "river cleanup",
+    imageUrl: "https://images.unsplash.com/rivercleanup.jpg"
+  },
+  {
+    title: "Solar Energy Education",
+    text: "Empowering the community with renewable energy knowledge.",
+    searchTerm: "solar energy",
+    imageUrl: "https://images.unsplash.com/solarpanels.jpg" 
+  }
+  // ... You can add more projects here 
+];
+
+  const featuredProjectsContainer = document.getElementById('featured-projects');
+
+// Function to create HTML for each project (you'd customize this)
+function createProjectListing(project) {
+  return `
+    <div class="project-card">
+      <h3>${project.title}</h3>
+      <img src="${project.imageUrl || 'placeholder.jpg'}" alt="${project.title}"> 
+      <p>${project.text}</p>
+    </div>
+  `; 
+}
+
+// Populate the featured projects section
+featuredProjects.forEach(project => {
+    featuredProjectsContainer.innerHTML += createProjectListing(project); 
+});
+
+</script>
