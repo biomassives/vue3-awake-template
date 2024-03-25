@@ -114,9 +114,9 @@
     const imageSource = document.getElementById('image-source');
     
     const nextView = document.getElementById('next-view'); 
+    const prevView = document.getElementById('prev-view'); 
     
-    prevView.disabled = (currentViewIndex === 0);
-    
+    prevView.disabled = (currentViewIndex === 0);    
     prevView.addEventListener('click', () => {
      currentViewIndex--;
      updateModalContent();
