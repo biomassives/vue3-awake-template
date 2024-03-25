@@ -3,17 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eco Ops Modal Example</title>
-  <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet"> </head>
-<body class="container mx-auto p-6"> 
-  
-
-  <h1 class="text-3xl font-bold mb-8">Welcome to Eco Ops!</h1>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Eco Ops - Your Eco Actions Hub</title>
   <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet"> 
 </head>
@@ -90,7 +79,14 @@
 
   <script>
 
-    const buttons = document.querySelectorAll('.modal-button'); 
+    const buttons = document.querySelectorAll('.modal-button');
+    const modal = document.getElementById('modal');
+    const closeBtn  = document.getElementById('close-modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalImage = document.getElementById('modal-image');
+    const modalText = document.getElementById('modal-text');
+    const imageSource = document.getElementById('image-source');
+
 
     const buttons = document.querySelectorAll('.modal-button');
     
