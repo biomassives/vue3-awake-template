@@ -23,7 +23,9 @@
   <p>Record your eco activities, gather valuable data, and contribute to projects.</p>
   <a href="#" class="inline-block mt-4 bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-md modal-button"
      data-title="Check-Ins" 
-     data-text="Record your eco activities... our system uses ipfs check it out! <a href=\"https://ecocity.com/up\">checkin form</a>" 
+     data-link-text="checkin form"
+     data-link-url="https://ecocity.com/up"
+     data-text="Record your eco activities... our system uses ipfs check it out!" 
      data-searchterm="sign paper">
     Start a Check-In
   </a>
@@ -73,7 +75,8 @@
       
       <h2 class="text-xl font-semibold mb-4" id="modal-title"></h2> 
       <div id="modal-image-container" class="mb-4">
-        <img id="modal-image" src="" alt="Project Image" class="max-w-full h-auto"> 
+        <img id="modal-image" src="" alt="Project Image" class="max-w-half h-auto"> 
+        <img id="modal-image" src="" alt="Project Image" class="max-w-half h-auto"> 
       </div>
       <p id="modal-text"></p>
       <a id="image-source" href="#" target="_blank" class="text-sm text-blue-600">Image Source</a>      
@@ -151,13 +154,23 @@
         const title = button.dataset.title;
         const text = button.dataset.text; 
         const searchTerm = button.dataset.searchterm;
-    
+  
         modalTitle.textContent = title;
         modalText.textContent = text;
-        fetchImage(searchTerm);
-        openModal();
-     });
-    });
+                 
+        // Check if link data exists
+        if (button.dataset.linkText && button.dataset.linkUrl) {
+          const linkElement = document.createElement('a');
+          linkElement.textContent = button.dataset.linkText;
+          linkElement.href = button.dataset.linkUrl;
+          linkElement.target = "_blank"; // Open in a new tab
+          modalText.appendChild(linkElement);  
+        }
+                  
+          fetchImage(searchTerm);
+          openModal();
+       });
+      });
 
 
 closeBtn.addEventListener('click', closeModal); 
