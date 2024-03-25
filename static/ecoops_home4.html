@@ -65,6 +65,29 @@
 </div>      
 </div>
 
+
+<div id="modal" class="hidden fixed inset-0 w-full h-full bg-black bg-opacity-50 z-50">
+  <div class="bg-white rounded-lg p-6 max-w-md mx-auto mt-24 shadow-lg">
+    <button id="close-modal" class="absolute top-4 right-4 text-gray-700 hover:text-black">X</button>
+    <div id="modal-content"> 
+      
+      <h2 class="text-xl font-semibold mb-4" id="modal-title"></h2> 
+      <div id="modal-image-container" class="mb-4">
+        <img id="modal-image" src="" alt="Project Image" class="max-w-full h-auto"> 
+      </div>
+      <p id="modal-text"></p>
+      <a id="image-source" href="#" target="_blank" class="text-sm text-blue-600">Image Source</a> 
+
+      </div>
+    <div class="mt-4 text-center"> <button id="prev-view" class="disabled bg-gray-400 ...">Prev</button>
+      <button id="next-view" >Next</button>
+    </div>
+  </div>
+</div>
+
+
+
+  
   <div id="modal" class="hidden fixed inset-0 w-full h-full bg-black bg-opacity-50 z-50">
     <div class="bg-white rounded-lg p-6 max-w-md mx-auto mt-24 shadow-lg">
       <button id="close-modal" class="absolute top-4 right-4 text-gray-700 hover:text-black">X</button>
