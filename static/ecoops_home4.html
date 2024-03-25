@@ -111,7 +111,40 @@
     const imageSource = document.getElementById('image-source');
 
 
+const educationalViews = [
+  { text: "View A content..." },
+  { text: "View B content..." },
+  { text: "View C content..." }
+];
 
+// Inside your button's click event handler
+  let currentViewIndex = 0; 
+
+  function updateModalContent() {
+    const currentView = educationalViews[currentViewIndex];
+    modalContent.innerHTML = currentView.text; 
+    // You might also insert form elements here dynamically 
+
+    // Update navigation button states
+    prevView.disabled = (currentViewIndex === 0);
+    nextView.disabled = (currentViewIndex === educationalViews.length - 1);
+  }
+
+  // Initial content population
+  updateModalContent();
+
+nextView.addEventListener('click', () => {
+  currentViewIndex++;
+  updateModalContent();
+});
+
+prevView.addEventListener('click', () => {
+  currentViewIndex--;
+  updateModalContent();
+});
+
+
+    
     
     buttons.forEach(button => { 
      button.addEventListener('click', () => {
