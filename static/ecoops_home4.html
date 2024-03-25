@@ -112,10 +112,14 @@
         const modalImage = document.getElementById('modal-image');
         const modalText = document.getElementById('modal-text');
         const imageSource = document.getElementById('image-source');
-        
         const nextView = document.getElementById('next-view'); 
         const prevView = document.getElementById('prev-view'); 
     
+
+          let currentViewIndex = 0; 
+
+    
+
         nextView.addEventListener('click', () => {
           currentViewIndex++;
           updateModalContent();
@@ -136,7 +140,6 @@
         ];
         
         // Inside your button's click event handler
-          let currentViewIndex = 0; 
           const modalContent = document.getElementById('modal-content');
     
         
