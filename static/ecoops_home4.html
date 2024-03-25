@@ -60,7 +60,7 @@
      data-title="Check-Ins" 
      data-text="Record your eco activities..." 
      data-searchterm="eco volunteering">
-    Start a Check-In
+    View Reports
   </a>
 </div>
 
@@ -71,16 +71,11 @@
      data-title="Check-Ins" 
      data-text="Record your eco activities..." 
      data-searchterm="eco volunteering">
-    Collaboration & Community Engagement
+    Join the community
   </a>
-</div>    
+</div>      
+</div>
 
-    
-    
-  
-    </div>
-
-  
   <div id="modal" class="hidden fixed inset-0 w-full h-full bg-black bg-opacity-50 z-50">
     <div class="bg-white rounded-lg p-6 max-w-md mx-auto mt-24 shadow-lg">
       <button id="close-modal" class="absolute top-4 right-4 text-gray-700 hover:text-black">X</button>
@@ -94,6 +89,9 @@
   </div>
 
   <script>
+
+    const buttons = document.querySelectorAll('.modal-button'); 
+
     const buttons = document.querySelectorAll('.modal-button');
     
     buttons.forEach(button => { 
