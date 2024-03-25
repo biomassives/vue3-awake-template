@@ -105,67 +105,55 @@
 
   <script>
 
-    const buttons = document.querySelectorAll('.modal-button');
-    const modal = document.getElementById('modal');
-    const closeBtn  = document.getElementById('close-modal');
-    const modalTitle = document.getElementById('modal-title');
-    const modalImage = document.getElementById('modal-image');
-    const modalText = document.getElementById('modal-text');
-    const imageSource = document.getElementById('image-source');
+        const buttons = document.querySelectorAll('.modal-button');
+        const modal = document.getElementById('modal');
+        const closeBtn  = document.getElementById('close-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalImage = document.getElementById('modal-image');
+        const modalText = document.getElementById('modal-text');
+        const imageSource = document.getElementById('image-source');
+        
+        const nextView = document.getElementById('next-view'); 
+        const prevView = document.getElementById('prev-view'); 
     
-    const nextView = document.getElementById('next-view'); 
-    const prevView = document.getElementById('prev-view'); 
-
-    nextView.addEventListener('click', () => {
-      currentViewIndex++;
+        nextView.addEventListener('click', () => {
+          currentViewIndex++;
+          updateModalContent();
+        });   
+    
+        
+        
+        prevView.disabled = (currentViewIndex === 0);    
+        prevView.addEventListener('click', () => {
+         currentViewIndex--;
+         updateModalContent();
+        });    
+        
+        const educationalViews = [
+          { text: "View A content..." },
+          { text: "View B content..." },
+          { text: "View C content..." }
+        ];
+        
+        // Inside your button's click event handler
+          let currentViewIndex = 0; 
+          const modalContent = document.getElementById('modal-content');
+    
+        
+      function updateModalContent() {
+        const currentView = educationalViews[currentViewIndex];
+        modalContent.innerHTML = currentView.text; 
+        // You might also insert form elements here dynamically 
+    
+        // Update navigation button states
+        prevView.disabled = (currentViewIndex === 0);
+        nextView.disabled = (currentViewIndex === educationalViews.length - 1);
+      }
+    
+      // Initial content population
       updateModalContent();
-    });   
-
     
-    
-    prevView.disabled = (currentViewIndex === 0);    
-    prevView.addEventListener('click', () => {
-     currentViewIndex--;
-     updateModalContent();
-    });    
-    
-    const educationalViews = [
-      { text: "View A content..." },
-      { text: "View B content..." },
-      { text: "View C content..." }
-    ];
-    
-    // Inside your button's click event handler
-      let currentViewIndex = 0; 
-      const modalContent = document.getElementById('modal-content');
-
-    
-  function updateModalContent() {
-    const currentView = educationalViews[currentViewIndex];
-    modalContent.innerHTML = currentView.text; 
-    // You might also insert form elements here dynamically 
-
-    // Update navigation button states
-    prevView.disabled = (currentViewIndex === 0);
-    nextView.disabled = (currentViewIndex === educationalViews.length - 1);
-  }
-
-  // Initial content population
-  updateModalContent();
-
-nextView.addEventListener('click', () => {
-  currentViewIndex++;
-  updateModalContent();
-});
-
-prevView.addEventListener('click', () => {
-  currentViewIndex--;
-  updateModalContent();
-});
-
-
-    
-    
+        
     buttons.forEach(button => { 
      button.addEventListener('click', () => {
         const title = button.dataset.title;
