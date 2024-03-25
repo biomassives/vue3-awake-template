@@ -86,6 +86,9 @@
     const modalImage = document.getElementById('modal-image');
     const modalText = document.getElementById('modal-text');
     const imageSource = document.getElementById('image-source');
+
+
+
     
     buttons.forEach(button => { 
      button.addEventListener('click', () => {
@@ -100,6 +103,18 @@
      });
     });
 
+
+closeBtn.addEventListener('click', closeModal); 
+
+function openModal() {
+  modal.classList.remove('hidden'); 
+}
+
+function closeModal() {
+  modal.classList.add('hidden'); 
+}
+
+    
 function fetchImage(searchTerm) {
   const apiKey = 'qAG7N9e7yM1tY3n5CAmSPCeSBuEDDujF7Uway1dIH5w'; 
   const url = `https://api.unsplash.com/search/photos?query=${searchTerm}&client_id=${apiKey}`;
