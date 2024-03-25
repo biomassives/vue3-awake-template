@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eco Ops Modal Example</title>
+  <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet"> </head>
+<body class="container mx-auto p-6"> 
+  
+
+  <h1 class="text-3xl font-bold mb-8">Welcome to Eco Ops!</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eco Ops - Your Eco Actions Hub</title>
+  <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet"> 
+</head>
+<body class="container mx-auto p-6"> 
+
+  <header class="bg-green-600 text-white py-4 mb-8">
+    <h1 class="text-3xl font-bold text-center">Eco Ops</h1>
+  </header>
+
+
+
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+  
+
+
+<div class="bg-white shadow-md rounded-lg p-6">
+  <h2 class="text-xl font-semibold mb-4">Check-Ins and Data Collection</h2>
+  <p>Record your eco activities, gather valuable data, and contribute to projects.</p>
+  <a href="#" class="inline-block mt-4 bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-md modal-button"
+     data-title="Check-Ins" 
+     data-text="Record your eco activities..." 
+     data-searchterm="eco volunteering">
+    Start a Check-In
+  </a>
+</div>
+
+<div class="bg-white shadow-md rounded-lg p-6">
+  <h2 class="text-xl font-semibold mb-4">Project Creation & Management</h2>
+  <p>Create new projects, manage tasks, and track progress towards your goals.</p>
+  <a href="#" class="inline-block mt-4 bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-md modal-button"
+     data-title="Check-Ins" 
+     data-text="Record your eco activities..." 
+     data-searchterm="eco volunteering">
+    Create a Project 
+  </a>
+</div>
+
+
+<div class="bg-white shadow-md rounded-lg p-6">
+  <h2 class="text-xl font-semibold mb-4">Reporting and Analytics</h2>
+  <p>Impact reports gain insights into your eco efforts.</p>
+  <a href="#" class="inline-block mt-4 bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-md modal-button"
+     data-title="Check-Ins" 
+     data-text="Record your eco activities..." 
+     data-searchterm="eco volunteering">
+    Start a Check-In
+  </a>
+</div>
+
+<div class="bg-white shadow-md rounded-lg p-6">
+  <h2 class="text-xl font-semibold mb-4">Collaboration & Community Engagement</h2>
+  <p>Connect, volunteer, share ideas, and build community.</p>
+  <a href="#" class="inline-block mt-4 bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-md modal-button"
+     data-title="Check-Ins" 
+     data-text="Record your eco activities..." 
+     data-searchterm="eco volunteering">
+    Collaboration & Community Engagement
+  </a>
+</div>    
+
+    
+    
+  
+    </div>
+
+  
+  <div id="modal" class="hidden fixed inset-0 w-full h-full bg-black bg-opacity-50 z-50">
+    <div class="bg-white rounded-lg p-6 max-w-md mx-auto mt-24 shadow-lg">
+      <button id="close-modal" class="absolute top-4 right-4 text-gray-700 hover:text-black">X</button>
+      <h2 class="text-xl font-semibold mb-4" id="modal-title"></h2> 
+      <div id="modal-image-container" class="mb-4">
+        <img id="modal-image" src="" alt="Project Image" class="max-w-full h-auto"> 
+      </div>
+      <p id="modal-text"></p>
+      <a id="image-source" href="#" target="_blank" class="text-sm text-blue-600">Image Source</a> 
+    </div>
+  </div>
+
+  <script>
+    const buttons = document.querySelectorAll('.modal-button');
+    
+    buttons.forEach(button => { 
+     button.addEventListener('click', () => {
+        const title = button.dataset.title;
+        const text = button.dataset.text; 
+        const searchTerm = button.dataset.searchterm;
+    
+        modalTitle.textContent = title;
+        modalText.textContent = text;
+        fetchImage(searchTerm);
+        openModal();
+     });
+    });
+  </script>
+</body>
+</html>
