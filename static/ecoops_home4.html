@@ -115,6 +115,13 @@
     
     const nextView = document.getElementById('next-view'); 
     const prevView = document.getElementById('prev-view'); 
+
+    nextView.addEventListener('click', () => {
+      currentViewIndex++;
+      updateModalContent();
+    });   
+
+    
     
     prevView.disabled = (currentViewIndex === 0);    
     prevView.addEventListener('click', () => {
