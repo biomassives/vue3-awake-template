@@ -70,6 +70,9 @@
   <div class="bg-white rounded-lg p-6 max-w-md mx-auto mt-24 shadow-lg">
     <button id="close-modal" class="absolute top-4 right-4 text-gray-700 hover:text-black">X</button>
     <div id="modal-content"> 
+         <div id="modal-content"> 
+      </div>
+
       
       <h2 class="text-xl font-semibold mb-4" id="modal-title"></h2> 
       <div id="modal-image-container" class="mb-4">
@@ -119,7 +122,9 @@ const educationalViews = [
 
 // Inside your button's click event handler
   let currentViewIndex = 0; 
+  const modalContent = document.getElementById('modal-content');
 
+    
   function updateModalContent() {
     const currentView = educationalViews[currentViewIndex];
     modalContent.innerHTML = currentView.text; 
