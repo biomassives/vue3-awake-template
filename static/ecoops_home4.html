@@ -112,17 +112,25 @@
     const modalImage = document.getElementById('modal-image');
     const modalText = document.getElementById('modal-text');
     const imageSource = document.getElementById('image-source');
-
-
-const educationalViews = [
-  { text: "View A content..." },
-  { text: "View B content..." },
-  { text: "View C content..." }
-];
-
-// Inside your button's click event handler
-  let currentViewIndex = 0; 
-  const modalContent = document.getElementById('modal-content');
+    
+    
+    
+    prevView.disabled = (currentViewIndex === 0);
+    
+    prevView.addEventListener('click', () => {
+     currentViewIndex--;
+     updateModalContent();
+    });    
+    
+    const educationalViews = [
+      { text: "View A content..." },
+      { text: "View B content..." },
+      { text: "View C content..." }
+    ];
+    
+    // Inside your button's click event handler
+      let currentViewIndex = 0; 
+      const modalContent = document.getElementById('modal-content');
 
     
   function updateModalContent() {
