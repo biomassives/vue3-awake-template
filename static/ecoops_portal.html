@@ -13,6 +13,91 @@
   </header>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+    <div id="modal" class="hidden fixed inset-0 w-full h-full bg-black bg-opacity-50 z-50">
+  <div class="bg-white rounded-lg p-6 max-w-md mx-auto mt-24 shadow-lg">
+    <div class="modal-content"> 
+      <h2 class="text-xl font-semibold mb-4" id="modal-title"></h2> 
+
+      <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#input-uploader">Input Uploader</a></li>
+        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#map">Map</a></li>
+        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#response-form">Response Form</a></li>
+        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#report-summary">Report Summary</a></li>
+      </ul>
+
+      <div class="tab-content">
+        <div class="tab-pane active" id="input-uploader">
+          <div id="modal-image-container" class="mb-4"> 
+            </div>
+          <input type="file" id="file-input" class="mb-4"> 
+        </div>
+        <div class="tab-pane" id="map">
+          <div id="map-container" style="height: 300px;"></div> 
+        </div>
+        <div class="tab-pane" id="response-form">
+          <form id="response-form">
+            </form> 
+        </div>
+        <div class="tab-pane" id="report-summary"> 
+          <div id="report-summary-content"></div>
+        </div>
+      </div>
+
+      </div>   
+  </div>
+</div>
+
+
+<div class="bg-white shadow-md rounded-lg p-6">
+  <h2 class="text-xl font-semibold mb-4">Check-Ins and Data Collection</h2>
+  <p>Record your eco activities, gather valuable data, and contribute to projects.</p>
+  <a href="#" class="inline-block mt-4 bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-md modal-button"
+     data-title="Check-Ins" 
+     data-link-text="checkin form"
+     data-link-url="https://ecocity.com/up"
+     data-text="Record your eco activities... our system uses ipfs check it out!" 
+     data-searchterm="sign paper">
+    Start a Check-In
+  </a>
+</div>
+
+<div class="bg-white shadow-md rounded-lg p-6">
+  <h2 class="text-xl font-semibold mb-4">Project Creation & Management</h2>
+  <p>Create new projects, manage tasks, and track progress towards your goals.</p>
+  <a href="#" class="inline-block mt-4 bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-md modal-button"
+     data-title="Check-Ins" 
+     data-text="Record your eco activities..." 
+     data-searchterm="project activity">
+    Create a Project 
+  </a>
+</div>
+
+
+<div class="bg-white shadow-md rounded-lg p-6">
+  <h2 class="text-xl font-semibold mb-4">Reporting and Analytics</h2>
+  <p>Impact reports gain insights into your eco efforts.</p>
+  <a href="#" class="inline-block mt-4 bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-md modal-button"
+     data-title="Check-Ins" 
+     data-text="Record your eco activities..." 
+     data-searchterm="boardroom chart present skirt">
+    View Reports
+  </a>
+</div>
+
+<div class="bg-white shadow-md rounded-lg p-6">
+  <h2 class="text-xl font-semibold mb-4">Collaboration & Community Engagement</h2>
+  <p>Connect, volunteer, share ideas, and build community.</p>
+  <a href="#" class="inline-block mt-4 bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-md modal-button"
+     data-title="Check-Ins" 
+     data-text="Record your eco activities..." 
+     data-searchterm="boat ride">
+    Join the community
+  </a>
+</div>      
+</div>
+
+    
     </div>
 
 
