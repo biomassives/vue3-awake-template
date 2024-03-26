@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eco Ops - Your Eco Actions Hub</title>
+  <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="container mx-auto p-6"> 
+
+  <header class="bg-green-600 text-white py-4 mb-8">
+    <h1 class="text-3xl font-bold text-center">Eco Ops</h1>
+  </header>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    </div>
+
+
+<div id="modal" class="hidden fixed inset-0 w-full h-full bg-black bg-opacity-50 z-50">
+  <div class="bg-white rounded-lg p-6 max-w-md mx-auto mt-24 shadow-lg">
+    <div class="modal-content"> 
+      <h2 class="text-xl font-semibold mb-4" id="modal-title"></h2> 
+
+      <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#input-uploader">Input Uploader</a></li>
+        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#map">Map</a></li>
+        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#response-form">Response Form</a></li>
+        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#report-summary">Report Summary</a></li>
+      </ul>
+
+      <div class="tab-content">
+        <div class="tab-pane active" id="input-uploader">
+          <div id="modal-image-container" class="mb-4"> 
+            </div>
+          <input type="file" id="file-input" class="mb-4"> 
+        </div>
+        <div class="tab-pane" id="map">
+          <div id="map-container" style="height: 300px;"></div> 
+        </div>
+        <div class="tab-pane" id="response-form">
+          <form id="response-form">
+            </form> 
+        </div>
+        <div class="tab-pane" id="report-summary"> 
+          <div id="report-summary-content"></div>
+        </div>
+      </div>
+
+      </div>   
+  </div>
+</div>
+
+
+  
+  <div id="modal" class="hidden fixed inset-0 w-full h-full bg-black bg-opacity-50 z-50">
+    <div class="bg-white rounded-lg p-6 max-w-md mx-auto mt-24 shadow-lg">
+      <button id="close-modal" class="absolute top-4 right-4 text-gray-700 hover:text-black text-2xl p-2 bg-white hover:bg-gray-200 rounded-full">[X]</button>
+
+      <h2 class="text-xl font-semibold mb-4" id="modal-title"></h2> 
+      <div id="modal-image-container" class="mb-4">
+        <img id="modal-image" src="" alt="Project Image" class="max-w-half h-auto">
+        <a id="image-source" href="#" target="_blank" class="text-sm text-blue-600">Image Source</a> 
+      </div>
+      <p id="modal-text"></p> 
+
+      <div class="mt-4 text-center">
+        <button id="prev-view" class="disabled bg-gray-400 hover:bg-gray-500 text-white font-medium py-2 px-4 rounded-md mr-2">Prev</button> 
+        <button id="next-view" class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md">Next</button> 
+      </div>
+    </div>
+  </div>
+
+  <script>
+
+        const buttons = document.querySelectorAll('.modal-button');
+        const modal = document.getElementById('modal');
+        const closeBtn  = document.getElementById('close-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalImage = document.getElementById('modal-image');
+        const modalText = document.getElementById('modal-text');
+        const imageSource = document.getElementById('image-source');
+        const nextView = document.getElementById('next-view'); 
+        const prevView = document.getElementById('prev-view'); 
+    
+
+          let currentViewIndex = 0; 
+
+    
+
+        nextView.addEventListener('click', () => {
+          currentViewIndex++;
+          updateModalContent();
+        });   
+    
+        
+        prevView.disabled = (currentViewIndex === 0);    
+        prevView.addEventListener('click', () => {
+         currentViewIndex--;
+         updateModalContent();
+        });    
+        
+        const educationalViews = [
+          { text: "your NFT checkins validate exchange value..." },
+          { text: "a Biodiversity credit is exchangeable..." },
+          { text: "How to make recycling work..." },
+          { text: "Learn how to validate other projects for cred & rewards." }
+        ];
+        
+        // Inside your button's click event handler
+          const modalContent = document.getElementById('modal-content');
+    
+    
+  // ... (buttons, modal, closeBtn, modalTitle, etc. declarations)
+
+let currentViewIndex = 0; 
+
+function updateModalContent() {
+  const currentView = educationalViews[currentViewIndex];
+  modalText.textContent = currentView.text;  
+
+  // ... rest of your modal content update logic (image, links, etc.)
+
+  // Navigation button states
+  prevView.disabled = (currentViewIndex === 0);
+  nextView.disabled = (currentViewIndex === educationalViews.length - 1);
+}
+
+
+        
+    buttons.forEach(button => { 
+     button.addEventListener('click', () => {
+        const title = button.dataset.title;
+        const text = button.dataset.text; 
+        const searchTerm = button.dataset.searchterm;
+  
+        modalTitle.textContent = title;
+        modalText.textContent = text;
+                 
+        // Check if link data exists
+        if (button.dataset.linkText && button.dataset.linkUrl) {
+          const linkElement = document.createElement('a');
+          linkElement.textContent = button.dataset.linkText;
+          linkElement.href = button.dataset.linkUrl;
+          linkElement.target = "_blank"; // Open in a new tab
+          modalText.appendChild(linkElement);  
+        }
+                  
+          fetchImage(searchTerm);
+          openModal();
+       });
+      });
+
+
+closeBtn.addEventListener('click', closeModal); 
+
+function openModal() {
+  modal.classList.remove('hidden'); 
+}
+
+function closeModal() {
+  modal.classList.add('hidden'); 
+}
+
+    
+function fetchImage(searchTerm) {
+  const apiKey = 'qAG7N9e7yM1tY3n5CAmSPCeSBuEDDujF7Uway1dIH5w'; 
+  const url = `https://api.unsplash.com/search/photos?query=${searchTerm}&client_id=${apiKey}`;
+
+  fetch(url)
+    .then(response => response.json())  // Convert response to JSON
+    .then(data => {
+      if (data.results.length > 0) {
+        const imageUrl = data.results[0].urls.regular; 
+        const imageAttribution = data.results[0].links.html; 
+
+        modalImage.src = imageUrl; 
+        imageSource.href = imageAttribution; 
+        modalImage.style.display = 'block'; // Show the image 
+      } else {
+        // Handle case if no image is found (e.g., display a message)
+        modalImage.style.display = 'none'; // Hide in case an earlier image was present
+        console.log("No images found for this search term.");
+      }
+    })
+    .catch(error => {
+      // Handle network or API errors
+      console.error('Error fetching image:', error); 
+    });
+}
+
+
+  
+  </script>
+</body>
+</html>
