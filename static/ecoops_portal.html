@@ -195,28 +195,42 @@
           const modalContent = document.getElementById('modal-content');
     
     
-  // ... (buttons, modal, closeBtn, modalTitle, etc. declarations)
+        // ... (buttons, modal, closeBtn, modalTitle, etc. declarations)
+      
+      
+      function updateModalContent() {
+        const currentView = educationalViews[currentViewIndex];
+        modalText.textContent = currentView.text;  
+      
+        // ... rest of your modal content update logic (image, links, etc.)
+      
+        // Navigation button states
+        prevView.disabled = (currentViewIndex === 0);
+        nextView.disabled = (currentViewIndex === educationalViews.length - 1);
+      }
+      
+      
+              
+          buttons.forEach(button => { 
+           button.addEventListener('click', () => {
+              const title = button.dataset.title;
+              const text = button.dataset.text; 
+              const searchTerm = button.dataset.searchterm;
+      
+            // Find or create the modal for this specific button
+            let buttonModal = document.getElementById(`modal-${button.id}`) // Assuming buttons have IDs
+      
+            if (!buttonModal) {
+              // Create the modal if it doesn't exist yet
+              buttonModal = createModal(button.id);
+              document.body.appendChild(buttonModal);
+            }
+      
+            // Update the modal's content
+            const modalTitle = buttonModal.querySelector('.modal-title'); // Update selector if needed
+            const modalText = buttonModal.querySelector('.modal-text'); // Update selector if needed
 
-
-function updateModalContent() {
-  const currentView = educationalViews[currentViewIndex];
-  modalText.textContent = currentView.text;  
-
-  // ... rest of your modal content update logic (image, links, etc.)
-
-  // Navigation button states
-  prevView.disabled = (currentViewIndex === 0);
-  nextView.disabled = (currentViewIndex === educationalViews.length - 1);
-}
-
-
-        
-    buttons.forEach(button => { 
-     button.addEventListener('click', () => {
-        const title = button.dataset.title;
-        const text = button.dataset.text; 
-        const searchTerm = button.dataset.searchterm;
-  
+       
         modalTitle.textContent = title;
         modalText.textContent = text;
                  
@@ -230,7 +244,7 @@ function updateModalContent() {
         }
                   
           fetchImage(searchTerm);
-          openModal();
+          openModal(buttonModal);
        });
       });
 
@@ -243,6 +257,24 @@ function openModal() {
 
 function closeModal() {
   modal.classList.add('hidden'); 
+}
+
+
+function createModal(buttonId) {
+  const modal = document.createElement('div');
+  modal.id = `modal-${buttonId}`;
+  modal.classList.add('modal', 'hidden', 'fixed', /* ...add other styles */); 
+
+  // Add the inner HTML structure for your modal here, 
+  // including elements with classes like 'modal-title', 'modal-text', etc.
+  modal.innerHTML = ` 
+      <div class="modal-content">
+        <h2 class="modal-title"></h2>
+        <p class="modal-text"></p>
+        </div>
+       `;
+
+  return modal;
 }
 
     
@@ -272,8 +304,7 @@ function fetchImage(searchTerm) {
     });
 }
 
-
   
-  </script>
+</script>
 </body>
 </html>
