@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eco Ops - Your Eco Actions Hub</title>
+  <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet"> 
+</head>
+<body class="container mx-auto p-6"> 
+
+  <header class="bg-green-600 text-white py-4 mb-8">
+    <h1 class="text-3xl font-bold text-center">Eco Ops</h1>
+  </header>
+
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+  
+
+<div class="bg-white shadow-md rounded-lg p-6">
+  <h2 class="text-xl font-semibold mb-4">Check-Ins and Data Collection</h2>
+  <p>Record your eco activities, gather valuable data, and contribute to projects.</p>
+  <a href="#" class="inline-block mt-4 bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-md modal-button"
+     data-title="Check-Ins" 
+     data-link-text="checkin form"
+     data-link-url="https://ecocity.com/up"
+     data-text="Record your eco activities... our system uses ipfs check it out!" 
+     data-searchterm="sign paper">
+    Start a Check-In
+  </a>
+</div>
+
+<div class="bg-white shadow-md rounded-lg p-6">
+  <h2 class="text-xl font-semibold mb-4">Project Creation & Management</h2>
+  <p>Create new projects, manage tasks, and track progress towards your goals.</p>
+  <a href="#" class="inline-block mt-4 bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-md modal-button"
+     data-title="Check-Ins" 
+     data-text="Record your eco activities..." 
+     data-searchterm="project activity">
+    Create a Project 
+  </a>
+</div>
+
+
+<div class="bg-white shadow-md rounded-lg p-6">
+  <h2 class="text-xl font-semibold mb-4">Reporting and Analytics</h2>
+  <p>Impact reports gain insights into your eco efforts.</p>
+  <a href="#" class="inline-block mt-4 bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-md modal-button"
+     data-title="Check-Ins" 
+     data-text="Record your eco activities..." 
+     data-searchterm="boardroom chart present skirt">
+    View Reports
+  </a>
+</div>
+
+<div class="bg-white shadow-md rounded-lg p-6">
+  <h2 class="text-xl font-semibold mb-4">Collaboration & Community Engagement</h2>
+  <p>Connect, volunteer, share ideas, and build community.</p>
+  <a href="#" class="inline-block mt-4 bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-md modal-button"
+     data-title="Check-Ins" 
+     data-text="Record your eco activities..." 
+     data-searchterm="boat ride">
+    Join the community
+  </a>
+</div>      
+</div>
+
+
+<div id="modal" class="hidden fixed inset-0 w-full h-full bg-black bg-opacity-50 z-50">
+  <div class="bg-white rounded-lg p-6 max-w-md mx-auto mt-24 shadow-lg">
+
+     <button id="close-modal" class="absolute top-4 right-4 text-gray-700 hover:text-black text-2xl p-2 bg-white hover:bg-gray-200 rounded-full">[X]</button>
+     <div id="modal-content"></div>
+      
+      <h2 class="text-xl font-semibold mb-4" id="modal-title"></h2> 
+      <div id="modal-image-container" class="mb-4">
+        <img id="modal-image" src="" alt="Project Image" class="max-w-half h-auto"> 
+        <img id="modal-image" src="" alt="Project Image" class="max-w-half h-auto"> 
+      </div>
+      <p id="modal-text"></p>
+      <a id="image-source" href="#" target="_blank" class="text-sm text-blue-600">Image Source</a>      
+
+      <div class="mt-4 text-center">
+        <button id="prev-view" class="disabled bg-gray-400 hover:bg-gray-500 text-white font-medium py-2 px-4 rounded-md mr-2">Prev</button> 
+        <button id="next-view" class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md">Next</button> 
+      </div>
+  
+      </div>
+  </div>
+</div>
+<script>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eco Ops - Your Eco Actions Hub</title>
+  <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet"> 
+</head>
+<body class="container mx-auto p-6"> 
+
+  <header class="bg-green-600 text-white py-4 mb-8">
+    <h1 class="text-3xl font-bold text-center">Eco Ops</h1>
+  </header>
+
+
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+  
+
+<div class="bg-white shadow-md rounded-lg p-6">
+  <h2 class="text-xl font-semibold mb-4">Check-Ins and Data Collection</h2>
+  <p>Record your eco activities, gather valuable data, and contribute to projects.</p>
+  <a href="#" class="inline-block mt-4 bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-md modal-button"
+     data-title="Check-Ins" 
+     data-link-text="checkin form"
+     data-link-url="https://ecocity.com/up"
+     data-text="Record your eco activities... our system uses ipfs check it out!" 
+     data-searchterm="sign paper">
+    Start a Check-In
+  </a>
+</div>
+
+<div class="bg-white shadow-md rounded-lg p-6">
+  <h2 class="text-xl font-semibold mb-4">Project Creation & Management</h2>
+  <p>Create new projects, manage tasks, and track progress towards your goals.</p>
+  <a href="#" class="inline-block mt-4 bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-md modal-button"
+     data-title="Check-Ins" 
+     data-text="Record your eco activities..." 
+     data-searchterm="project activity">
+    Create a Project 
+  </a>
+</div>
+
+
+<div class="bg-white shadow-md rounded-lg p-6">
+  <h2 class="text-xl font-semibold mb-4">Reporting and Analytics</h2>
+  <p>Impact reports gain insights into your eco efforts.</p>
+  <a href="#" class="inline-block mt-4 bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-md modal-button"
+     data-title="Check-Ins" 
+     data-text="Record your eco activities..." 
+     data-searchterm="boardroom chart present skirt">
+    View Reports
+  </a>
+</div>
+
+<div class="bg-white shadow-md rounded-lg p-6">
+  <h2 class="text-xl font-semibold mb-4">Collaboration & Community Engagement</h2>
+  <p>Connect, volunteer, share ideas, and build community.</p>
+  <a href="#" class="inline-block mt-4 bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-md modal-button"
+     data-title="Check-Ins" 
+     data-text="Record your eco activities..." 
+     data-searchterm="boat ride">
+    Join the community
+  </a>
+</div>      
+</div>
+
+
+<div id="modal" class="hidden fixed inset-0 w-full h-full bg-black bg-opacity-50 z-50">
+  <div class="bg-white rounded-lg p-6 max-w-md mx-auto mt-24 shadow-lg">
+
+     <button id="close-modal" class="absolute top-4 right-4 text-gray-700 hover:text-black text-2xl p-2 bg-white hover:bg-gray-200 rounded-full">[X]</button>
+     <div id="modal-content"></div>
+      
+      <h2 class="text-xl font-semibold mb-4" id="modal-title"></h2> 
+      <div id="modal-image-container" class="mb-4">
+        <img id="modal-image" src="" alt="Project Image" class="max-w-half h-auto"> 
+        <img id="modal-image" src="" alt="Project Image" class="max-w-half h-auto"> 
+      </div>
+      <p id="modal-text"></p>
+      <a id="image-source" href="#" target="_blank" class="text-sm text-blue-600">Image Source</a>      
+
+      <div class="mt-4 text-center">
+        <button id="prev-view" class="disabled bg-gray-400 hover:bg-gray-500 text-white font-medium py-2 px-4 rounded-md mr-2">Prev</button> 
+        <button id="next-view" class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md">Next</button> 
+      </div>
+  
+      </div>
+  </div>
+</div>
+
+  <script>
+
+const buttons = document.querySelectorAll('.modal-button');
+const modal = document.getElementById('modal');
+const closeBtn = document.getElementById('close-modal');
+const modalTitle = document.getElementById('modal-title');
+const modalImage = document.getElementById('modal-image');
+const modalText = document.getElementById('modal-text');
+const imageSource = document.getElementById('image-source');
+const nextView = document.getElementById('next-view');
+const prevView = document.getElementById('prev-view');
+
+let currentViewIndex = 0; 
+
+const educationalViews = [
+  { text: "Your NFT checkins validate exchange value..." },
+  { text: "A biodiversity credit is exchangeable..." },
+  { text: "How to make recycling work..." },
+  { text: "Learn how to validate other projects for cred & rewards." }
+];
+
+// Update content for educational views 
+function updateModalContent() {
+  const currentView = educationalViews[currentViewIndex];
+  modalText.textContent = currentView.text;  
+
+  // Navigation button states
+  prevView.disabled = (currentViewIndex === 0);
+  nextView.disabled = (currentViewIndex === educationalViews.length - 1);
+}
+
+// Initial content 
+updateModalContent();
+
+buttons.forEach(button => { 
+  button.addEventListener('click', () => {
+    const title = button.dataset.title;
+    const text = button.dataset.text; 
+    const searchTerm = button.dataset.searchterm;
+
+    modalTitle.textContent = title;
+    modalText.textContent = text; 
+
+    // Check for link data 
+    if (button.dataset.linkText && button.dataset.linkUrl) {
+      const linkElement = document.createElement('a');
+      linkElement.textContent = button.dataset.linkText;
+      linkElement.href = button.dataset.linkUrl;
+      linkElement.target = "_blank"; 
+      modalText.appendChild(linkElement); 
+    }
+
+    fetchImage(searchTerm);
+    openModal();
+  });
+});
+
+// ... rest of your code (closeModal, fetchImage functions) 
+
+
+
+closeBtn.addEventListener('click', closeModal); 
+
+function openModal() {
+  modal.classList.remove('hidden'); 
+}
+
+function closeModal() {
+  modal.classList.add('hidden'); 
+}
+
+    
+function fetchImage(searchTerm) {
+  const apiKey = 'qAG7N9e7yM1tY3n5CAmSPCeSBuEDDujF7Uway1dIH5w'; 
+  const url = `https://api.unsplash.com/search/photos?query=${searchTerm}&client_id=${apiKey}`;
+
+  fetch(url)
+    .then(response => response.json())  // Convert response to JSON
+    .then(data => {
+      if (data.results.length > 0) {
+        const imageUrl = data.results[0].urls.regular; 
+        const imageAttribution = data.results[0].links.html; 
+
+        modalImage.src = imageUrl; 
+        imageSource.href = imageAttribution; 
+        modalImage.style.display = 'block'; // Show the image 
+      } else {
+        // Handle case if no image is found (e.g., display a message)
+        modalImage.style.display = 'none'; // Hide in case an earlier image was present
+        console.log("No images found for this search term.");
+      }
+    })
+    .catch(error => {
+      // Handle network or API errors
+      console.error('Error fetching image:', error); 
+    });
+}
+
+
+    
+
+    
+
+        const buttons = document.querySelectorAll('.modal-button');
+        const modal = document.getElementById('modal');
+        const closeBtn  = document.getElementById('close-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalImage = document.getElementById('modal-image');
+        const modalText = document.getElementById('modal-text');
+        const imageSource = document.getElementById('image-source');
+        const nextView = document.getElementById('next-view'); 
+        const prevView = document.getElementById('prev-view'); 
+    
+
+          let currentViewIndex = 0; 
+
+    
+
+        nextView.addEventListener('click', () => {
+          currentViewIndex++;
+          updateModalContent();
+        });   
+    
+        
+        prevView.disabled = (currentViewIndex === 0);    
+        prevView.addEventListener('click', () => {
+         currentViewIndex--;
+         updateModalContent();
+        });    
+        
+        const educationalViews = [
+          { text: "your NFT checkins validate exchange value..." },
+          { text: "a Biodiversity credit is exchangeable..." },
+          { text: "How to make recycling work..." },
+          { text: "Learn how to validate other projects for cred & rewards." }
+        ];
+        
+        // Inside your button's click event handler
+          const modalContent = document.getElementById('modal-content');
+    
+        
+      function updateModalContent() {
+        const currentView = educationalViews[currentViewIndex];
+        modalContent.innerHTML = currentView.text; 
+        // You might also insert form elements here dynamically 
+    
+        // Update navigation button states
+        prevView.disabled = (currentViewIndex === 0);
+        nextView.disabled = (currentViewIndex === educationalViews.length - 1);
+      }
+    
+      // Initial content population
+      updateModalContent();
+    
+        
+    buttons.forEach(button => { 
+     button.addEventListener('click', () => {
+        const title = button.dataset.title;
+        const text = button.dataset.text; 
+        const searchTerm = button.dataset.searchterm;
+  
+        modalTitle.textContent = title;
+        modalText.textContent = text;
+                 
+        // Check if link data exists
+        if (button.dataset.linkText && button.dataset.linkUrl) {
+          const linkElement = document.createElement('a');
+          linkElement.textContent = button.dataset.linkText;
+          linkElement.href = button.dataset.linkUrl;
+          linkElement.target = "_blank"; // Open in a new tab
+          modalText.appendChild(linkElement);  
+        }
+                  
+          fetchImage(searchTerm);
+          openModal();
+       });
+      });
+
+
+closeBtn.addEventListener('click', closeModal); 
+
+function openModal() {
+  modal.classList.remove('hidden'); 
+}
+
+function closeModal() {
+  modal.classList.add('hidden'); 
+}
+
+    
+function fetchImage(searchTerm) {
+  const apiKey = 'qAG7N9e7yM1tY3n5CAmSPCeSBuEDDujF7Uway1dIH5w'; 
+  const url = `https://api.unsplash.com/search/photos?query=${searchTerm}&client_id=${apiKey}`;
+
+  fetch(url)
+    .then(response => response.json())  // Convert response to JSON
+    .then(data => {
+      if (data.results.length > 0) {
+        const imageUrl = data.results[0].urls.regular; 
+        const imageAttribution = data.results[0].links.html; 
+
+        modalImage.src = imageUrl; 
+        imageSource.href = imageAttribution; 
+        modalImage.style.display = 'block'; // Show the image 
+      } else {
+        // Handle case if no image is found (e.g., display a message)
+        modalImage.style.display = 'none'; // Hide in case an earlier image was present
+        console.log("No images found for this search term.");
+      }
+    })
+    .catch(error => {
+      // Handle network or API errors
+      console.error('Error fetching image:', error); 
+    });
+}
+
+
+    
+  </script>
+</body>
+</html>
