@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eco Ops - Your Eco Actions Hub</title>
+  <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="container mx-auto p-6"> 
+
+  <header class="bg-green-600 text-white py-4 mb-8">
+    <h1 class="text-3xl font-bold text-center">Eco Ops</h1>
+  </header>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+    <!-- Simplified Modal Structure -->
+    <div id="modal" class="hidden fixed inset-0 w-full h-full bg-black bg-opacity-50 z-50">
+      <div class="bg-white rounded-lg p-6 max-w-md mx-auto mt-24 shadow-lg relative">
+        <button id="close-modal" class="absolute top-4 right-4 text-gray-700 hover:text-black text-2xl p-2 bg-white hover:bg-gray-200 rounded-full">[X]</button>
+        <h2 class="text-xl font-semibold mb-4" id="modal-title"></h2>
+        <p id="modal-text"></p>
+        <!-- Removed the tab structure for simplicity -->
+      </div>
+    </div>
+
+    <!-- Content Blocks -->
+    <div class="bg-white shadow-md rounded-lg p-6">
+      <h2 class="text-xl font-semibold mb-4">Check-Ins and Data Collection</h2>
+      <p>Record your eco activities, gather valuable data, and contribute to projects.</p>
+      <button class="inline-block mt-4 bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-md modal-button"
+             data-title="Check-Ins" 
+             data-text="Record your eco activities... our system uses ipfs check it out!">
+        Start a Check-In
+      </button>
+    </div>
+
+    <!-- Additional content blocks can be added here -->
+
+  </div>
+
+  <script>
+    document.querySelectorAll('.modal-button').forEach(button => {
+      button.addEventListener('click', () => {
+        const modal = document.getElementById('modal');
+        document.getElementById('modal-title').textContent = button.getAttribute('data-title');
+        document.getElementById('modal-text').textContent = button.getAttribute('data-text');
+        modal.classList.remove('hidden');
+      });
+    });
+
+    document.getElementById('close-modal').addEventListener('click', () => {
+      document.getElementById('modal').classList.add('hidden');
+    });
+  </script>
+</body>
+</html>
