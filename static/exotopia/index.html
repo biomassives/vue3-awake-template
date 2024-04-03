@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Interactive Exoplanet Visualization</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+        #info { position: absolute; top: 10px; left: 10px; color: white; }
+    </style>
+</head>
+<body>
+    <div id="container"></div>
+    <div id="info">Hover over an object</div>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.125.2/build/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.5.1/gsap.min.js"></script>
+    <script>
+        let scene, camera, renderer;
+        let sphere; // Declare 'sphere' globally
+        let raycaster = new THREE.Raycaster();
+        let mouse = new THREE.Vector2();
+        let isDragging = false;
+        let previousMousePosition = { x: 0, y: 0 };
+        let INTERSECTED;
+        const regions = [];
+        const radius = 50; // Sphere radius for the visualization
+    
+        function init() {
+            const container = document.getElementById('container');
+            scene = new THREE.Scene();
+
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 0, 0); // Center the camera
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            container.appendChild(renderer.domElement);
+    
+
+
+            
+            const geometry = new THREE.SphereGeometry(radius, 32, 32);
+            const material = new THREE.MeshBasicMaterial({ color: 0x000, side: THREE.BackSide, wireframe: false });
+            const sphere = new THREE.Mesh(geometry, material);
+            scene.add(sphere);
+
+       //     const debugSphereGeometry = new THREE.SphereGeometry(5, 32, 32);
+       //     const debugSphereMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 }); 
+       //     const debugSphere = new THREE.Mesh(debugSphereGeometry, debugSphereMaterial);
+       //     scene.add(debugSphere);
+
+            document.addEventListener('mousemove', onMouseMove, false);
+            document.addEventListener('mousedown', () => { isDragging = true; });
+            document.addEventListener('mouseup', () => { isDragging = false; });
+            window.addEventListener('resize', onWindowResize, false);
+    
+            loadAllQuadrants(); // Load data from all quadrants at initialization
+            animate();
+        }
+    
+        function loadAllQuadrants() {
+            for (let i = 1; i <= 8; i++) {
+                loadExoplanetData(`quadrant_${i}.json`); // Adjust the path if necessary
+            }
+        }
+    
+        function loadExoplanetData(jsonFilePath) {
+            fetch(jsonFilePath)
+                .then(response => response.json())
+                .then(data => {
+                    createExoplanetVisuals(data); // Process the data for each quadrant
+                })
+                .catch(error => console.error(`Failed to load data from ${jsonFilePath}:`, error));
+        }
+    
+
+        let exoplanetsData = {}; // Declare this globally
+
+        function createExoplanetVisuals(data) {
+            const maxExoplanets = 200; 
+            let exoplanetCount = 0; 
+
+            data.forEach(planet => {
+                if (exoplanetCount >= maxExoplanets) return; 
+
+            try {
+                const size = planet.pl_rade ? parseFloat(planet.pl_rade) * 0.1 : 0.5; 
+                const geometry = new THREE.SphereGeometry(size, 32, 32);
+                const color = planet.sy_dist === "N/A" ? 0xff0000 : Math.random() * 0xffffff; 
+                const material = new THREE.MeshBasicMaterial({ color: 0xff00ff, opacity: 1 }); 
+                const exoplanet = new THREE.Mesh(geometry, material); 
+
+                console.log("exoplanet variable exists:", typeof exoplanet !== 'undefined'); // This should log 'true'
+
+                const ra = parseFloat(planet.ra);   
+                const dec = parseFloat(planet.dec);
+                const distance = planet.sy_dist === "N/A" ? 100 : parseFloat(planet.sy_dist); 
+
+                const position = convertCelestialTo3D(ra, dec, distance); 
+                console.log(`Exoplanet ${planet.pl_name} (or other identifier) placed at: `, position); 
+                exoplanet.position.set(position.x, position.y, position.z);
+
+                exoplanet.userData = { id: planet.pl_name }; 
+                scene.add(exoplanet);
+                regions.push(exoplanet);
+
+                exoplanetCount++; // Increment the counter on successful sphere creation
+
+                // Dispatch a custom event (exoplanet is in scope here)
+                const event = new CustomEvent('exoplanetCreated', { 
+                    detail: {
+                        exoplanet: exoplanet, // Pass the sphere object
+                        planetData: planet     // Include the original planet data
+                    }
+                });
+                window.dispatchEvent(event); 
+
+            } catch (error) {
+                console.error("Error creating sphere for exoplanet:", planet, error);
+            }
+
+            if (exoplanetCount >= maxExoplanets) {
+                window.dispatchEvent(new Event('allExoplanetsLoaded')); 
+            }
+        });
+    }
+
+
+    
+        function convertCelestialTo3D(ra, dec, distance) {
+            // Convert RA and Dec from degrees to radians
+            ra = THREE.MathUtils.degToRad(ra);
+            dec = THREE.MathUtils.degToRad(dec);
+
+            let x = distance * Math.cos(dec) * Math.cos(ra);
+            let y = distance * Math.sin(dec);
+            let z = distance * Math.cos(dec) * Math.sin(ra);
+
+            const positionVector = new THREE.Vector3(x, y, z);
+            positionVector.normalize().multiplyScalar(radius);
+            return { x: positionVector.x, y: positionVector.y, z: positionVector.z };
+        }
+
+
+
+// ... your existing code ...
+
+
+
+function onMouseMove(event) {
+    event.preventDefault();
+    if (isDragging) {
+        const deltaX = event.clientX - previousMousePosition.x;
+        const deltaY = event.clientY - previousMousePosition.y;
+
+        // Move everything within the sphere
+        scene.position.x -= deltaX * 0.05;  // Adjust sensitivity (0.05)
+        scene.position.y += deltaY * 0.05;  
+
+        previousMousePosition.x = event.clientX;
+        previousMousePosition.y = event.clientY;
+    }
+}
+
+function onTouchMove(event) {
+    event.preventDefault();
+    if (isDragging) {
+        const touch = event.touches[0];
+        const deltaX = touch.clientX - previousTouchPosition.x;
+        const deltaY = touch.clientY - previousTouchPosition.y;
+
+        // Move everything within the sphere
+        scene.position.x -= deltaX * 0.05;  
+        scene.position.y += deltaY * 0.05; 
+
+        previousTouchPosition = { 
+            x: touch.clientX, 
+            y: touch.clientY 
+        }; 
+    }
+}
+
+
+
+
+
+
+function highlightIntersected() {
+    if (!INTERSECTED) return; // Safety check
+    INTERSECTED.material.opacity = 1;
+    gsap.to(INTERSECTED.scale, { x: 2, y: 2, z: 2, ease: "power1.out" });
+
+    // Display planet information
+    document.getElementById('info').textContent = INTERSECTED.userData.id 
+        + " (" + INTERSECTED.position.x.toFixed(2) + ", " + INTERSECTED.position.y.toFixed(2) + ", " + INTERSECTED.position.z.toFixed(2) + ")"; 
+}
+
+function resetIntersected() {
+    if (!INTERSECTED) return;  // Safety check
+    INTERSECTED.material.opacity = 0.5;
+    gsap.to(INTERSECTED.scale, { x: 1, y: 1, z: 1, ease: "power1.out" });
+    INTERSECTED = null;
+    document.getElementById('info').textContent = 'Hover over an object';
+}
+
+function onWindowResize() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+
+
+
+
+
+
+
+        // Before your animate function:
+let allDataLoaded = false;
+window.addEventListener('allExoplanetsLoaded', () => { allDataLoaded = true; });
+
+// Inside animate:
+
+function animate() {
+    requestAnimationFrame(animate);
+
+    let rotationX = 0; // Initialize rotation variables
+    let rotationY = 0;
+
+    if (allDataLoaded) { 
+        // Apply camera rotation
+        camera.position.x = radius * Math.sin(rotationX) * Math.cos(rotationY);
+        camera.position.y = radius * Math.sin(rotationY);
+        camera.position.z = radius * Math.cos(rotationX) * Math.cos(rotationY);
+        camera.lookAt(scene.position); 
+
+        // Existing planet animation logic
+        Object.values(exoplanetsData).forEach(data => {
+            const exoplanet = data.exoplanet;
+            const planetData = data.planetData;
+
+            // Rotation based on size
+            exoplanet.rotation.y += 0.00 // Or any other rotation logic
+        }); 
+    }
+
+    renderer.render(scene, camera);
+}
+
+
+
+
+
+
+    // Event listener for exoplanet creation
+    window.addEventListener('exoplanetCreated', (event) => {
+        const exoplanetData = event.detail;
+        exoplanetsData[exoplanetData.exoplanet.userData.id] = exoplanetData;  
+    });
+
+
+
+
+    // Attach 'touchmove' listener
+    document.addEventListener('touchmove', onTouchMove, false);
+
+    init(); 
+
+
+    </script>
+    
+</body>
+</html>
