@@ -62,6 +62,23 @@
             loadAllQuadrants(); // Load data from all quadrants at initialization
             animate();
         }
+
+        
+        // Function to extract URL parameters
+        function getURLParameter(name) {
+            return new URLSearchParams(window.location.search).get(name);
+        }
+        
+        // Function to point the camera at a given planet
+        function pointCameraAtPlanet(planetName) {
+            let planetObject = scene.getObjectByName(planetName);
+            if (planetObject) {
+                camera.lookAt(planetObject.position);
+            } else {
+                console.warn("Planet not found: " + planetName);
+            }
+        }
+
     
         function loadAllQuadrants() {
             for (let i = 1; i <= 8; i++) {
@@ -94,6 +111,7 @@
                 const color = planet.sy_dist === "N/A" ? 0xff0000 : Math.random() * 0xffffff; 
                 const material = new THREE.MeshBasicMaterial({ color: 0xff00ff, opacity: 1 }); 
                 const exoplanet = new THREE.Mesh(geometry, material); 
+                exoplanet.name = planet.pl_name; // Ensure this matches the planet identifier
 
                // console.log("exoplanet variable exists:", typeof exoplanet !== 'undefined'); // This should log 'true'
 
@@ -128,6 +146,22 @@
                 window.dispatchEvent(new Event('allExoplanetsLoaded')); 
             }
         });
+        
+        // At the end of the createExoplanetVisuals function
+        if (exoplanetCount >= maxExoplanets) {
+            window.dispatchEvent(new Event('allExoplanetsLoaded'));
+        
+            // Point the camera to the specified planet after all planets are loaded
+            let planetParam = getURLParameter('planet');
+            if (planetParam) {
+                pointCameraAtPlanet(planetParam);
+            }
+        }
+
+
+            
+
+            
     }
 
 
@@ -146,259 +180,244 @@
             return { x: positionVector.x, y: positionVector.y, z: positionVector.z };
         }
 
+        
+        document.addEventListener('mousedown', function(event) {
+            isDragging = true;
+        });
+        
+        document.addEventListener('mouseup', function(event) {
+            isDragging = false;
+        });
+        
+        document.addEventListener('mouseleave', function(event) {
+            isDragging = false;
+        });
+
         function onMouseMove(event) {
-    event.preventDefault();
-
-    console.log('Mouse event:', { x: event.clientX, y: event.clientY });
-
-    if (isDragging) {
-        const deltaX = event.clientX - previousMousePosition.x;
-        const deltaY = event.clientY - previousMousePosition.y;
-
-        console.log('Dragging:', { deltaX, deltaY });
-
-        // Move everything within the sphere
-        scene.position.x -= deltaX * 0.05;  // Adjust sensitivity (0.05)
-        scene.position.y += deltaY * 0.05;
-
+        event.preventDefault();
+    
+        // Calculate mouse position in normalized device coordinates
+        // (-1 to +1) for both components
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    
+        if (isDragging) {
+            const deltaX = event.clientX - previousMousePosition.x;
+            const deltaY = event.clientY - previousMousePosition.y;
+    
+            // Assuming the camera is looking at the center of the scene
+            // Determine the rotation amount based on the mouse movement
+            const rotationSpeed = 0.005;
+            const angleY = deltaX * rotationSpeed;
+            const angleX = deltaY * rotationSpeed;
+    
+            // Apply rotation to the camera
+            camera.rotation.y += angleY;
+            camera.rotation.x += angleX;
+    
+            // Optional: Clamp the camera's pitch rotation to prevent flipping
+            camera.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, camera.rotation.x));
+        } else {
+            // Perform raycasting to detect hover over objects
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(scene.children);
+    
+            if (intersects.length > 0) {
+                if (INTERSECTED != intersects[0].object) {
+                    if (INTERSECTED) resetIntersected();
+                    INTERSECTED = intersects[0].object;
+                    highlightIntersected();
+                }
+            } else {
+                if (INTERSECTED) resetIntersected();
+                INTERSECTED = null;
+            }
+        }
+    
+        // Update the previous mouse position
         previousMousePosition.x = event.clientX;
         previousMousePosition.y = event.clientY;
-
-        console.log('Updated scene position:', { x: scene.position.x, y: scene.position.y });
     }
-
-    const deltaX = event.clientX - previousMousePosition.x;
-    const deltaY = event.clientY - previousMousePosition.y;
-
-    console.log('Delta after update:', { deltaX, deltaY });
-
-    if (allowFullRotation) {
-        // Spherical rotation based on mouse movement
-        const rotationSpeed = 0.005; // Smaller value for smoother rotation
-        const angleY = deltaX * rotationSpeed; // Horizontal rotation
-        const angleX = deltaY * rotationSpeed; // Vertical rotation
-
-        console.log('Rotation angles:', { angleY, angleX });
-
-        // Rotating the camera around the Y axis (yaw)
-        camera.rotateY(-angleY);
-        
-        // Rotating the camera around the X axis (pitch)
-        camera.rotateX(-angleX);
-        
-        camera.lookAt(scene.position); // Ensure the camera always points to the center
-
-        console.log('Camera orientation:', { yaw: camera.rotation.y, pitch: camera.rotation.x });
-    }
-
-    if (INTERSECTED) {
-        // Zoom based on mouse direction: right-to-left increases zoom, left-to-right decreases
-        const zoomDirection = deltaX > 0 ? -1 : 1;
-        const zoomIncrement = 0.05; // Adjust zoom sensitivity
-
-        console.log('Zoom direction and increment:', { zoomDirection, zoomIncrement });
-
-        // Calculate the vector pointing from the camera towards the intersected object
-        const rayDirection = INTERSECTED.position.clone().sub(camera.position).normalize();
-
-        console.log('Ray direction:', rayDirection);
-
-        // Adjust the camera position along the ray
-        camera.position.addScaledVector(rayDirection, zoomDirection * zoomIncrement);
-        camera.position.clampLength(0, radius); // Keep the camera within a defined sphere radius
-
-        console.log('New camera position:', camera.position);
-    }
-
-    // Update previous mouse position for the next move event
-    previousMousePosition.x = event.clientX;
-    previousMousePosition.y = event.clientY;
-}
-
     
-function onTouchMove(event) {
-    event.preventDefault();
-    if (isDragging) {
-        const touch = event.touches[0];
-        const deltaX = touch.clientX - previousTouchPosition.x;
-        const deltaY = touch.clientY - previousTouchPosition.y;
-
-        // Move everything within the sphere
-        scene.position.x -= deltaX * 0.05;  
-        scene.position.y += deltaY * 0.05; 
-
-        previousTouchPosition = { 
-            x: touch.clientX, 
-            y: touch.clientY 
-        }; 
-    }
-}
-
-
-
-
-
-
-function highlightIntersected() {
-    if (!INTERSECTED) return; // Safety check
-
-
-
-
-    
-    // Enlargement with GSAP animation
-    gsap.to(INTERSECTED.scale, { 
-        x: 2, 
-        y: 2, 
-        z: 2, 
-        ease: "power1.out",
-        duration: 0.5  // Animation duration in seconds
-    });
-
-    // Zoom effect with camera position
-    const zoomAmount = 0.8; // Adjust zoom closeness (0.8 would be closer)
-    gsap.to(camera.position, {
-        x: INTERSECTED.position.x * zoomAmount,
-        y: INTERSECTED.position.y * zoomAmount,
-        z: INTERSECTED.position.z * zoomAmount,
-        ease: "power1.out",
-        duration: 0.5
-    });
-
-    INTERSECTED.material.opacity = 1;
-    gsap.to(INTERSECTED.scale, { x: 2, y: 2, z: 2, ease: "power1.out" });
-
-    // Display planet information
-    document.getElementById('info').textContent = INTERSECTED.userData.id 
-        + " (" + INTERSECTED.position.x.toFixed(2) + ", " + INTERSECTED.position.y.toFixed(2) + ", " + INTERSECTED.position.z.toFixed(2) + ")"; 
-
-
-   INTERSECTED.material.opacity = 1;
-    gsap.to(INTERSECTED.scale, { x: 1.5, y: 1.5, z: 1.5, ease: "power1.out" }); // Slight enlargement
-
-    hoverTimer = setTimeout(() => {
-        allowFullRotation = false; // Prevent normal rotation
-        zoomState = 1; // Initiate zoom-in sequence
-    }, 2000); // 2 second timer
-
-    
-}
-
-
             
-
-function resetIntersected() {
-    if (!INTERSECTED) return;  // Safety check
-
-    // Reset scale
-    gsap.to(INTERSECTED.scale, { 
-        x: 1, 
-        y: 1, 
-        z: 1, 
-        ease: "power1.out",
-        duration: 0.5 
-    });
-
-     // Reset camera position (adjust zoomAmount for different zoom-out)
-    const zoomOutAmount = 1.2; // Example value
-    gsap.to(camera.position, {
-        x: INTERSECTED.position.x * zoomOutAmount,
-        y: INTERSECTED.position.y * zoomOutAmount,
-        z: INTERSECTED.position.z * zoomOutAmount,
-        ease: "power1.out",
-        duration: 0.5
-    });
-    
-    INTERSECTED.material.opacity = 0.5;
-    gsap.to(INTERSECTED.scale, { x: 1, y: 1, z: 1, ease: "power1.out" });
-    INTERSECTED = null;
-    document.getElementById('info').textContent = 'Hover over an object';
-
-    clearTimeout(hoverTimer);
-    hoverTimer = null;
-    zoomState = 0;
-    allowFullRotation = false;
-    
-}
-
-function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-}
-
-
-
-
-
-
-
-
-        // Before your animate function:
-let allDataLoaded = false;
-window.addEventListener('allExoplanetsLoaded', () => { allDataLoaded = true; });
-
-// Inside animate:
-
-function animate() {
-    requestAnimationFrame(animate);
-
-    let rotationX = 0; // Initialize rotation variables
-    let rotationY = 0;
-
-    if (allDataLoaded) { 
-        // Apply camera rotation
-        camera.position.x = radius * Math.sin(rotationX) * Math.cos(rotationY);
-        camera.position.y = radius * Math.sin(rotationY);
-        camera.position.z = radius * Math.cos(rotationX) * Math.cos(rotationY);
-        camera.lookAt(scene.position); 
-
-        // Existing planet animation logic
-        Object.values(exoplanetsData).forEach(data => {
-            const exoplanet = data.exoplanet;
-            const planetData = data.planetData;
-
-            // Rotation based on size
-            exoplanet.rotation.y += 0.00 // Or any other rotation logic
-        }); 
-
-  if (zoomState > 0) {
-        const ray = raycaster.ray;        
-        const targetPosition = INTERSECTED.position.clone();  
-
-        if (zoomState === 1) {
-            // Slow zoom - move camera slightly towards the target
-            camera.position.addScaledVector(ray.direction, 0.1); 
-            if (camera.position.distanceTo(targetPosition) < radius * 0.75) { // Change threshold if needed
-                zoomState = 2; 
+        
+            
+        function onTouchMove(event) {
+            event.preventDefault();
+            if (isDragging) {
+                const touch = event.touches[0];
+                const deltaX = touch.clientX - previousTouchPosition.x;
+                const deltaY = touch.clientY - previousTouchPosition.y;
+        
+                // Move everything within the sphere
+                scene.position.x -= deltaX * 0.05;  
+                scene.position.y += deltaY * 0.05; 
+        
+                previousTouchPosition = { 
+                    x: touch.clientX, 
+                    y: touch.clientY 
+                }; 
             }
-        } else if (zoomState === 2) {
-            // Faster zoom
-            camera.position.addScaledVector(ray.direction, 0.5); 
-            if (camera.position.distanceTo(targetPosition) < radius * 0.3) { // Change threshold if needed
-                zoomState = 3;
-            }
-        } else if (zoomState === 3) {
-            // Slower zoom
-            camera.position.addScaledVector(ray.direction, 0.2); 
-            if (camera.position.distanceTo(targetPosition) < radius * 0.15) { // Change threshold if needed
-                zoomState = 4; 
-            }
-        } else if (zoomState === 4) {
-            // Orbit - Example, adjust parameters as needed
-            const orbitSpeed = 0.02;
-            const orbitRadius = radius * 0.2;
-            camera.position.x = targetPosition.x + orbitRadius * Math.cos(Date.now() * orbitSpeed);
-            camera.position.z = targetPosition.z + orbitRadius * Math.sin(Date.now() * orbitSpeed);
-            camera.lookAt(targetPosition);
         }
-    }
+        
+    
+    
+    function highlightIntersected() {
+        if (!INTERSECTED) return; // Safety check
+    
+   
+        // Enlargement with GSAP animation
+        gsap.to(INTERSECTED.scale, { 
+            x: 2, 
+            y: 2, 
+            z: 2, 
+            ease: "power1.out",
+            duration: 0.5  // Animation duration in seconds
+        });
+    
+        // Zoom effect with camera position
+        const zoomAmount = 0.8; // Adjust zoom closeness (0.8 would be closer)
+        gsap.to(camera.position, {
+            x: INTERSECTED.position.x * zoomAmount,
+            y: INTERSECTED.position.y * zoomAmount,
+            z: INTERSECTED.position.z * zoomAmount,
+            ease: "power1.out",
+            duration: 0.5
+        });
+    
+        INTERSECTED.material.opacity = 1;
+        gsap.to(INTERSECTED.scale, { x: 2, y: 2, z: 2, ease: "power1.out" });
+    
+        // Display planet information
+        document.getElementById('info').textContent = INTERSECTED.userData.id 
+            + " (" + INTERSECTED.position.x.toFixed(2) + ", " + INTERSECTED.position.y.toFixed(2) + ", " + INTERSECTED.position.z.toFixed(2) + ")"; 
+    
+    
+       INTERSECTED.material.opacity = 1;
+        gsap.to(INTERSECTED.scale, { x: 1.5, y: 1.5, z: 1.5, ease: "power1.out" }); // Slight enlargement
+    
+        hoverTimer = setTimeout(() => {
+            allowFullRotation = false; // Prevent normal rotation
+            zoomState = 1; // Initiate zoom-in sequence
+        }, 2000); // 2 second timer
+    
         
     }
-
-    renderer.render(scene, camera);
-}
-
+    
+     
+    
+    function resetIntersected() {
+        if (!INTERSECTED) return;  // Safety check
+    
+        // Reset scale
+        gsap.to(INTERSECTED.scale, { 
+            x: 1, 
+            y: 1, 
+            z: 1, 
+            ease: "power1.out",
+            duration: 0.5 
+        });
+    
+         // Reset camera position (adjust zoomAmount for different zoom-out)
+        const zoomOutAmount = 1.2; // Example value
+        gsap.to(camera.position, {
+            x: INTERSECTED.position.x * zoomOutAmount,
+            y: INTERSECTED.position.y * zoomOutAmount,
+            z: INTERSECTED.position.z * zoomOutAmount,
+            ease: "power1.out",
+            duration: 0.5
+        });
+        
+        INTERSECTED.material.opacity = 0.5;
+        gsap.to(INTERSECTED.scale, { x: 1, y: 1, z: 1, ease: "power1.out" });
+        INTERSECTED = null;
+        document.getElementById('info').textContent = 'Hover over an object';
+    
+        clearTimeout(hoverTimer);
+        hoverTimer = null;
+        zoomState = 0;
+        allowFullRotation = false;
+        
+    }
+    
+    function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+            // Before your animate function:
+    let allDataLoaded = false;
+    window.addEventListener('allExoplanetsLoaded', () => { allDataLoaded = true; });
+    
+    // Inside animate:
+    
+    function animate() {
+        requestAnimationFrame(animate);
+    
+        let rotationX = 0; // Initialize rotation variables
+        let rotationY = 0;
+    
+        if (allDataLoaded) { 
+            // Apply camera rotation
+            camera.position.x = radius * Math.sin(rotationX) * Math.cos(rotationY);
+            camera.position.y = radius * Math.sin(rotationY);
+            camera.position.z = radius * Math.cos(rotationX) * Math.cos(rotationY);
+            camera.lookAt(scene.position); 
+    
+            // Existing planet animation logic
+            Object.values(exoplanetsData).forEach(data => {
+                const exoplanet = data.exoplanet;
+                const planetData = data.planetData;
+    
+                // Rotation based on size
+                exoplanet.rotation.y += 0.00 // Or any other rotation logic
+            }); 
+    
+      if (zoomState > 0) {
+            const ray = raycaster.ray;        
+            const targetPosition = INTERSECTED.position.clone();  
+    
+            if (zoomState === 1) {
+                // Slow zoom - move camera slightly towards the target
+                camera.position.addScaledVector(ray.direction, 0.1); 
+                if (camera.position.distanceTo(targetPosition) < radius * 0.75) { // Change threshold if needed
+                    zoomState = 2; 
+                }
+            } else if (zoomState === 2) {
+                // Faster zoom
+                camera.position.addScaledVector(ray.direction, 0.5); 
+                if (camera.position.distanceTo(targetPosition) < radius * 0.3) { // Change threshold if needed
+                    zoomState = 3;
+                }
+            } else if (zoomState === 3) {
+                // Slower zoom
+                camera.position.addScaledVector(ray.direction, 0.2); 
+                if (camera.position.distanceTo(targetPosition) < radius * 0.15) { // Change threshold if needed
+                    zoomState = 4; 
+                }
+            } else if (zoomState === 4) {
+                // Orbit - Example, adjust parameters as needed
+                const orbitSpeed = 0.02;
+                const orbitRadius = radius * 0.2;
+                camera.position.x = targetPosition.x + orbitRadius * Math.cos(Date.now() * orbitSpeed);
+                camera.position.z = targetPosition.z + orbitRadius * Math.sin(Date.now() * orbitSpeed);
+                camera.lookAt(targetPosition);
+            }
+        }
+            
+        }
+    
+        renderer.render(scene, camera);
+    }
+    
 
 
 
@@ -410,7 +429,13 @@ function animate() {
         exoplanetsData[exoplanetData.exoplanet.userData.id] = exoplanetData;  
     });
 
+    
+    let planetParam = getURLParameter('planet');
+    if (planetParam) {
+        pointCameraAtPlanet(planetParam);
+    }
 
+        
 
 
     // Attach 'touchmove' listener
