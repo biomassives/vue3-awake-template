@@ -192,52 +192,44 @@
         document.addEventListener('mouseleave', function(event) {
             isDragging = false;
         });
-
-function onMouseMove(event) {
-    event.preventDefault();
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-    if (isDragging) {
-        // Calculate the delta distance from the last mouse position
-        var deltaX = event.clientX - previousMousePosition.x;
-        var deltaY = event.clientY - previousMousePosition.y;
         
-        // Apply rotation to the camera
-        if (allowFullRotation) {
-            // Convert delta distance to rotation angle, adjust sensitivity if needed
-            var rotationAngleY = deltaX * 0.005;
-            var rotationAngleX = deltaY * 0.005;
-
-            // Rotate around the vertical axis (Y-axis)
-            camera.rotateOnWorldAxis(new THREE.Vector3(0, 1, 0), rotationAngleY);
-            // Rotate around the horizontal axis (X-axis)
-            // We use the camera's local X-axis for rotation
-            camera.rotateOnAxis(new THREE.Vector3(1, 0, 0), rotationAngleX);
-        }
-    }
-
-    // Raycasting for hover effects
-    raycaster.setFromCamera(mouse, camera);
-    const intersects = raycaster.intersectObjects(scene.children);
-    
-    if (intersects.length > 0) {
-        if (INTERSECTED != intersects[0].object) {
-            if (INTERSECTED) resetIntersected();
-            INTERSECTED = intersects[0].object;
-            highlightIntersected();
-        }
-    } else {
-        if (INTERSECTED) resetIntersected();
-        INTERSECTED = null;
-    }
-
-    previousMousePosition.x = event.clientX;
-    previousMousePosition.y = event.clientY;
-}
-
-            
+        function onMouseMove(event) {
+            event.preventDefault();
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
         
+            if (isDragging) {
+                var deltaX = event.clientX - previousMousePosition.x;
+                var deltaY = event.clientY - previousMousePosition.y;
+                
+                var rotationVector = new THREE.Vector3();
+                camera.getWorldDirection(rotationVector);
+                rotationVector.y = 0; // ignore any up/down tilt
+                rotationVector.normalize();
+                var upVector = new THREE.Vector3(0, 1, 0);
+                var sideVector = new THREE.Vector3().crossVectors(upVector, rotationVector);
+        
+                var moveDirection = new THREE.Vector3();
+                moveDirection.set(
+                    sideVector.x * deltaX - upVector.x * deltaY,
+                    sideVector.y * deltaX - upVector.y * deltaY,
+                    sideVector.z * deltaX - upVector.z * deltaY
+                ).normalize();
+        
+                var quaternion = new THREE.Quaternion();
+                quaternion.setFromUnitVectors(rotationVector, moveDirection);
+                
+                camera.applyQuaternion(quaternion);
+        
+                // limit the tilt up/down to the poles
+                var angleX = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, camera.rotation.x));
+                camera.rotation.set(angleX, camera.rotation.y, camera.rotation.z);
+            }
+        
+            previousMousePosition.x = event.clientX;
+            previousMousePosition.y = event.clientY;
+        }
+
             
         function onTouchMove(event) {
             event.preventDefault();
