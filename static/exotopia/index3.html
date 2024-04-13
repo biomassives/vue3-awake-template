@@ -152,12 +152,16 @@
 
 
 
-function onMouseMove(event) {
 
+
+
+
+function onMouseMove(event) {
     event.preventDefault();
 
+    if (!isDragging) {
+        // Handle mouse hover logic here (raycasting etc.)
 
-if (isDragging) {
         const deltaX = event.clientX - previousMousePosition.x;
         const deltaY = event.clientY - previousMousePosition.y;
 
@@ -167,47 +171,91 @@ if (isDragging) {
 
         previousMousePosition.x = event.clientX;
         previousMousePosition.y = event.clientY;
-} else if (allowFullRotation) {
-
-      // Restricted Rotation
-        const deltaX = event.clientX - previousMousePosition.x;
-        const deltaY = event.clientY - previousMousePosition.y;
-
-        // Rotate in XY plane (adjust sensitivity as needed)
-        const rotationXY = deltaX * 0.01; 
-        camera.position.applyAxisAngle(new THREE.Vector3(0, 1, 0), rotationXY);
-
-        // Rotate in YZ plane around the current 'up' direction of the camera
-        camera.position.applyAxisAngle(camera.up.clone(), deltaY * 0.01);
-
-        // Optionally, you can add rotation in the ZX plane if needed, following a similar pattern
-
-        // Update the camera look direction
-        camera.lookAt(scene.position); 
-
-        previousMousePosition.x = event.clientX;
-        previousMousePosition.y = event.clientY;
-
-    }
-    
-        const zoomIncrement = 0.05; // Adjust zoom sensitivity
-
-    if (INTERSECTED) {
-        // Calculate zoom direction based on mouse movement
-        let direction = mouse.x < previousMousePosition.x ? -1 : 1;
-
-        // Apply zoom in/out to the camera position along the ray towards the INTERSECTED object
-        const ray = raycaster.ray; // Get the ray from raycaster
-        camera.position.addScaledVector(ray.direction, direction * zoomIncrement);  
-
-        // Clamp camera position to stay within the sphere 
-        camera.position.clampLength(0, radius); 
+        
+        return;
     }
 
-    previousMousePosition.x = event.clientX;
-    previousMousePosition.y = event.clientY;
+    var deltaX = event.clientX - previousMousePosition.x;
+    var deltaY = event.clientY - previousMousePosition.y;
+
+    var angleY = deltaX / window.innerWidth * Math.PI; // Horizontal rotation
+    var angleX = deltaY / window.innerHeight * Math.PI; // Vertical rotation
+
+    camera.rotation.y += angleY;
+    camera.rotation.x += angleX;
+
+    previousMousePosition = {
+        x: event.clientX,
+        y: event.clientY
+    };
 }
 
+
+
+
+
+
+        
+function onMouseMove(event) {
+
+    event.preventDefault();
+
+
+    if (isDragging) {
+            const deltaX = event.clientX - previousMousePosition.x;
+            const deltaY = event.clientY - previousMousePosition.y;
+    
+            // Move everything within the sphere
+            scene.position.x -= deltaX * 0.05;  // Adjust sensitivity (0.05)
+            scene.position.y += deltaY * 0.05;  
+    
+            previousMousePosition.x = event.clientX;
+            previousMousePosition.y = event.clientY;    
+    }
+    
+
+    const deltaX = event.clientX - previousMousePosition.x;
+    const deltaY = event.clientY - previousMousePosition.y;
+
+    if (allowFullRotation) {
+        // Spherical rotation based on mouse movement
+        const rotationSpeed = 0.005; // Smaller value for smoother rotation
+        const angleY = deltaX * rotationSpeed; // Horizontal rotation
+        const angleX = deltaY * rotationSpeed; // Vertical rotation
+
+        // Rotating the camera around the Y axis (yaw)
+        camera.rotateY(-angleY);
+        
+        // Rotating the camera around the X axis (pitch)
+        camera.rotateX(-angleX);
+        
+        camera.lookAt(scene.position); // Ensure the camera always points to the center
+    }
+
+    if (INTERSECTED) {
+        // Zoom based on mouse direction: right-to-left increases zoom, left-to-right decreases
+        const zoomDirection = deltaX > 0 ? -1 : 1;
+        const zoomIncrement = 0.05; // Adjust zoom sensitivity
+
+        // Calculate the vector pointing from the camera towards the intersected object
+        const rayDirection = INTERSECTED.position.clone().sub(camera.position).normalize();
+
+        // Adjust the camera position along the ray
+        camera.position.addScaledVector(rayDirection, zoomDirection * zoomIncrement);
+        camera.position.clampLength(0, radius); // Keep the camera within a defined sphere radius
+    }
+
+    // Update previous mouse position
+    previousMousePosition.x = event.clientX;
+    previousMousePosition.y = event.clientY;
+
+    
+    
+
+}
+
+
+    
 function onTouchMove(event) {
     event.preventDefault();
     if (isDragging) {
