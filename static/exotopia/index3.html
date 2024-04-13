@@ -21,7 +21,7 @@
             animate();
         });
 
-        let scene, camera, renderer, controls; // Declare globally
+        let scene, camera, renderer; // Declare globally
 
         let sphere; // Declare 'sphere' globally
         let raycaster = new THREE.Raycaster();
@@ -400,13 +400,6 @@ function updateZoomState() {
 }
 
 
-
-        controls.update(); 
-
-        
-        renderer.render(scene, camera);
-    }
-    
 
 
 
