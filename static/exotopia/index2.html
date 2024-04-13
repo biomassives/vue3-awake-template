@@ -215,6 +215,26 @@ function highlightIntersected() {
 
 function resetIntersected() {
     if (!INTERSECTED) return;  // Safety check
+
+    // Reset scale
+    gsap.to(INTERSECTED.scale, { 
+        x: 1, 
+        y: 1, 
+        z: 1, 
+        ease: "power1.out",
+        duration: 0.5 
+    });
+
+     // Reset camera position (adjust zoomAmount for different zoom-out)
+    const zoomOutAmount = 1.2; // Example value
+    gsap.to(camera.position, {
+        x: INTERSECTED.position.x * zoomOutAmount,
+        y: INTERSECTED.position.y * zoomOutAmount,
+        z: INTERSECTED.position.z * zoomOutAmount,
+        ease: "power1.out",
+        duration: 0.5
+    });
+    
     INTERSECTED.material.opacity = 0.5;
     gsap.to(INTERSECTED.scale, { x: 1, y: 1, z: 1, ease: "power1.out" });
     INTERSECTED = null;
