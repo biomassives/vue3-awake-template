@@ -146,41 +146,39 @@
             return { x: positionVector.x, y: positionVector.y, z: positionVector.z };
         }
 
-
-
-
-
-
-
-
-
-        
-function onMouseMove(event) {
-
+        function onMouseMove(event) {
     event.preventDefault();
 
+    console.log('Mouse event:', { x: event.clientX, y: event.clientY });
 
     if (isDragging) {
-            const deltaX = event.clientX - previousMousePosition.x;
-            const deltaY = event.clientY - previousMousePosition.y;
-    
-            // Move everything within the sphere
-            scene.position.x -= deltaX * 0.05;  // Adjust sensitivity (0.05)
-            scene.position.y += deltaY * 0.05;  
-    
-            previousMousePosition.x = event.clientX;
-            previousMousePosition.y = event.clientY;    
+        const deltaX = event.clientX - previousMousePosition.x;
+        const deltaY = event.clientY - previousMousePosition.y;
+
+        console.log('Dragging:', { deltaX, deltaY });
+
+        // Move everything within the sphere
+        scene.position.x -= deltaX * 0.05;  // Adjust sensitivity (0.05)
+        scene.position.y += deltaY * 0.05;
+
+        previousMousePosition.x = event.clientX;
+        previousMousePosition.y = event.clientY;
+
+        console.log('Updated scene position:', { x: scene.position.x, y: scene.position.y });
     }
-    
 
     const deltaX = event.clientX - previousMousePosition.x;
     const deltaY = event.clientY - previousMousePosition.y;
+
+    console.log('Delta after update:', { deltaX, deltaY });
 
     if (allowFullRotation) {
         // Spherical rotation based on mouse movement
         const rotationSpeed = 0.005; // Smaller value for smoother rotation
         const angleY = deltaX * rotationSpeed; // Horizontal rotation
         const angleX = deltaY * rotationSpeed; // Vertical rotation
+
+        console.log('Rotation angles:', { angleY, angleX });
 
         // Rotating the camera around the Y axis (yaw)
         camera.rotateY(-angleY);
@@ -189,6 +187,8 @@ function onMouseMove(event) {
         camera.rotateX(-angleX);
         
         camera.lookAt(scene.position); // Ensure the camera always points to the center
+
+        console.log('Camera orientation:', { yaw: camera.rotation.y, pitch: camera.rotation.x });
     }
 
     if (INTERSECTED) {
@@ -196,23 +196,24 @@ function onMouseMove(event) {
         const zoomDirection = deltaX > 0 ? -1 : 1;
         const zoomIncrement = 0.05; // Adjust zoom sensitivity
 
+        console.log('Zoom direction and increment:', { zoomDirection, zoomIncrement });
+
         // Calculate the vector pointing from the camera towards the intersected object
         const rayDirection = INTERSECTED.position.clone().sub(camera.position).normalize();
+
+        console.log('Ray direction:', rayDirection);
 
         // Adjust the camera position along the ray
         camera.position.addScaledVector(rayDirection, zoomDirection * zoomIncrement);
         camera.position.clampLength(0, radius); // Keep the camera within a defined sphere radius
+
+        console.log('New camera position:', camera.position);
     }
 
-    // Update previous mouse position
+    // Update previous mouse position for the next move event
     previousMousePosition.x = event.clientX;
     previousMousePosition.y = event.clientY;
-
-    
-    
-
 }
-
 
     
 function onTouchMove(event) {
