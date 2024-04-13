@@ -372,16 +372,21 @@ function animate() {
         const intersected = intersects[0];
         const planetData = intersected.object.userData;
 
-        infobox.style.display = 'block';
-        infobox.textContent = `Name: ${planetData.id} \n Distance: ${planetData.planetData.sy_dist}`;
+        // Ensure that planetData and planetData.planetData are not undefined
+        if (planetData && planetData.planetData) {
+            infobox.style.display = 'block';
+            infobox.textContent = `Name: ${planetData.id} \n Distance: ${planetData.planetData.sy_dist}`;
 
-        // Project 3D position to screen coordinates
-        const projectedPosition = intersected.object.position.clone().project(camera);
-        projectedPosition.x = (projectedPosition.x + 1) * window.innerWidth / 2;
-        projectedPosition.y = - (projectedPosition.y - 1) * window.innerHeight / 2;
+            // Project 3D position to screen coordinates
+            const projectedPosition = intersected.object.position.clone().project(camera);
+            projectedPosition.x = (projectedPosition.x + 1) * window.innerWidth / 2;
+            projectedPosition.y = - (projectedPosition.y - 1) * window.innerHeight / 2;
 
-        infobox.style.left = `${projectedPosition.x + 10}px`;
-        infobox.style.top = `${projectedPosition.y + 10}px`;
+            infobox.style.left = `${projectedPosition.x + 10}px`;
+            infobox.style.top = `${projectedPosition.y + 10}px`;
+        } else {
+            infobox.style.display = 'none';
+        }
     } else {
         infobox.style.display = 'none';
     }
@@ -402,6 +407,7 @@ function animate() {
     updateZoomState(); // Call the zoom state update function
     renderer.render(scene, camera);
 }
+
 
 
         
