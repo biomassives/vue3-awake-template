@@ -15,7 +15,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.5.1/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.125.2/examples/js/controls/OrbitControls.js"></script>
     <script>
-        let scene, camera, renderer, controls;
+        let scene, camera, renderer;
         let sphere; // Declare 'sphere' globally
         let raycaster = new THREE.Raycaster();
         let mouse = new THREE.Vector2();
@@ -24,7 +24,18 @@
         let INTERSECTED;
         const regions = [];
         const radius = 50; // Sphere radius for the visualization
+    
+        // Initialize the controls without 'const'
+        controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.25;
+        controls.screenSpacePanning = false;
+        controls.minDistance = 10;
+        controls.maxDistance = 500;
+        controls.maxPolarAngle = Math.PI / 2;
 
+
+        
         let allowFullRotation = false;  
         let hoverTimer = null;        
         let TEST = new URLSearchParams(window.location.search).has('test');        
@@ -71,8 +82,8 @@
        //     const debugSphere = new THREE.Mesh(debugSphereGeometry, debugSphereMaterial);
        //     scene.add(debugSphere);
 
-            document.addEventListener('mousedown', () => { gging = true; });
-            document.addEventListener('mouseup', () => { gging = false; });
+            document.addEventListener('mousedown', () => { isDragging = true; });
+            document.addEventListener('mouseup', () => { isDragging = false; });
             window.addEventListener('resize', onWindowResize, false);
     
             loadAllQuadrants(); // Load data from all quadrants at initialization
@@ -196,6 +207,10 @@
             return { x: positionVector.x, y: positionVector.y, z: positionVector.z };
         }
 
+
+
+
+        
         
         document.addEventListener('mousedown', function(event) {
             isDragging = true;
