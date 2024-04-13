@@ -54,8 +54,8 @@
        //     scene.add(debugSphere);
 
             document.addEventListener('mousemove', onMouseMove, false);
-            document.addEventListener('mousedown', () => { isDragging = true; });
-            document.addEventListener('mouseup', () => { isDragging = false; });
+            document.addEventListener('mousedown', () => { gging = true; });
+            document.addEventListener('mouseup', () => { gging = false; });
             window.addEventListener('resize', onWindowResize, false);
     
             loadAllQuadrants(); // Load data from all quadrants at initialization
@@ -154,7 +154,9 @@
 function onMouseMove(event) {
 
     event.preventDefault();
-    if (isDragging || allowFullRotation) {
+
+
+if (isDragging) {
         const deltaX = event.clientX - previousMousePosition.x;
         const deltaY = event.clientY - previousMousePosition.y;
 
@@ -164,7 +166,7 @@ function onMouseMove(event) {
 
         previousMousePosition.x = event.clientX;
         previousMousePosition.y = event.clientY;
-    } else { 
+} else if (allowFullRotation) {
 
       // Restricted Rotation
         const deltaX = event.clientX - previousMousePosition.x;
