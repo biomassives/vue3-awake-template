@@ -148,47 +148,6 @@
 
 
 
-// ... your existing code ...
-
-
-
-
-
-
-
-function onMouseMove(event) {
-    event.preventDefault();
-
-    if (!isDragging) {
-        // Handle mouse hover logic here (raycasting etc.)
-
-        const deltaX = event.clientX - previousMousePosition.x;
-        const deltaY = event.clientY - previousMousePosition.y;
-
-        // Move everything within the sphere
-        scene.position.x -= deltaX * 0.05;  // Adjust sensitivity (0.05)
-        scene.position.y += deltaY * 0.05;  
-
-        previousMousePosition.x = event.clientX;
-        previousMousePosition.y = event.clientY;
-        
-        return;
-    }
-
-    var deltaX = event.clientX - previousMousePosition.x;
-    var deltaY = event.clientY - previousMousePosition.y;
-
-    var angleY = deltaX / window.innerWidth * Math.PI; // Horizontal rotation
-    var angleX = deltaY / window.innerHeight * Math.PI; // Vertical rotation
-
-    camera.rotation.y += angleY;
-    camera.rotation.x += angleX;
-
-    previousMousePosition = {
-        x: event.clientX,
-        y: event.clientY
-    };
-}
 
 
 
