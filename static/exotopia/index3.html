@@ -341,6 +341,25 @@ test('Camera rotates around the sphere', () => {
 });
 
 
+test('Exoplanet pulses when hovered', () => {
+    // Arrange: Scene with sphere at (1, 1, 1)
+    const sphere = new THREE.Mesh(new THREE.SphereGeometry(1), new THREE.MeshBasicMaterial({ color: 0x00ff00 })); 
+    scene.add(sphere);
+
+    // ... set up raycasting and simulate mouse hover ...
+
+    // Act: Call highlightIntersected()
+    highlightIntersected(); 
+
+    // Assert: (After a short delay to allow the GSAP animation)
+    expect(sphere.material.color.r).toBeGreaterThan(0); // Check if color has changed
+    expect(sphere.material.color.g).toBeGreaterThan(0);
+    expect(sphere.material.color.b).toBeGreaterThan(0);
+});
+
+
+
+    
 
 }
 
