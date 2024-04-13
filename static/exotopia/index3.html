@@ -81,11 +81,6 @@
     loadAllQuadrants(); // Assuming this function does not depend on the controls
 }
 
-function animate() {
-    requestAnimationFrame(animate);
-    controls.update(); // Needed for damping or auto-rotation
-    renderer.render(scene, camera);
-}
 
         
         // Function to extract URL parameters
@@ -373,6 +368,8 @@ function animate() {
     renderer.render(scene, camera);
 }
 
+
+        
 function updateZoomState() {
     if (zoomState > 0 && INTERSECTED) {
         let targetPosition = INTERSECTED.position.clone();
