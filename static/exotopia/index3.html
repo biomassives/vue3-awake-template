@@ -357,14 +357,14 @@
 function animate() {
     requestAnimationFrame(animate);
 
-    // Update controls if user interactions are being used
-    if (controls && controls.enabled) {
+    // Only update controls if user interactions are being used
+    if (controls.enabled) {
         controls.update();
     }
 
-    // Perform raycasting using the global mouse object
+    // Raycasting for mouseover
     const raycaster = new THREE.Raycaster();
-    raycaster.setFromCamera(mouse, camera); // Use the global mouse object
+    raycaster.setFromCamera(mouse, camera);  // Use the updated global mouse object
     const intersects = raycaster.intersectObjects(regions);
     const infobox = document.getElementById('infobox');
 
@@ -392,15 +392,17 @@ function animate() {
     let rotationY = rotationSpeed * Date.now();
 
     if (allDataLoaded && !controls.enabled) {
+        // Manually rotate the camera around the origin
         camera.position.x = radius * Math.sin(rotationX) * Math.cos(rotationY);
         camera.position.y = radius * Math.sin(rotationY);
         camera.position.z = radius * Math.cos(rotationX) * Math.cos(rotationY);
         camera.lookAt(scene.position);
     }
 
-    updateZoomState(); // Modularize zoom logic into a function for clarity
+    updateZoomState(); // Call the zoom state update function
     renderer.render(scene, camera);
 }
+
 
         
 function updateZoomState() {
@@ -435,9 +437,6 @@ function updateZoomState() {
         }
     }
 }
-
-
-
 
 
 
