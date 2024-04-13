@@ -158,6 +158,22 @@ function onMouseMove(event) {
         previousMousePosition.x = event.clientX;
         previousMousePosition.y = event.clientY;
     }
+        const zoomIncrement = 0.05; // Adjust zoom sensitivity
+
+    if (INTERSECTED) {
+        // Calculate zoom direction based on mouse movement
+        let direction = mouse.x < previousMousePosition.x ? -1 : 1;
+
+        // Apply zoom in/out to the camera position along the ray towards the INTERSECTED object
+        const ray = raycaster.ray; // Get the ray from raycaster
+        camera.position.addScaledVector(ray.direction, direction * zoomIncrement);  
+
+        // Clamp camera position to stay within the sphere 
+        camera.position.clampLength(0, radius); 
+    }
+
+    previousMousePosition.x = event.clientX;
+    previousMousePosition.y = event.clientY;
 }
 
 function onTouchMove(event) {
