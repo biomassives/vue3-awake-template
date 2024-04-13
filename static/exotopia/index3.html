@@ -404,33 +404,38 @@ function animate() {
 
         
 function updateZoomState() {
-    if (zoomState > 0 && INTERSECTED) {
-        let targetPosition = INTERSECTED.position.clone();
-        switch (zoomState) {
-            case 1:
-                camera.position.lerp(targetPosition, 0.05); // Smooth transition
-                if (camera.position.distanceTo(targetPosition) < radius * 0.75) {
-                    zoomState = 2;
-                }
-                break;
-            case 2:
-                camera.position.lerp(targetPosition, 0.1);
-                if (camera.position.distanceTo(targetPosition) < radius * 0.3) {
-                    zoomState = 3;
-                }
-                break;
-            case 3:
-                camera.position.lerp(targetPosition, 0.15);
-                if (camera.position.distanceTo(targetPosition) < radius * 0.15) {
-                    zoomState = 4;
-                }
-                break;
-            case 4:
-                // Implement orbit logic if necessary or end zoom logic
-                break;
+    // Exit if there's nothing to interact with
+    if (!INTERSECTED || zoomState === 0) return;
+
+    // Clone the position to avoid mutating the original
+    const targetPosition = INTERSECTED.position.clone();
+    
+    // Define transitions for smooth camera movements
+    const transitions = {
+        1: { lerpFactor: 0.05, threshold: radius * 0.75, nextState: 2 },
+        2: { lerpFactor: 0.1, threshold: radius * 0.3, nextState: 3 },
+        3: { lerpFactor: 0.15, threshold: radius * 0.15, nextState: 4 },
+        4: { lerpFactor: 0.2, threshold: 0, nextState: 0 }  // Example end state logic
+    };
+
+    const currentTransition = transitions[zoomState];
+    if (!currentTransition) return;
+
+    // Apply the lerping transition to the camera position
+    camera.position.lerp(targetPosition, currentTransition.lerpFactor);
+
+    // Check if it's time to transition to the next zoom state
+    if (camera.position.distanceTo(targetPosition) < currentTransition.threshold) {
+        zoomState = currentTransition.nextState;
+
+        // Optional: Trigger a custom event when reaching a specific zoom state
+        if (zoomState === 4) {
+            console.log("Reached final zoom state.");
+            // Additional logic or function calls can be placed here
         }
     }
 }
+
 
 
 
