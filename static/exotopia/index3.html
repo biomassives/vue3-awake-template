@@ -94,14 +94,14 @@
                 const material = new THREE.MeshBasicMaterial({ color: 0xff00ff, opacity: 1 }); 
                 const exoplanet = new THREE.Mesh(geometry, material); 
 
-                console.log("exoplanet variable exists:", typeof exoplanet !== 'undefined'); // This should log 'true'
+               // console.log("exoplanet variable exists:", typeof exoplanet !== 'undefined'); // This should log 'true'
 
                 const ra = parseFloat(planet.ra);   
                 const dec = parseFloat(planet.dec);
                 const distance = planet.sy_dist === "N/A" ? 100 : parseFloat(planet.sy_dist); 
 
                 const position = convertCelestialTo3D(ra, dec, distance); 
-                console.log(`Exoplanet ${planet.pl_name} (or other identifier) placed at: `, position); 
+                // console.log(`Exoplanet ${planet.pl_name} (or other identifier) placed at: `, position); 
                 exoplanet.position.set(position.x, position.y, position.z);
 
                 exoplanet.userData = { id: planet.pl_name }; 
