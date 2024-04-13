@@ -183,6 +183,8 @@
         
         document.addEventListener('mousedown', function(event) {
             isDragging = true;
+            previousMousePosition.x = event.clientX;
+            previousMousePosition.y = event.clientY;
         });
         
         document.addEventListener('mouseup', function(event) {
@@ -193,32 +195,38 @@
             isDragging = false;
         });
         
-        function onMouseMove(event) {
-            event.preventDefault();
-        
-            // Calculate mouse position in normalized device coordinates (-1 to +1)
-            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-        
-            if (isDragging) {
-                // Calculate mouse movement delta
-                var deltaX = event.clientX - previousMousePosition.x;
-                var deltaY = event.clientY - previousMousePosition.y;
-        
-                // Determine the rotation speed
-                var rotationSpeed = 0.005;
-                
-                // Apply rotation to the camera
-                camera.rotateOnWorldAxis(new THREE.Vector3(0, 1, 0), deltaX * rotationSpeed);
-                camera.rotateX(deltaY * rotationSpeed);
-        
-                // Optional: Clamp the camera's rotation
-                camera.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, camera.rotation.x));
-            }
-        
+
+
+    function onMouseMove(event) {
+        event.preventDefault();
+
+        if (isDragging) {
+            // Calculate mouse movement delta
+            const deltaX = event.clientX - previousMousePosition.x;
+            const deltaY = event.clientY - previousMousePosition.y;
+    
+            // Calculate the new rotation angles based on the mouse movement
+            const angleY = deltaX * (Math.PI / window.innerWidth);
+            const angleX = deltaY * (Math.PI / window.innerHeight);
+    
+            // Create a quaternion for the Y-axis rotation
+            const quaternionY = new THREE.Quaternion();
+            quaternionY.setFromAxisAngle(new THREE.Vector3(0, 1, 0), angleY);
+    
+            // Create a quaternion for the X-axis rotation
+            const quaternionX = new THREE.Quaternion();
+            quaternionX.setFromAxisAngle(new THREE.Vector3(1, 0, 0), angleX);
+    
+            // Apply the quaternions to the camera's quaternion
+            camera.quaternion.premultiply(quaternionY);
+            camera.quaternion.premultiply(quaternionX);
+    
+            // Update the previous mouse position
             previousMousePosition.x = event.clientX;
             previousMousePosition.y = event.clientY;
         }
+    }
+
 
 
             
