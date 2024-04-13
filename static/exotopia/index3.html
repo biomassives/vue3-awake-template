@@ -152,6 +152,7 @@
 
 
 function onMouseMove(event) {
+
     event.preventDefault();
     if (isDragging || allowFullRotation) {
         const deltaX = event.clientX - previousMousePosition.x;
@@ -163,7 +164,7 @@ function onMouseMove(event) {
 
         previousMousePosition.x = event.clientX;
         previousMousePosition.y = event.clientY;
-    } else {
+    } else { 
 
       // Restricted Rotation
         const deltaX = event.clientX - previousMousePosition.x;
@@ -185,12 +186,6 @@ function onMouseMove(event) {
         previousMousePosition.y = event.clientY;
 
     }
-
-
-
-
-    
-
     
         const zoomIncrement = 0.05; // Adjust zoom sensitivity
 
