@@ -13,6 +13,7 @@
     <div id="info">Hover over an object</div>
     <script src="https://cdn.jsdelivr.net/npm/three@0.125.2/build/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.5.1/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.125.2/examples/js/controls/OrbitControls.js"></script>
     <script>
         let scene, camera, renderer;
         let sphere; // Declare 'sphere' globally
@@ -43,8 +44,22 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
             container.appendChild(renderer.domElement);
     
-
-
+            
+            // In your JavaScript, after setting up the camera:
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            
+            // In your animate function, add this line:
+            controls.update();
+            
+            // You can set various properties on the controls as well:
+            controls.enableDamping = true; // An animation loop is required when either damping or auto-rotation are enabled
+            controls.dampingFactor = 0.25;
+            controls.screenSpacePanning = false;
+            controls.minDistance = 10;
+            controls.maxDistance = 500;
+            controls.maxPolarAngle = Math.PI / 2;
+            
+            
             
             const geometry = new THREE.SphereGeometry(radius, 32, 32);
             const material = new THREE.MeshBasicMaterial({ color: 0x000, side: THREE.BackSide, wireframe: false });
@@ -199,35 +214,7 @@
         
 
 
-    function onMouseMove(event) {
-        event.preventDefault();
 
-        if (isDragging) {
-            // Calculate mouse movement delta
-            const deltaX = event.clientX - previousMousePosition.x;
-            const deltaY = event.clientY - previousMousePosition.y;
-    
-            // Calculate the new rotation angles based on the mouse movement
-            const angleY = deltaX * (Math.PI / window.innerWidth);
-            const angleX = deltaY * (Math.PI / window.innerHeight);
-    
-            // Create a quaternion for the Y-axis rotation
-            const quaternionY = new THREE.Quaternion();
-            quaternionY.setFromAxisAngle(new THREE.Vector3(0, 1, 0), angleY);
-    
-            // Create a quaternion for the X-axis rotation
-            const quaternionX = new THREE.Quaternion();
-            quaternionX.setFromAxisAngle(new THREE.Vector3(1, 0, 0), angleX);
-    
-            // Apply the quaternions to the camera's quaternion
-            camera.quaternion.premultiply(quaternionY);
-            camera.quaternion.premultiply(quaternionX);
-    
-            // Update the previous mouse position
-            previousMousePosition.x = event.clientX;
-            previousMousePosition.y = event.clientY;
-        }
-    }
 
 
 
