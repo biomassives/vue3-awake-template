@@ -31,7 +31,8 @@
         const regions = [], radius = 50;
         let isDragging = false, allowFullRotation = false, hoverTimer = null;
         let zoomState = 0; // Zoom states
-
+        let mouse = { x: 0, y: 0 }; // Global mouse object
+        
         function init() {
             const container = document.getElementById('container');
             scene = new THREE.Scene();
@@ -352,52 +353,45 @@
     
     // Inside :
     
+
 function animate() {
     requestAnimationFrame(animate);
 
-    // Only update controls if user interactions are being used
-    if (controls.enabled) {
+    // Update controls if user interactions are being used
+    if (controls && controls.enabled) {
         controls.update();
     }
 
-    // Raycasting for mouseover
+    // Perform raycasting using the global mouse object
     const raycaster = new THREE.Raycaster();
-    const mouse = new THREE.Vector2(); 
-    const infobox = document.getElementById('infobox');
-
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
-
-    raycaster.setFromCamera(mouse, camera);
+    raycaster.setFromCamera(mouse, camera); // Use the global mouse object
     const intersects = raycaster.intersectObjects(regions);
+    const infobox = document.getElementById('infobox');
 
     if (intersects.length > 0) {
         const intersected = intersects[0];
         const planetData = intersected.object.userData;
 
-        infobox.style.display = 'block'; 
-        infobox.textContent =  `Name: ${planetData.id} \n Distance: ${planetData.planetData.sy_dist}`; 
+        infobox.style.display = 'block';
+        infobox.textContent = `Name: ${planetData.id} \n Distance: ${planetData.planetData.sy_dist}`;
 
-        // Project 3D position to screen coordinates 
+        // Project 3D position to screen coordinates
         const projectedPosition = intersected.object.position.clone().project(camera);
         projectedPosition.x = (projectedPosition.x + 1) * window.innerWidth / 2;
         projectedPosition.y = - (projectedPosition.y - 1) * window.innerHeight / 2;
 
-        infobox.style.left = `${projectedPosition.x + 10}px`; 
-        infobox.style.top = `${projectedPosition.y + 10}px`; 
+        infobox.style.left = `${projectedPosition.x + 10}px`;
+        infobox.style.top = `${projectedPosition.y + 10}px`;
     } else {
-        infobox.style.display = 'none'; 
+        infobox.style.display = 'none';
     }
 
-
-    
-    // Example dynamic rotation logic
+    // Dynamic rotation logic
     let rotationSpeed = 0.001; // Define rotation speed
-    let rotationX = rotationSpeed * Date.now(); // This could be more complex depending on needs
+    let rotationX = rotationSpeed * Date.now();
     let rotationY = rotationSpeed * Date.now();
 
-    if (allDataLoaded && !controls.enabled) { 
-        // Manually rotate the camera around the origin
+    if (allDataLoaded && !controls.enabled) {
         camera.position.x = radius * Math.sin(rotationX) * Math.cos(rotationY);
         camera.position.y = radius * Math.sin(rotationY);
         camera.position.z = radius * Math.cos(rotationX) * Math.cos(rotationY);
@@ -405,10 +399,8 @@ function animate() {
     }
 
     updateZoomState(); // Modularize zoom logic into a function for clarity
-
     renderer.render(scene, camera);
 }
-
 
         
 function updateZoomState() {
