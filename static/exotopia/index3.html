@@ -174,10 +174,10 @@ if (isDragging) {
 
         // Rotate in XY plane (adjust sensitivity as needed)
         const rotationXY = deltaX * 0.01; 
-        camera.position.applyAxisAngle(new THREE.Vector3(0, 1, 0), rotationXY);
+       // camera.position.applyAxisAngle(new THREE.Vector3(0, 1, 0), rotationXY);
 
         // Rotate in YZ plane around the current 'up' direction of the camera
-        camera.position.applyAxisAngle(camera.up.clone(), deltaY * 0.01);
+       // camera.position.applyAxisAngle(camera.up.clone(), deltaY * 0.01);
 
         // Optionally, you can add rotation in the ZX plane if needed, following a similar pattern
 
