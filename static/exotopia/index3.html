@@ -54,7 +54,7 @@
        //     const debugSphere = new THREE.Mesh(debugSphereGeometry, debugSphereMaterial);
        //     scene.add(debugSphere);
 
-            document.addEventListener('mousemove', onMouseMove, false);
+            document.addEventListener('mousemove', onMouseMove, true);
             document.addEventListener('mousedown', () => { gging = true; });
             document.addEventListener('mouseup', () => { gging = false; });
             window.addEventListener('resize', onWindowResize, false);
