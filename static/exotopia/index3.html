@@ -208,7 +208,7 @@
 
 
 
-        
+        // event listeners
         
         document.addEventListener('mousedown', function(event) {
             isDragging = true;
@@ -224,7 +224,11 @@
             isDragging = false;
         });
         
-
+        document.addEventListener('mousemove', function(event) {
+            // Normalize mouse coordinates and update global mouse object
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+        });
 
 
 
