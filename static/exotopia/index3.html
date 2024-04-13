@@ -193,52 +193,49 @@
             isDragging = false;
         });
 
-        function onMouseMove(event) {
-        event.preventDefault();
-    
-        // Calculate mouse position in normalized device coordinates
-        // (-1 to +1) for both components
-        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-    
-        if (isDragging) {
-            const deltaX = event.clientX - previousMousePosition.x;
-            const deltaY = event.clientY - previousMousePosition.y;
-    
-            // Assuming the camera is looking at the center of the scene
-            // Determine the rotation amount based on the mouse movement
-            const rotationSpeed = 0.005;
-            const angleY = deltaX * rotationSpeed;
-            const angleX = deltaY * rotationSpeed;
-    
-            // Apply rotation to the camera
-            camera.rotation.y += angleY;
-            camera.rotation.x += angleX;
-    
-            // Optional: Clamp the camera's pitch rotation to prevent flipping
-            camera.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, camera.rotation.x));
-        } else {
-            // Perform raycasting to detect hover over objects
-            raycaster.setFromCamera(mouse, camera);
-            const intersects = raycaster.intersectObjects(scene.children);
-    
-            if (intersects.length > 0) {
-                if (INTERSECTED != intersects[0].object) {
-                    if (INTERSECTED) resetIntersected();
-                    INTERSECTED = intersects[0].object;
-                    highlightIntersected();
-                }
-            } else {
-                if (INTERSECTED) resetIntersected();
-                INTERSECTED = null;
-            }
+      function onMouseMove(event) {
+    event.preventDefault();
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+    if (isDragging) {
+        // Calculate the delta distance from the last mouse position
+        var deltaX = event.clientX - previousMousePosition.x;
+        var deltaY = event.clientY - previousMousePosition.y;
+        
+        // Apply rotation to the camera
+        if (allowFullRotation) {
+            // Convert delta distance to rotation angle, adjust sensitivity if needed
+            var rotationAngleY = deltaX * 0.005;
+            var rotationAngleX = deltaY * 0.005;
+
+            // Rotate around the vertical axis (Y-axis)
+            camera.rotateOnWorldAxis(new THREE.Vector3(0, 1, 0), rotationAngleY);
+            // Rotate around the horizontal axis (X-axis)
+            // We use the camera's local X-axis for rotation
+            camera.rotateOnAxis(new THREE.Vector3(1, 0, 0), rotationAngleX);
         }
-    
-        // Update the previous mouse position
-        previousMousePosition.x = event.clientX;
-        previousMousePosition.y = event.clientY;
     }
+
+    // Raycasting for hover effects
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObjects(scene.children);
     
+    if (intersects.length > 0) {
+        if (INTERSECTED != intersects[0].object) {
+            if (INTERSECTED) resetIntersected();
+            INTERSECTED = intersects[0].object;
+            highlightIntersected();
+        }
+    } else {
+        if (INTERSECTED) resetIntersected();
+        INTERSECTED = null;
+    }
+
+    previousMousePosition.x = event.clientX;
+    previousMousePosition.y = event.clientY;
+}
+
             
         
             
