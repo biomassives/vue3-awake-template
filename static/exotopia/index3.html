@@ -11,6 +11,10 @@
 <body>
     <div id="container"></div>
     <div id="info">Hover over an object</div>
+
+    <div id="infobox" style="position: absolute; top: 50px; left: 50px; background-color: white; padding: 10px; border: 1px solid black;"> </div>
+
+    
     <script src="https://cdn.jsdelivr.net/npm/three@0.125.2/build/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.5.1/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.125.2/examples/js/controls/OrbitControls.js"></script>
@@ -352,6 +356,37 @@ function animate() {
         controls.update();
     }
 
+    // Raycasting for mouseover
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2(); 
+    const infobox = document.getElementById('infobox');
+
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObjects(regions);
+
+    if (intersects.length > 0) {
+        const intersected = intersects[0];
+        const planetData = intersected.object.userData;
+
+        infobox.style.display = 'block'; 
+        infobox.textContent =  `Name: ${planetData.id} \n Distance: ${planetData.planetData.sy_dist}`; 
+
+        // Project 3D position to screen coordinates 
+        const projectedPosition = intersected.object.position.clone().project(camera);
+        projectedPosition.x = (projectedPosition.x + 1) * window.innerWidth / 2;
+        projectedPosition.y = - (projectedPosition.y - 1) * window.innerHeight / 2;
+
+        infobox.style.left = `${projectedPosition.x + 10}px`; 
+        infobox.style.top = `${projectedPosition.y + 10}px`; 
+    } else {
+        infobox.style.display = 'none'; 
+    }
+
+
+    
     // Example dynamic rotation logic
     let rotationSpeed = 0.001; // Define rotation speed
     let rotationX = rotationSpeed * Date.now(); // This could be more complex depending on needs
