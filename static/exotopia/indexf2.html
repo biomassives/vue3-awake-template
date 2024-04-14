@@ -424,7 +424,7 @@ document.addEventListener('click', function(event) {
     let allDataLoaded = false;
     window.addEventListener('allExoplanetsLoaded', () => { allDataLoaded = true; });
     
-    function animate() {
+ function animate() {
     requestAnimationFrame(animate);
 
     if (controls.enabled) {
@@ -456,8 +456,8 @@ document.addEventListener('click', function(event) {
         infobox.style.display = 'none';
     }
 
-    let rotationSpeed = 0.001;
-    rotationSpeed += rotationAcceleration; // Use the defined deceleration rate
+    let rotationSpeed = 0.001; // Initial rotation speed
+    rotationSpeed += rotationAcceleration; // Apply deceleration
     rotationSpeed = Math.max(0, rotationSpeed); // Prevent rotation speed from going negative
 
     let rotationX = rotationSpeed * Date.now();
