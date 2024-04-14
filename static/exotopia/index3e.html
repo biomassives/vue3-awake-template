@@ -27,9 +27,12 @@
             animate();
         });
 
+
         let scene, camera, renderer, controls;
         let TEST = false;  
-        let sphere, raycaster = new THREE.Vector2(), INTERSECTED;
+        let sphere = new THREE.Vector2(), INTERSECTED;
+        let raycaster = new THREE.Raycaster(); // Correct initialization
+
         const regions = [], radius = 50;
         let isDragging = false, allowFullRotation = false, hoverTimer = null;
         let zoomState = 0; // Zoom states
@@ -259,26 +262,39 @@ function createExoplanetVisuals(data) {
 
 
 
+
 document.addEventListener('click', function(event) {
-    const raycaster = new THREE.Raycaster();
+    // Update the mouse position with a normalized value
+    mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
+    mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
+
+    // Update the picking ray with the camera and mouse position
     raycaster.setFromCamera(mouse, camera);
+
+    // Calculate objects intersecting the picking ray
     const intersects = raycaster.intersectObjects(regions);
 
     if (intersects.length > 0) {
-        const clickedExoplanet = intersects[0].object;
-        controls.enabled = false; // Make sure this is an assignment
+        const clickedObject = intersects[0].object;
 
-        // Animate camera position
+        // Disable controls
+        controls.enabled = false;
+
+        // Animate the camera towards the clicked object
         gsap.to(camera.position, {
-            duration: 1.5,
-            x: clickedExoplanet.position.x * 0.8,
-            y: clickedExoplanet.position.y * 0.8,
-            z: clickedExoplanet.position.z * 0.8,
-            onUpdate: () => camera.lookAt(clickedExoplanet.position)
+            duration: 2, // Duration of animation
+            x: clickedObject.position.x,
+            y: clickedObject.position.y,
+            z: clickedObject.position.z * 0.8, // Slightly in front of the object
+            onUpdate: function() {
+                camera.lookAt(clickedObject.position); // Continuously look at the object during animation
+            },
+            onComplete: function() {
+                controls.enabled = true; // Re-enable controls after animation
+            }
         });
     }
 });
-
 
 
         
