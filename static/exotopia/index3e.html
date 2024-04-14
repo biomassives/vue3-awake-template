@@ -264,33 +264,31 @@ function createExoplanetVisuals(data) {
 
 
 document.addEventListener('click', function(event) {
-    // Update the mouse position with a normalized value
-    mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
-    mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
+    // Properly calculate normalized mouse coordinates
+    mouse.x = ((event.clientX / renderer.domElement.clientWidth) * 2) - 1;
+    mouse.y = -((event.clientY / renderer.domElement.clientHeight) * 2) + 1;
 
-    // Update the picking ray with the camera and mouse position
+    // Set the raycaster to use updated mouse coordinates
     raycaster.setFromCamera(mouse, camera);
 
-    // Calculate objects intersecting the picking ray
-    const intersects = raycaster.intersectObjects(regions);
+    // Determine which objects are intersected by the ray
+    var intersects = raycaster.intersectObjects(regions, true);
 
     if (intersects.length > 0) {
         const clickedObject = intersects[0].object;
+        controls.enabled = false;  // Correctly use the assignment to update control state
 
-        // Disable controls
-        controls.enabled = false;
-
-        // Animate the camera towards the clicked object
+        // Animate the camera to focus on the clicked object
         gsap.to(camera.position, {
-            duration: 2, // Duration of animation
+            duration: 2,  // Specify the animation duration
             x: clickedObject.position.x,
             y: clickedObject.position.y,
-            z: clickedObject.position.z * 0.8, // Slightly in front of the object
+            z: clickedObject.position.z * 0.8,  // Adjust z to be slightly in front of the object
             onUpdate: function() {
-                camera.lookAt(clickedObject.position); // Continuously look at the object during animation
+                camera.lookAt(clickedObject.position);  // Continuously adjust camera focus during animation
             },
             onComplete: function() {
-                controls.enabled = true; // Re-enable controls after animation
+                controls.enabled = true;  // Re-enable controls after the animation completes
             }
         });
     }
