@@ -257,43 +257,72 @@ function createExoplanetVisuals(data) {
         });
 
 
+
+
 document.addEventListener('click', function(event) {
     const raycaster = new THREE.Raycaster();
     raycaster.setFromCamera(mouse, camera);
     const intersects = raycaster.intersectObjects(regions);
 
-    
-      if (intersects.length > 0) {
-            const clickedExoplanet = intersects[0].object;
-            const targetZoomDistance = radius * 0.2; // Zoom closer 
+    if (intersects.length > 0) {
+        const clickedExoplanet = intersects[0].object;
+        controls.enabled = false; // Make sure this is an assignment
 
-            // Disable automatic rotation once an exoplanet is clicked
-            controls.enabled = false; 
-
-          
-            // Smooth zoom using GSAP
-            gsap.to(camera.position, {
-                duration: 1.5, // Adjust duration for desired speed
-                ease: "power2.out", // Adjust easing for the feel
-                x: clickedExoplanet.position.x * 0.8, // Zoom slightly in
-                y: clickedExoplanet.position.y * 0.8,
-                z: clickedExoplanet.position.z * 0.8,
-                onUpdate: () => {
-                    // Ensure the camera keeps looking at the object during zoom
-                    camera.lookAt(clickedExoplanet.position); 
-                    
-                }
-            });  
-            onExoplanetClick(event);
-     } else {
-        // Hide infobox if nothing is clicked
-        document.getElementById('infobox').style.display = 'none';
+        // Animate camera position
+        gsap.to(camera.position, {
+            duration: 1.5,
+            x: clickedExoplanet.position.x * 0.8,
+            y: clickedExoplanet.position.y * 0.8,
+            z: clickedExoplanet.position.z * 0.8,
+            onUpdate: () => camera.lookAt(clickedExoplanet.position)
+        });
+    }
+});
 
 
-          
-     }
-  });
 
+        
+        /*
+        document.addEventListener('click', function(event) {
+            const raycaster = new THREE.Raycaster();
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(regions);
+        
+            
+              if (intersects.length > 0) {
+                    const clickedExoplanet = intersects[0].object;
+                    const targetZoomDistance = radius * 0.2; // Zoom closer 
+        
+                    // Disable automatic rotation once an exoplanet is clicked
+                    controls.enabled = false; 
+        
+                  
+                    // Smooth zoom using GSAP
+                    gsap.to(camera.position, {
+                        duration: 1.5, // Adjust duration for desired speed
+                        ease: "power2.out", // Adjust easing for the feel
+                        x: clickedExoplanet.position.x * 0.8, // Zoom slightly in
+                        y: clickedExoplanet.position.y * 0.8,
+                        z: clickedExoplanet.position.z * 0.8,
+                        onUpdate: () => {
+                            // Ensure the camera keeps looking at the object during zoom
+                            camera.lookAt(clickedExoplanet.position); 
+                            
+                        }
+                    });  
+                    onExoplanetClick(event);
+             } else {
+                // Hide infobox if nothing is clicked
+                document.getElementById('infobox').style.display = 'none';
+        
+        
+                  
+             }
+          });
+        */
+
+
+        
 
 
       
