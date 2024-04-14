@@ -466,6 +466,10 @@ document.addEventListener('click', function(event) {
     
         if (allDataLoaded && !controls.enabled) {
             // Manually rotate the camera around the origin
+            rotationSpeed += rotationAcceleration;  // Apply deceleration 
+            rotationSpeed = Math.max(0, rotationSpeed); // Prevent speed from going negative
+            rotationX += rotationSpeed;
+            rotationY += rotationSpeed;    
             camera.position.x = radius * Math.sin(rotationX) * Math.cos(rotationY);
             camera.position.y = radius * Math.sin(rotationY);
             camera.position.z = radius * Math.cos(rotationX) * Math.cos(rotationY);
