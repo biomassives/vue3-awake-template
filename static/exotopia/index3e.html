@@ -39,6 +39,10 @@
         let mouse = { x: 0, y: 0 }; // Global mouse object
         
         function init() {
+
+            console.log("Init function start");
+
+            
             const container = document.getElementById('container');
             scene = new THREE.Scene();
             camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -63,6 +67,12 @@
 
             window.addEventListener('resize', onWindowResize, false);
             loadAllQuadrants();
+
+            console.log("Scene:", scene);
+            console.log("Camera:", camera);
+            console.log("Renderer:", renderer);
+            console.log("Controls:", controls);
+
         }
 /*
         let sphere; // Declare 'sphere' globally
