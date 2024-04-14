@@ -484,9 +484,13 @@ document.addEventListener('click', function(event) {
     
             rotationX += rotationSpeed;
             rotationY += rotationSpeed;       
-            camera.position.x = radius * Math.sin(rotationX) * Math.cos(rotationY);
-            camera.position.y = radius * Math.sin(rotationY);
-            camera.position.z = radius * Math.cos(rotationX) * Math.cos(rotationY);
+            
+            camera.position = new THREE.Vector3(
+                radius * Math.sin(rotationX) * Math.cos(rotationY),
+                radius * Math.sin(rotationY),
+                radius * Math.cos(rotationX) * Math.cos(rotationY)
+            );
+
             camera.lookAt(scene.position);
         }
     
