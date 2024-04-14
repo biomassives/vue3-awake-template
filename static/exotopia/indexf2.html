@@ -424,16 +424,13 @@ document.addEventListener('click', function(event) {
     let allDataLoaded = false;
     window.addEventListener('allExoplanetsLoaded', () => { allDataLoaded = true; });
     
-    
     function animate() {
     requestAnimationFrame(animate);
 
-    // Only update controls if user interactions are being used
     if (controls.enabled) {
         controls.update();
     }
 
-    // Raycasting for mouseover
     const raycaster = new THREE.Raycaster();
     raycaster.setFromCamera(mouse, camera);
     const intersects = raycaster.intersectObjects(regions);
@@ -442,7 +439,6 @@ document.addEventListener('click', function(event) {
     if (intersects.length > 0) {
         const intersected = intersects[0];
         const planetData = intersected.object.userData;
-
         if (planetData && planetData.planetData) {
             infobox.style.display = 'block';
             infobox.textContent = `Name: ${planetData.id} \n Distance: ${planetData.planetData.sy_dist}`;
@@ -460,25 +456,21 @@ document.addEventListener('click', function(event) {
         infobox.style.display = 'none';
     }
 
-    // Dynamic rotation logic
-    let rotationSpeed = 0.001; // Define rotation speed
+    let rotationSpeed = 0.001;
+    rotationSpeed += rotationAcceleration; // Use the defined deceleration rate
+    rotationSpeed = Math.max(0, rotationSpeed); // Prevent rotation speed from going negative
+
     let rotationX = rotationSpeed * Date.now();
     let rotationY = rotationSpeed * Date.now();
+    camera.position.x = radius * Math.sin(rotationX) * Math.cos(rotationY);
+    camera.position.y = radius * Math.sin(rotationY);
+    camera.position.z = radius * Math.cos(rotationX) * Math.cos(rotationY);
+    camera.lookAt(scene.position);
 
-    if (allDataLoaded && !controls.enabled) {
-        rotationSpeed += rotationAcceleration;  // Apply deceleration 
-        rotationSpeed = Math.max(0, rotationSpeed); // Prevent speed from going negative
-        rotationX += rotationSpeed;
-        rotationY += rotationSpeed;
-        camera.position.x = radius * Math.sin(rotationX) * Math.cos(rotationY);
-        camera.position.y = radius * Math.sin(rotationY);
-        camera.position.z = radius * Math.cos(rotationX) * Math.cos(rotationY);
-        camera.lookAt(scene.position);
-    }
-
-    updateZoomState(); // Call the zoom state update function
+    updateZoomState();
     renderer.render(scene, camera);
 }
+
 
     
     
