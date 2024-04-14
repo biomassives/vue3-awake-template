@@ -268,7 +268,11 @@ document.addEventListener('click', function(event) {
       if (intersects.length > 0) {
             const clickedExoplanet = intersects[0].object;
             const targetZoomDistance = radius * 0.2; // Zoom closer 
-    
+
+            // Disable automatic rotation once an exoplanet is clicked
+            controls.enabled = false; 
+
+          
             // Smooth zoom using GSAP
             gsap.to(camera.position, {
                 duration: 1.5, // Adjust duration for desired speed
@@ -279,6 +283,7 @@ document.addEventListener('click', function(event) {
                 onUpdate: () => {
                     // Ensure the camera keeps looking at the object during zoom
                     camera.lookAt(clickedExoplanet.position); 
+                    
                 }
             });      
      }
