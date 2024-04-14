@@ -32,6 +32,8 @@
         let isDragging = false, allowFullRotation = false, hoverTimer = null;
         let zoomState = 0; // Zoom states
         let mouse = { x: 0, y: 0 }; // Global mouse object
+        let rotationAcceleration = -0.00005;  // Initial deceleration value
+
         
         function init() {
             const container = document.getElementById('container');
@@ -40,7 +42,7 @@
             camera.position.set(0, 0, 0.01);
 
 
-            let rotationAcceleration = -0.00005;  // Initial deceleration value
+            
 
           
             renderer = new THREE.WebGLRenderer({ antialias: true });
