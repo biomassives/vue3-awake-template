@@ -262,33 +262,29 @@ function createExoplanetVisuals(data) {
 
 
 
-
 document.addEventListener('click', function(event) {
-    // Properly calculate normalized mouse coordinates
+    console.log('Click event triggered');
     mouse.x = ((event.clientX / renderer.domElement.clientWidth) * 2) - 1;
     mouse.y = -((event.clientY / renderer.domElement.clientHeight) * 2) + 1;
 
-    // Set the raycaster to use updated mouse coordinates
     raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObjects(regions);
 
-    // Determine which objects are intersected by the ray
-    var intersects = raycaster.intersectObjects(regions, true);
-
+    console.log('Intersects:', intersects.length);
     if (intersects.length > 0) {
-        const clickedObject = intersects[0].object;
-        controls.enabled = false;  // Correctly use the assignment to update control state
+        console.log('Clicked on:', intersects[0].object);
+        controls.enabled = false;
 
-        // Animate the camera to focus on the clicked object
         gsap.to(camera.position, {
-            duration: 2,  // Specify the animation duration
-            x: clickedObject.position.x,
-            y: clickedObject.position.y,
-            z: clickedObject.position.z * 0.8,  // Adjust z to be slightly in front of the object
+            duration: 2,
+            x: intersects[0].object.position.x,
+            y: intersects[0].object.position.y,
+            z: intersects[0].object.position.z * 0.8,
             onUpdate: function() {
-                camera.lookAt(clickedObject.position);  // Continuously adjust camera focus during animation
+                camera.lookAt(intersects[0].object.position);
             },
             onComplete: function() {
-                controls.enabled = true;  // Re-enable controls after the animation completes
+                controls.enabled = true;
             }
         });
     }
