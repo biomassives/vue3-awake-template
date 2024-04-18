@@ -24,6 +24,7 @@
           
           document.addEventListener('DOMContentLoaded', function() {
               init();
+              loadAllQuadrants(); // Load data right after initializing the scene
               setupEventListeners();
               animate();
           });
@@ -49,6 +50,25 @@ function init() {
     window.addEventListener('resize', onWindowResize, false);
 }
 
+
+function loadAllQuadrants() {
+    // Array of paths to your JSON data files
+    const dataSources = [
+        'path/to/quadrant1.json',
+        'path/to/quadrant2.json',
+        // Add more as needed
+    ];
+    
+    dataSources.forEach(source => {
+        fetch(source)
+            .then(response => response.json())
+            .then(data => createExoplanetVisuals(data))
+            .catch(error => console.error('Failed to load data:', error));
+    });
+}
+
+
+        
           function setupEventListeners() {
     document.addEventListener('mousemove', onMouseMove, false);
 }
@@ -79,14 +99,23 @@ function onMouseMove(event) {
 
 function createExoplanetVisuals(data) {
     data.forEach(planet => {
-        const geometry = new THREE.SphereGeometry(5, 32, 32); // Example size
-        const material = new THREE.MeshBasicMaterial({ color: new THREE.Color().setHSL(Math.random(), 1, 0.5) });
+        const geometry = new THREE.SphereGeometry(planet.size || 5, 32, 32); // Use size from data or default
+        const color = new THREE.Color().setHSL(Math.random(), 1, 0.5); // Random color or based on data
+        const material = new THREE.MeshBasicMaterial({ color });
         const exoplanet = new THREE.Mesh(geometry, material);
-        exoplanet.position.set(Math.random() * 400 - 200, Math.random() * 400 - 200, Math.random() * 400 - 200);
+        
+        // Position can be based on actual data if available
+        exoplanet.position.set(
+            planet.position.x || Math.random() * 400 - 200,
+            planet.position.y || Math.random() * 400 - 200,
+            planet.position.z || Math.random() * 400 - 200
+        );
+        
         exoplanet.userData = {
             id: planet.id,
             description: `Name: ${planet.name}, Temp: ${planet.temperature}K`
         };
+        
         scene.add(exoplanet);
         regions.push(exoplanet);
     });
