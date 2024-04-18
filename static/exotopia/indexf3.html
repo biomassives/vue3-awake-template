@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Exotopia Interactive Exoplanet Visualization</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+        #info { position: absolute; top: 10px; left: 10px; color: white; }
+    </style>
+</head>
+<body>
+    <div id="container"></div>
+    <div id="info">Hover over an object</div>
+    <div id="infobox" style="position: absolute; top: 50px; left: 50px; background-color: white; padding: 10px; border: 1px solid black;"> </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/three@0.125.2/build/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.5.1/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.125.2/examples/js/controls/OrbitControls.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            init();
+            animate();
+        });
+
+        let scene, camera, renderer, controls;
+        let sphere, raycaster = new THREE.Vector2(), INTERSECTED;
+        const regions = [], radius = 50;
+        let mouse = { x: 0, y: 0 }; // Global mouse object
+        let isDragging = false, hoverTimer = null;
+        let zoomState = 0; // Zoom states
+        let allDataLoaded = false;
+
+        function init() {
+            const container = document.getElementById('container');
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 0, 0.01);
+
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            container.appendChild(renderer.domElement);
+
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.25;
+            controls.screenSpacePanning = false;
+            controls.minDistance = 10;
+            controls.maxDistance = 500;
+            controls.maxPolarAngle = Math.PI / 2;
+
+            const geometry = new THREE.SphereGeometry(radius, 32, 32);
+            const material = new THREE.MeshBasicMaterial({ color: 0x000, side: THREE.BackSide });
+            sphere = new THREE.Mesh(geometry, material);
+            scene.add(sphere);
+
+            window.addEventListener('resize', throttle(onWindowResize, 100), false);
+            loadAllQuadrants();
+        }
+
+        // Throttle function to limit the rate at which a function can fire.
+        function throttle(func, limit) {
+            let lastFunc;
+            let lastRan;
+            return function() {
+                const context = this;
+                const args = arguments;
+                if (!lastRan) {
+                    func.apply(context, args);
+                    lastRan = Date.now();
+                } else {
+                    clearTimeout(lastFunc);
+                    lastFunc = setTimeout(function() {
+                        if ((Date.now() - lastRan) >= limit) {
+                            func.apply(context, args);
+                            lastRan = Date.now();
+                        }
+                    }, limit - (Date.now() - lastRan));
+                }
+            }
+        }
+
+        function loadAllQuadrants() {
+            const quadrantCount = 8;
+            for (let i = 1; i <= quadrantCount; i++) {
+                setTimeout(() => {  // Stagger the loading process to avoid spikes in network activity
+                    loadExoplanetData(`quadrant_${i}.json`);
+                }, i * 200); // 200 ms stagger time
+            }
+        }
+
+        function loadExoplanetData(jsonFilePath) {
+            fetch(jsonFilePath)
+                .then(response => response.json())
+                .then(data => {
+                    createExoplanetVisuals(data);
+                })
+                .catch(error => console.error(`Failed to load data from ${jsonFilePath}:`, error));
+        }
+
+function createExoplanetVisuals(data) {
+    const maxExoplanets = 200; 
+    let exoplanetCount = 0; 
+
+    // Process the data in smaller batches
+    processExoplanetBatch(0);
+
+    function processExoplanetBatch(index) {
+        const batch_size = 10; // Number of exoplanets to process at a time
+        for (let i = index; i < Math.min(index + batch_size, data.length); i++) {
+            if (exoplanetCount >= maxExoplanets) {
+                console.log('Reached max exoplanets limit');
+                break;
+            }
+            createExoplanet(data[i]);
+            exoplanetCount++;
+        }
+
+        if (index + batch_size < data.length && exoplanetCount < maxExoplanets) {
+            setTimeout(() => processExoplanetBatch(index + batch_size), 0); // Use setTimeout to avoid blocking the UI
+        } else {
+            window.dispatchEvent(new Event('allExoplanetsLoaded'));
+            console.log('All exoplanets processed');
+        }
+    }
+
+    function createExoplanet(planet) {
+        const size = planet.pl_rade ? parseFloat(planet.pl_rade) * 0.1 : 0.5; 
+        const geometry = new THREE.SphereGeometry(size, 32, 32);
+        let color = calculateColor(planet);
+        const material = new THREE.MeshBasicMaterial({ color: color, opacity: 1 }); 
+        const exoplanet = new THREE.Mesh(geometry, material);
+        exoplanet.name = planet.pl_name;
+        
+        const position = convertCelestialTo3D(parseFloat(planet.ra), parseFloat(planet.dec), parseFloat(planet.sy_dist));
+        exoplanet.position.set(position.x, position.y, position.z);
+        exoplanet.userData = { id: planet.pl_name }; 
+        scene.add(exoplanet);
+        regions.push(exoplanet);
+    }
+
+    function calculateColor(planet) {
+        let color = new THREE.Color(0x808080); // Default gray
+        if (planet.pl_eqt) {
+            const temperature = parseFloat(planet.pl_eqt);
+            // Adjust color based on temperature
+            if (temperature <= 500) {
+                color = new THREE.Color(0xff4500); // Orange for cooler temperatures
+            } else {
+                color = new THREE.Color(0xffff00); // Yellow for warmer temperatures
+            }
+        }
+        return color;
+    }
+}
+
+function convertCelestialTo3D(ra, dec, distance) {
+    ra = THREE.MathUtils.degToRad(ra);
+    dec = THREE.MathUtils.degToRad(dec);
+    let x = distance * Math.cos(dec) * Math.cos(ra);
+    let y = distance * Math.sin(dec);
+    let z = distance * Math.cos(dec) * Math.sin(ra);
+    return new THREE.Vector3(x, y, z);
+}
+
+      
+    
+    </script>
+</body>
+</html>
