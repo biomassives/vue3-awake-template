@@ -96,6 +96,14 @@ const sphere = new THREE.Mesh(
 );
 scene.add(sphere);
 
+function loadAllQuadrants() {
+    loadExoplanetData('quadrant_1.json'); 
+    loadExoplanetData('quadrant_2.json'); 
+    loadExoplanetData('quadrant_3.json'); 
+    loadExoplanetData('quadrant_4.json'); 
+}
+
+        
 function loadExoplanetData(filename) {
     fetch(filename)
         .then(response => response.json())
