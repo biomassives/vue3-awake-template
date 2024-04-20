@@ -37,9 +37,10 @@
         const exoplanetsData = {}; // Initialize exoplanetsData
         const exoplanetMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff });
 
-
         
         function init() {
+            console.log("Initial camera position:", camera.position);
+
             const container = document.getElementById('container');
             scene = new THREE.Scene();
 
@@ -96,7 +97,10 @@
         function loadExoplanetData(filename) {
             fetch(filename)
                 .then(response => response.json())
-                .then(data => createExoplanetVisuals(data))
+                .then(data => {
+                    console.log("Loaded exoplanet data:", data); // Output loaded data
+                    createExoplanetVisuals(data);
+                })
                 .catch(error => console.error('Error loading data:', error));
         }
 
@@ -183,8 +187,8 @@
             let y = distance * Math.sin(dec);
             let z = distance * Math.cos(dec) * Math.sin(ra);
 
-            // Adjust the scale factor for better visualization
-            const scaleFactor = 0.1;
+            // Temporarily set a large scaleFactor for experimentation
+            const scaleFactor = 10;
             x *= scaleFactor;
             y *= scaleFactor;
             z *= scaleFactor;
