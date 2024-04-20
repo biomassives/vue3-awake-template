@@ -33,20 +33,7 @@
         let raycaster, INTERSECTED;
         const regions = [];
 
-        document.addEventListener('DOMContentLoaded', function() {
-            init();
-            loadExoplanetData('quadrant_1.json');  // Specify your data source here
-            animate();
-        });
 
-
-// ... (Scene, camera, renderer setup from Code B)
-
-const sphere = new THREE.Mesh(
-    new THREE.SphereGeometry(radius, 32, 32),
-    new THREE.MeshBasicMaterial({ color: 0x000, side: THREE.BackSide, wireframe: false })
-);
-scene.add(sphere);
 
 function init() {
     const container = document.getElementById('container');
@@ -73,7 +60,8 @@ function init() {
             controls.minDistance = 10;
             controls.maxDistance = 500;
 
- 
+     raycaster = new THREE.Raycaster();
+    
     // Event Listeners
     window.addEventListener('resize', onWindowResize, false); 
     document.addEventListener('mousemove', onMouseMove, false);
@@ -90,9 +78,27 @@ function init() {
 }
 
 
+document.addEventListener('DOMContentLoaded', function() {
+    init();
+    loadExoplanetData('quadrant_1.json');  // Specify your data source here
+    animate();
+});
 
 
+// ... (Scene, camera, renderer setup from Code B)
 
+const sphere = new THREE.Mesh(
+    new THREE.SphereGeometry(radius, 32, 32),
+    new THREE.MeshBasicMaterial({ color: 0x000, side: THREE.BackSide, wireframe: false })
+);
+scene.add(sphere);
+
+function loadExoplanetData(filename) {
+    fetch(filename)
+        .then(response => response.json())
+        .then(data => createExoplanetVisuals(data))
+        .catch(error => console.error('Error loading data:', error));
+}
 
 let isDragging = false; 
 let previousMousePosition = { x: 0, y: 0 };
