@@ -203,31 +203,33 @@
             renderer.render(scene, camera);
         }
 
-        function createExoplanetVisuals(data) {
-            data.forEach(planet => {
-                try {
-                    const planetRadius = planet.pl_rade ? parseFloat(planet.pl_rade) * 0.1 : 0.5;
-                    const geometry = new THREE.SphereGeometry(planetRadius, 32, 32);
-                    const exoplanetMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff }); // Adjust material as needed
-                    const exoplanet = new THREE.Mesh(geometry, exoplanetMaterial); 
+function createExoplanetVisuals(data) {
+    data.forEach(planet => {
+        try {
+            const planetRadius = planet.pl_rade ? parseFloat(planet.pl_rade) * 0.1 : 0.5;
+            const geometry = new THREE.SphereGeometry(planetRadius, 32, 32);
+            const exoplanetMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff });
+            const exoplanet = new THREE.Mesh(geometry, exoplanetMaterial); 
 
-                    const position = convertCelestialTo3D(planet.ra, planet.dec, planet.sy_dist);
-                    exoplanet.position.set(position.x, position.y, position.z); 
+            const distance = planet.sy_dist !== 'N/A' ? parseFloat(planet.sy_dist) : radius; // Use radius if distance is 'N/A'
+            const position = convertCelestialTo3D(planet.ra, planet.dec, distance);
 
-                    exoplanet.userData = { id: planet.pl_name }; 
-                    scene.add(exoplanet);
-                    regions.push(exoplanet);
+            exoplanet.position.set(position.x, position.y, position.z); 
+            exoplanet.userData = { id: planet.pl_name }; 
+            scene.add(exoplanet);
+            regions.push(exoplanet);
 
-                    exoplanetsData[planet.pl_name] = { 
-                        exoplanet: exoplanet,
-                        planetData: planet
-                    };
+            exoplanetsData[planet.pl_name] = { 
+                exoplanet: exoplanet,
+                planetData: planet
+            };
 
-                } catch (error) {
-                    console.error("Error creating exoplanet:", planet, error);
-                }
-            });
+        } catch (error) {
+            console.error("Error creating exoplanet:", planet, error);
         }
+    });
+}
+
     </script>
 </body>
 </html>
