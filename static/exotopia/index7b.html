@@ -37,10 +37,11 @@
         const exoplanetsData = {}; // Initialize exoplanetsData
         const exoplanetMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff });
 
-        
-        function init() {
-            console.log("Initial camera position:", camera.position);
+        // Define the camera variable outside the init function
+        camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 100;
 
+        function init() {
             const container = document.getElementById('container');
             scene = new THREE.Scene();
 
@@ -49,9 +50,6 @@
             scene.add(light);
 
             scene.background = new THREE.Color(0xff00ff); // Bright pink
-            
-            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.z = 100;
 
             renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
@@ -65,19 +63,17 @@
             controls.maxDistance = 500;
 
             raycaster = new THREE.Raycaster();
-            
+
             // Event Listeners
-            window.addEventListener('resize', onWindowResize, false); 
+            window.addEventListener('resize', onWindowResize, false);
             document.addEventListener('mousemove', onMouseMove, false);
 
-
             // test
-
             const testSphereGeometry = new THREE.SphereGeometry(15, 32, 32);
             const testSphereMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 }); // Bright green
             const testSphere = new THREE.Mesh(testSphereGeometry, testSphereMaterial);
-            scene.add(testSphere)
-            
+            scene.add(testSphere);
+
             // Load data from all quadrants at initialization
             loadAllQuadrants();
         }
@@ -104,11 +100,11 @@
                 .catch(error => console.error('Error loading data:', error));
         }
 
-        let isDragging = false; 
+        let isDragging = false;
         let previousMousePosition = { x: 0, y: 0 };
 
         function onMouseDown(event) {
-            isDragging = true; 
+            isDragging = true;
             previousMousePosition.x = event.clientX;
             previousMousePosition.y = event.clientY;
         }
@@ -117,25 +113,25 @@
             event.preventDefault();
 
             if (isDragging) { // Dragging functionality (if needed)
-                
+
                 const deltaX = event.clientX - previousMousePosition.x;
                 const deltaY = event.clientY - previousMousePosition.y;
 
                 // Calculate how much to rotate the scene based on mouse movement
-                const rotateX = THREE.MathUtils.degToRad(deltaY / 5);  
-                const rotateY = THREE.MathUtils.degToRad(deltaX / 5); 
+                const rotateX = THREE.MathUtils.degToRad(deltaY / 5);
+                const rotateY = THREE.MathUtils.degToRad(deltaX / 5);
 
-                // Apply rotation (adjust sensitivity as needed) 
+                // Apply rotation (adjust sensitivity as needed)
                 scene.rotation.y += rotateY;
                 scene.rotation.x += rotateX;
 
                 previousMousePosition.x = event.clientX;
                 previousMousePosition.y = event.clientY;
 
-            } else { 
-                const mouse = new THREE.Vector2( 
-                    (event.clientX / window.innerWidth) * 2 - 1, 
-                    -(event.clientY / window.innerHeight) * 2 + 1 
+            } else {
+                const mouse = new THREE.Vector2(
+                    (event.clientX / window.innerWidth) * 2 - 1,
+                    -(event.clientY / window.innerHeight) * 2 + 1
                 );
 
                 raycaster.setFromCamera(mouse, camera);
@@ -148,15 +144,15 @@
                             INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
                         }
                         INTERSECTED = intersects[0].object;
-                        if (INTERSECTED.material.emissive) { 
+                        if (INTERSECTED.material.emissive) {
                             INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
                             INTERSECTED.material.emissive.setHex(0xff0000);
                         }
 
                         // Infobox Update (from Code A)
                         document.getElementById('infobox').style.display = 'block';
-                        const exoplanetId =  INTERSECTED.userData.id; 
-                        const planetData =  exoplanetsData[exoplanetId].planetData; 
+                        const exoplanetId = INTERSECTED.userData.id;
+                        const planetData = exoplanetsData[exoplanetId].planetData;
                         document.getElementById('infobox').innerHTML = `Name: ${planetData.pl_name || 'Name Unavailable'} <br> 
                             Distance: ${planetData.sy_dist === 'N/A' ? 'Distance Unavailable' : planetData.sy_dist}`;
 
@@ -171,7 +167,7 @@
                     document.getElementById('infobox').style.display = 'none';
                     document.getElementById('info').style.display = 'block';
                 }
-            } 
+            }
         }
 
         function onMouseUp(event) {
@@ -210,39 +206,38 @@
             if (distanceFromCenter > radius) {
                 const directionToCenter = scene.position.clone().sub(camera.position).normalize();
                 camera.position.copy(directionToCenter.multiplyScalar(radius)); // Stay on the edge 
-                controls.update(); 
+                controls.update();
             }
 
             renderer.render(scene, camera);
         }
 
-function createExoplanetVisuals(data) {
-    data.forEach(planet => {
-        try {
-            const planetRadius = planet.pl_rade ? parseFloat(planet.pl_rade) * 0.1 : 0.5;
-            const geometry = new THREE.SphereGeometry(planetRadius, 32, 32);
-            const exoplanetMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff });
-            const exoplanet = new THREE.Mesh(geometry, exoplanetMaterial); 
+        function createExoplanetVisuals(data) {
+            data.forEach(planet => {
+                try {
+                    const planetRadius = planet.pl_rade ? parseFloat(planet.pl_rade) * 0.1 : 0.5;
+                    const geometry = new THREE.SphereGeometry(planetRadius, 32, 32);
+                    const exoplanetMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff });
+                    const exoplanet = new THREE.Mesh(geometry, exoplanetMaterial);
 
-            const distance = planet.sy_dist !== 'N/A' ? parseFloat(planet.sy_dist) : radius; // Use radius if distance is 'N/A'
-            const position = convertCelestialTo3D(planet.ra, planet.dec, distance);
+                    const distance = planet.sy_dist !== 'N/A' ? parseFloat(planet.sy_dist) : radius; // Use radius if distance is 'N/A'
+                    const position = convertCelestialTo3D(planet.ra, planet.dec, distance);
 
-            exoplanet.position.set(position.x, position.y, position.z); 
-            exoplanet.userData = { id: planet.pl_name }; 
-            scene.add(exoplanet);
-            regions.push(exoplanet);
+                    exoplanet.position.set(position.x, position.y, position.z);
+                    exoplanet.userData = { id: planet.pl_name };
+                    scene.add(exoplanet);
+                    regions.push(exoplanet);
 
-            exoplanetsData[planet.pl_name] = { 
-                exoplanet: exoplanet,
-                planetData: planet
-            };
+                    exoplanetsData[planet.pl_name] = {
+                        exoplanet: exoplanet,
+                        planetData: planet
+                    };
 
-        } catch (error) {
-            console.error("Error creating exoplanet:", planet, error);
+                } catch (error) {
+                    console.error("Error creating exoplanet:", planet, error);
+                }
+            });
         }
-    });
-}
-
     </script>
 </body>
 </html>
