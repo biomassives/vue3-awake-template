@@ -166,9 +166,13 @@
             let y = distance * Math.sin(dec);
             let z = distance * Math.cos(dec) * Math.sin(ra);
 
-            const positionVector = new THREE.Vector3(x, y, z);
-            positionVector.normalize().multiplyScalar(radius);
-            return { x: positionVector.x, y: positionVector.y, z: positionVector.z };
+            // Adjust the scale factor for better visualization
+            const scaleFactor = 0.1;
+            x *= scaleFactor;
+            y *= scaleFactor;
+            z *= scaleFactor;
+
+            return { x, y, z };
         }
 
         function onWindowResize() {
