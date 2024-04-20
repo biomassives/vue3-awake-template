@@ -47,6 +47,7 @@
             light.position.set(0, 0, 0);
             scene.add(light);
 
+            scene.background = new THREE.Color(0xff00ff); // Bright pink
             
             camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
             camera.position.z = 100;
@@ -68,6 +69,14 @@
             window.addEventListener('resize', onWindowResize, false); 
             document.addEventListener('mousemove', onMouseMove, false);
 
+
+            // test
+
+            const testSphereGeometry = new THREE.SphereGeometry(15, 32, 32);
+            const testSphereMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 }); // Bright green
+            const testSphere = new THREE.Mesh(testSphereGeometry, testSphereMaterial);
+            scene.add(testSphere)
+            
             // Load data from all quadrants at initialization
             loadAllQuadrants();
         }
