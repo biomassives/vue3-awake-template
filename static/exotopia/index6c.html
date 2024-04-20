@@ -81,7 +81,9 @@
                     document.getElementById('infobox').innerHTML = INTERSECTED.userData.description || 'No additional information';
                 }
             } else {
-                if (INTERSECTED) INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
+                if (INTERSECTED && INTERSECTED.material.emissive) {
+                   INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
+                }
                 INTERSECTED = null;
                 document.getElementById('infobox').style.display = 'none';
             }
