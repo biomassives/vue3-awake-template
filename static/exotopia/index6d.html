@@ -87,7 +87,7 @@
 
                     document.getElementById('infobox').innerHTML = `Name: ${INTERSECTED.userData.pl_name || 'Name Unavailable'} <br> 
                         Distance: ${INTERSECTED.userData.sy_dist === 'N/A' ? 'Distance Unavailable' : INTERSECTED.userData.sy_dist}`;
-
+                    document.getElementById('info').style.display = 'none';
                     //document.getElementById('infobox').innerHTML = INTERSECTED.userData.description || 'No additional information';
                 }
             } else {
@@ -96,6 +96,7 @@
                 }
                 INTERSECTED = null;
                 document.getElementById('infobox').style.display = 'none';
+                document.getElementById('info').style.display = 'block';
             }
         }
 
