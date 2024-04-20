@@ -39,7 +39,7 @@
 
         // Define the camera variable outside the init function
         camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = 100;
+        camera.position.z = 0;
 
         function init() {
             console.log("Camera position:", camera.position); // Check camera position
@@ -47,7 +47,7 @@
             scene = new THREE.Scene();
 
             const light = new THREE.DirectionalLight(0xffffff, 0.8);  // Soft white light
-            light.position.set(0, 0, 0);
+            light.position.set(60, 0, 0);
             scene.add(light);
 
             scene.background = new THREE.Color(0xff00ff); // Bright pink
