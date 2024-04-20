@@ -73,10 +73,10 @@
                       INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
                     }
                     INTERSECTED = intersects[0].object;
-                    if (INTERSECTED && INTERSECTED.material.emissive) {
-                      INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+                    if (INTERSECTED.material.emissive) { 
+                        INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+                        INTERSECTED.material.emissive.setHex(0xff0000);
                     }
-                    INTERSECTED.material.emissive.setHex(0xff0000);
                     document.getElementById('infobox').style.display = 'block';
                     document.getElementById('infobox').style.left = `${event.clientX + 5}px`;
                     document.getElementById('infobox').style.top = `${event.clientY + 5}px`;
