@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interconnected Issues</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+            <style> 
+        .issue {
+            @apply border border-gray-300 p-4 rounded text-center cursor-pointer transition duration-300 ease-in-out;
+        }
+        
+        .issue:hover {
+            @apply bg-blue-100 shadow-md transform scale-105;
+        }
+        
+        /* Hexagon Grid Layout */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Responsive columns */
+            gap: 1rem; /* Adjust the gap as needed */
+        }
+        
+        .issue {
+            position: relative; /* For positioning the hexagon */
+            overflow: hidden;
+        }
+        
+        .issue::before {
+            content: '';
+            display: block;
+            padding-top: 86.6%; /* 100% / tan(60deg) = 86.6% */
+            background: white; /* Background color of the hexagon */
+        }
+        
+        .issue-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            width: 100%; /* Ensure the text fills the hexagon */
+        }
+        
+        /* Text Styles */
+        .issue-content { /* Emulate the white text color */
+            @apply text-white;
+        }
+        
+        /* Hexagon Colors (Emulate the concentric rings) */
+        .issue:nth-child(n) { @apply bg-red-600; }   
+        .issue:nth-child(7n) { @apply bg-red-400; }  
+        .issue:nth-child(19n) { @apply bg-red-200; }
+        .issue:nth-child(37n) { @apply bg-yellow-200; }
+        
+        /* Adjust the colors and the nth-child selector values to match your preference and the number of issues you have. */
+        
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    </div>
+
+    <script>
+      const issuesData = {
+          "toxic algal blooms": { info: "Excessive nutrients cause rapid algae growth, depleting oxygen and harming marine life.", icon: "fas fa-biohazard" },
+          "storminess": { info: "Increased frequency and intensity of storms due to climate change, causing damage and flooding.", icon: "fas fa-cloud-showers-heavy" },
+          "dead zones": { info: "Areas in oceans or lakes with low oxygen levels, often caused by excessive nutrient pollution.", icon: "fas fa-skull-crossbones" },
+          "coral bleaching": { info: "Rising temperatures stress corals, causing them to expel symbiotic algae, turning white and vulnerable.", icon: "fas fa-coral" },
+          "pharmaceuticals": { info: "Pharmaceutical pollution in water sources can harm aquatic life and potentially impact human health.", icon: "fas fa-prescription-bottle" },
+          "loss of sea ice": { info: "Diminishing sea ice due to warming temperatures affects wildlife, ocean currents, and global climate patterns.", icon: "fas fa-icicles" },
+          "plastics": { info: "Plastic pollution accumulates in oceans, harming marine life through entanglement, ingestion, and toxic effects.", icon: "fas fa-recycle" },
+          "polluted runoff": { info: "Pollutants from land activities wash into oceans, harming ecosystems and wildlife.", icon: "fas fa-faucet-drip" },
+          "sea level rise": { info: "Rising sea levels due to climate change threaten coastal communities, ecosystems, and infrastructure.", icon: "fas fa-water" },
+          "biophysical collapse": { info: "The breakdown of natural systems due to environmental stressors, leading to ecological instability.", icon: "fas fa-mountain" },
+          "toxic metals": { info: "Heavy metal pollution from industrial and mining activities can bioaccumulate in organisms, causing health problems.", icon: "fas fa-industry" },
+          "endocrine disruptors": { info: "Chemicals that interfere with hormonal systems, potentially affecting reproduction and development.", icon: "fas fa-vial" },
+          "ocean heating": { info: "Increasing ocean temperatures due to climate change impact marine ecosystems, weather patterns, and sea levels.", icon: "fas fa-temperature-high" },
+          "acidification": { info: "Absorption of excess carbon dioxide by oceans lowers pH, harming marine life, especially shellfish.", icon: "fas fa-lemon" },
+          "deoxygenation": { info: "Reduced oxygen levels in oceans due to climate change and pollution threaten marine biodiversity.", icon: "fas fa-lungs" },
+          "disease": { info: "Outbreaks of disease in marine life and humans can be exacerbated by environmental stress and pollution.", icon: "fas fa-virus" },
+          "sewage": { info: "Untreated sewage released into water bodies contaminates them, posing risks to human health and ecosystems.", icon: "fas fa-toilet" },
+          "extreme weather": { info: "More frequent and severe weather events (heatwaves, droughts, floods) are linked to climate change.", icon: "fas fa-bolt" },
+          "climate change": { info: "Long-term shifts in temperature and weather patterns caused by human activities, with widespread impacts.", icon: "fas fa-smog" },
+          "megadrought": { info: "Prolonged and severe droughts with significant ecological, social, and economic consequences.", icon: "fas fa-water-lower" },
+          "population growth": { info: "Increasing human population puts pressure on resources, leading to environmental degradation.", icon: "fas fa-users" },
+          "toxic waste site": { info: "Areas contaminated with hazardous waste pose risks to human health and the environment.", icon: "fas fa-dumpster-fire" },
+          "flooding": { info: "Overwhelming of land by water, often due to heavy rainfall or storm surge, causing damage and displacement.", icon: "fas fa-house-flood-water" },
+          "animal feeding operations": { info: "Large-scale livestock farms can contribute to pollution, antibiotic resistance, and animal welfare concerns.", icon: "fas fa-cow" },
+          "extractive relationship with Nature": { info: "Exploitation of natural resources without regard for sustainability or ecological consequences.", icon: "fas fa-hand-holding-usd" },
+          "wealth disparity": { info: "Unequal distribution of resources and wealth can lead to social unrest and environmental injustice.", icon: "fas fa-chart-line" },
+          "social inequality": { info: "Disparities in access to resources, healthcare, and opportunities based on social factors.", icon: "fas fa-scale-unbalanced" },
+          "heat wave": { info: "Prolonged periods of excessively hot weather can cause heatstroke, dehydration, and other health problems.", icon: "fas fa-sun" },
+          "public health emergencies": { info: "Situations that threaten public health, such as disease outbreaks or environmental disasters.", icon: "fas fa-hospital" },
+          "political and civil unrest": { info: "Social unrest and conflict can be exacerbated by environmental stress and resource scarcity.", icon: "fas fa-fist-raised" },
+          "biodiversity loss": { info: "Decline in the variety of life on Earth, threatening ecosystems and human well-being.", icon: "fas fa-seedling" },
+          "expanding vectors": { info: "Increased range of disease-carrying organisms due to climate change and environmental disruption.", icon: "fas fa-mosquito" },
+          "pandemics": { info: "Global outbreaks of infectious diseases with significant health and socioeconomic impacts.", icon: "fas fa-virus" },
+          "zoonotic disease": { info: "Diseases that can be transmitted between animals and humans, often linked to environmental factors.", icon: "fas fa-disease" },
+          "genetic diversity loss": { info: "Reduced genetic variation within populations makes species more vulnerable to extinction.", icon: "fas fa-dna" },
+          "displacement": { info: "Forced migration due to environmental disasters, conflict, or persecution.", icon: "fas fa-person-walking-arrow-right" },
+          "regional water crises": { info: "Shortages of freshwater due to overconsumption, pollution, and climate change.", icon: "fas fa-droplet" },
+          "ecosystem collapse": { info: "The irreversible breakdown of ecosystems, leading to loss of biodiversity and essential services.", icon: "fas fa-tree" },
+          "deforestation": { info: "Clearing of forests for agriculture, logging, or other purposes, contributing to climate change and biodiversity loss.", icon: "fas fa-axe" },
+          "extractive agriculture": { info: "Intensive farming practices that deplete soil, pollute water, and harm biodiversity.", icon: "fas fa-tractor" },
+          "defaunation": { info: "Loss of animal populations due to hunting, habitat destruction, and environmental stress.", icon: "fas fa-paw" },
+          "wildfire": { info: "Uncontrolled fires in natural areas, often exacerbated by drought and climate change.", icon: "fas fa-fire" },
+          "overfishing": { info: "Harvesting fish at unsustainable rates, leading to depletion of fish stocks and ecological imbalances.", icon: "fas fa-fish" },
+          "animal & plant extinction": { info: "Irreversible loss of species due to human activities and environmental factors.", icon: "fas fa-dove" }
+      };
+
+    issueElement.addEventListener('mouseover', () => {
+        const issueData = issuesData[issue]; // Get data for the issue
+        infoBox.innerHTML = `<i class="${issueData.icon} mr-2"></i> ${issueData.info}`; // Add icon and info
+        infoBox.classList.remove('hidden');
+    });
+
+
+
+    </script>
+</body>
+</html>
+
