@@ -36,95 +36,101 @@
         scene.add(sphere);
 
         // Arrays of text labels
-        const kittyIpsum = [
-            "Lick the curtain just to be annoying",
-            "Walk on keyboard",
-            "Stares at human while pushing stuff off a table",
-            "Meow for food, then when human fills food dish, take a few bites of food and continue meowing",
-            "Meow meow, i tell my human purr for no reason but to chase after silly colored fish toys around the house",
-            "Gimme attention gimme attention gimme attention gimme attention gimme attention gimme attention",
-            "If it fits, i sits",
-            "Behind the couch",
-            "Stares at human while pushing stuff off a table",
-            "Behind the couch",
-            "Lick the curtain just to be annoying",
-            "Meow meow, i tell my human purr for no reason but claw drapes for stare out the window",
+        const textArrays = [
+            [
+                "Text 1 from array 1",
+                "Text 2 from array 1",
+                "Text 3 from array 1",
+                // Add more texts here...
+            ],
+            [
+                "Text 1 from array 2",
+                "Text 2 from array 2",
+                "Text 3 from array 2",
+                // Add more texts here...
+            ],
+            // Add more arrays here...
         ];
 
-        const spaceIpsum = [
-            "Vastness is bearable only through love descended from astronomers globular star cluster colonies",
-            "A still more glorious dawn awaits extraplanetary vanquish the impossible muse about citizens of distant epochs",
-            "Hundreds of thousands venture a very small stage in a vast cosmic arena vanquish the impossible",
-            "Dream of the mind's eye, Orion's sword billions upon billions",
-            "Descended from astronomers vastness is bearable only through love courage of our questions",
-            "Gathered by gravity descended from astronomers cosmic fugue network of wormholes",
-            "Apollonius of Perga light years hundreds of thousands astonishment",
-            "Hundred of thousands two ghostly white figures in coveralls and helmets are soflty dancing",
-            "Cosmic fugue Sea of Tranquility, extraplanetary hearts of the stars",
-            "Muse about billions upon billions, dream of the mind's eye hearts of the stars",
-            "The ash of stellar alchemy not a sunrise but a galaxyrise",
-            "Rig Veda take root and flourish white dwarf",
-        ];
+        // Function to divide the sphere's surface into segments
+        function divideSphereIntoSegments(numSegments) {
+            const segments = [];
+            for (let i = 0; i < numSegments; i++) {
+                const phiStart = Math.PI * (i / numSegments);
+                const phiEnd = Math.PI * ((i + 1) / numSegments);
 
-        // Function to generate points on the surface of a sphere
-        function generatePointsOnSphere(numPoints) {
-            const points = [];
-            for (let i = 0; i < numPoints; i++) {
-                const phi = Math.acos(-1 + (2 * i) / numPoints);
-                const theta = Math.sqrt(numPoints * Math.PI) * phi;
-                const x = Math.cos(theta) * Math.sin(phi);
-                const y = Math.sin(theta) * Math.sin(phi);
-                const z = Math.cos(phi);
-                points.push(new THREE.Vector3(x, y, z).multiplyScalar(6)); // Adjusted radius
+                const segment = {
+                    phiStart: phiStart,
+                    phiEnd: phiEnd,
+                    texts: []
+                };
+
+                segments.push(segment);
             }
-            return points;
+            return segments;
         }
 
-        // Function to calculate Voronoi regions on a sphere
-        function calculateVoronoiRegions(points) {
-            const voronoi = new THREE.Voronoi();
-            const boundingSphere = new THREE.Sphere(new THREE.Vector3(0, 0, 0), 6); // Adjusted radius
-            const cells = voronoi.computeCells(points, boundingSphere);
-            return cells;
+        // Function to add text labels to segments
+        function addTextsToSegments(segments, textArrays) {
+            const numSegments = segments.length;
+            const numArrays = textArrays.length;
+
+            textArrays.forEach((textArray, index) => {
+                const segmentIndex = Math.floor((index / numArrays) * numSegments);
+                const segment = segments[segmentIndex];
+
+                const textIndex = index % textArray.length;
+                const text = textArray[textIndex];
+
+                segment.texts.push(text);
+            });
         }
 
-        // Function to add text labels using Voronoi regions
-        function addTexts(textArray, cells) {
+        // Function to add text labels to the scene
+        function addTextsToScene(segments) {
             const loader = new THREE.FontLoader();
             loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', function(font) {
                 const curveSegments = 12;
                 const material = new THREE.MeshBasicMaterial({ color: 0x000000 });
 
-                cells.forEach((cell, index) => {
-                    const text = textArray[index % textArray.length]; // Use modulus to cycle through textArray
-                    const centroid = cell.getCentroid();
-                    const textGeometry = new THREE.TextGeometry(text, {
-                        font: font,
-                        size: 0.1,
-                        height: 0.02,
-                        curveSegments: curveSegments
+                segments.forEach((segment, index) => {
+                    const phiMid = (segment.phiStart + segment.phiEnd) / 2;
+
+                    segment.texts.forEach((text, textIndex) => {
+                        const theta = Math.PI * 2 * (textIndex / segment.texts.length);
+                        const x = Math.sin(phiMid) * Math.cos(theta);
+                        const y = Math.sin(phiMid) * Math.sin(theta);
+                        const z = Math.cos(phiMid);
+                        const position = new THREE.Vector3(x, y, z).multiplyScalar(6); // Adjusted radius
+
+                        const textGeometry = new THREE.TextGeometry(text, {
+                            font: font,
+                            size: 0.1,
+                            height: 0.02,
+                            curveSegments: curveSegments
+                        });
+                        const textMesh = new THREE.Mesh(textGeometry, material);
+
+                        textMesh.position.copy(position);
+
+                        // Orient text towards the center
+                        textMesh.lookAt(new THREE.Vector3(0, 0, 0));
+
+                        scene.add(textMesh);
                     });
-                    const textMesh = new THREE.Mesh(textGeometry, material);
-
-                    textMesh.position.copy(centroid);
-
-                    // Orient text towards the center
-                    textMesh.lookAt(new THREE.Vector3(0, 0, 0));
-
-                    scene.add(textMesh);
                 });
             });
         }
 
-        // Generate points on the sphere
-        const points = generatePointsOnSphere(100);
+        // Divide the sphere into segments
+        const numSegments = 5;
+        const segments = divideSphereIntoSegments(numSegments);
 
-        // Calculate Voronoi regions
-        const cells = calculateVoronoiRegions(points);
+        // Add text labels to segments
+        addTextsToSegments(segments, textArrays);
 
-        // Add text labels
-        addTexts(kittyIpsum, cells);
-        addTexts(spaceIpsum, cells);
+        // Add text labels to the scene
+        addTextsToScene(segments);
 
         // Render loop
         function animate() {
