@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sphere with Text Labels</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+        #menu { position: absolute; top: 10px; left: 10px; background: rgba(255, 255, 255, 0.8); padding: 10px; border-radius: 5px; }
+        #menu label { display: block; margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+    <div id="menu">
+        <label><input type="checkbox" id="spaceIpsumCheckbox" checked> Space Ipsum</label>
+        <label><input type="checkbox" id="kittyIpsumCheckbox" checked> Kitty Ipsum</label>
+        <label><input type="checkbox" id="engineeringIpsumCheckbox" checked> Engineering Ipsum</label>
+        <button onclick="zoomToSurface()">Zoom to Surface</button>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.125.2/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.125.2/examples/js/controls/OrbitControls.js"></script>
+
+    <script>
+        // Create a scene
+        const scene = new THREE.Scene();
+
+        // Create a camera
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 0, 10); // Adjusted camera position
+
+        // Create a renderer
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Add orbit controls
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableKeys = false; // Disable keyboard controls
+        controls.enableDamping = true; // Enable smooth camera movement
+        controls.dampingFactor = 0.1;
+        controls.screenSpacePanning = false;
+        controls.minDistance = 0.5; // Set minimum and maximum zoom distance
+        controls.maxDistance = 3;
+
+        // Create a sphere
+        const geometry = new THREE.SphereGeometry(3, 64, 64); // Adjusted sphere size
+        const material = new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: true }); // Strong color contrast
+        const sphere = new THREE.Mesh(geometry, material);
+        scene.add(sphere);
+
+        // Arrays of text labels
+        const spaceIpsum = [
+            "Vastness is bearable only through love descended from astronomers globular star cluster colonies",
+            "A still more glorious dawn awaits extraplanetary vanquish the impossible muse about citizens of distant epochs",
+            "Hundreds of thousands venture a very small stage in a vast cosmic arena vanquish the impossible",
+            "Dream of the mind's eye, Orion's sword billions upon billions",
+            "Descended from astronomers vastness is bearable only through love courage of our questions",
+            "Gathered by gravity descended from astronomers cosmic fugue network of wormholes",
+            "Apollonius of Perga light years hundreds of thousands astonishment",
+            "Hundred of thousands two ghostly white figures in coveralls and helmets are soflty dancing",
+            "Cosmic fugue Sea of Tranquility, extraplanetary hearts of the stars",
+            "Muse about billions upon billions, dream of the mind's eye hearts of the stars",
+            "The ash of stellar alchemy not a sunrise but a galaxyrise",
+            "Rig Veda take root and flourish white dwarf",
+        ];
+
+        const kittyIpsum = [
+            "Lick the curtain just to be annoying",
+            "Walk on keyboard",
+            "Stares at human while pushing stuff off a table",
+            "Meow for food, then when human fills food dish, take a few bites of food and continue meowing",
+            "Meow meow, i tell my human purr for no reason but to chase after silly colored fish toys around the house",
+            "Gimme attention gimme attention gimme attention gimme attention gimme attention gimme attention",
+            "If it fits, i sits",
+            "Behind the couch",
+            "Stares at human while pushing stuff off a table",
+            "Behind the couch",
+            "Lick the curtain just to be annoying",
+            "Meow meow, i tell my human purr for no reason but claw drapes for stare out the window",
+        ];
+
+        const engineeringIpsum = [
+            "Optimize for sustainable systems",
+            "Iterate through disruptive engineering paradigms",
+            "Synergize scalable solutions",
+            "Empower real-time feedback loops",
+            "Leverage blockchain for decentralized architectures",
+            "Integrate artificial intelligence for smart manufacturing",
+            "Innovate user-centric interfaces",
+            "Evolve 3D printing for distributed production",
+            "Drive agile methodologies",
+            "Disrupt legacy systems with disruptive innovation",
+            "Harness renewable energy for eco-friendly operations",
+            "Implement modular design principles for adaptive structures",
+        ];
+
+        // Merge all arrays
+        const mergedArray = spaceIpsum.concat(kittyIpsum, engineeringIpsum);
+
+        // Divide the sphere into segments
+        const numSegments = 5;
+        const segments = divideSphereIntoSegments(numSegments);
+
+        // Add text labels to segments
+        addTextsToSegments(segments, mergedArray);
+
+        // Add text labels to the scene
+        addTextsToScene(segments);
+
+        // Render loop
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // Menu for overlay items
+        const spaceIpsumCheckbox = document.getElementById('spaceIpsumCheckbox');
+        spaceIpsumCheckbox.addEventListener('change', function() {
+            toggleLabelsVisibility(spaceIpsum, spaceIpsumCheckbox.checked);
+        });
+
+        const kittyIpsumCheckbox = document.getElementById('kittyIpsumCheckbox');
+        kittyIpsumCheckbox.addEventListener('change', function() {
+            toggleLabelsVisibility(kittyIpsum, kittyIpsumCheckbox.checked);
+        });
+
+        const engineeringIpsumCheckbox = document.getElementById('engineeringIpsumCheckbox');
+        engineeringIpsumCheckbox.addEventListener('change', function() {
+            toggleLabelsVisibility(engineeringIpsum, engineeringIpsumCheckbox.checked);
+        });
+
+        function toggleLabelsVisibility(textArray, visible) {
+            const labels = scene.children.filter(obj => obj instanceof THREE.Mesh && textArray.includes(obj.userData.text));
+            labels.forEach(label => {
+                label.visible = visible;
+            });
+        }
+
+        // Function to divide the sphere's surface into segments
+        function divideSphereIntoSegments(numSegments) {
+            const segments = [];
+            for (let i = 0; i < numSegments; i++) {
+                const phiStart = Math.PI * (i / numSegments);
+                const phiEnd = Math.PI * ((i + 1) / numSegments);
+
+                segments.push({
+                    phiStart: phiStart,
+                    phiEnd: phiEnd,
+                    texts: []
+                });
+            }
+            return segments;
+        }
+
+        // Function to add text labels to segments
+        function addTextsToSegments(segments, textArray) {
+            const numSegments = segments.length;
+            const numTexts = textArray.length;
+
+            for (let i = 0; i < numTexts; i++) {
+                const phi = Math.random() * (Math.PI - 0.1) + 0.05; // Random phi angle within segment
+                const segmentIndex = Math.floor(phi / Math.PI * numSegments);
+                segments[segmentIndex].texts.push({ text: textArray[i], phi: phi });
+            }
+        }
+
+        // Function to add text labels to the scene
+        function addTextsToScene(segments) {
+            const loader = new THREE.FontLoader();
+            loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', function(font) {
+                const curveSegments = 12;
+                const material = new THREE.MeshBasicMaterial({ color: 0xffffff }); // Strong color contrast
+
+                segments.forEach(segment => {
+                    segment.texts.forEach(textObj => {
+                        const theta = Math.random() * Math.PI * 2; // Random theta angle
+                        const x = Math.sin(textObj.phi) * Math.cos(theta);
+                        const y = Math.sin(textObj.phi) * Math.sin(theta);
+                        const z = Math.cos(textObj.phi);
+                        const position = new THREE.Vector3(x, y, z).multiplyScalar(2.9); // Adjusted radius
+
+                        const textGeometry = new THREE.TextGeometry(textObj.text, {
+                            font: font,
+                            size: 0.07, // Adjusted text size
+                            height: 0.02,
+                            curveSegments: curveSegments
+                        });
+                        const textMesh = new THREE.Mesh(textGeometry, material);
+
+                        // Orient text towards the camera
+                        textMesh.lookAt(camera.position);
+
+                        // Apply rotation to make the text "flat" on the surface
+                        textMesh.rotateX(-textObj.phi); // Reverse rotation to counteract surface curvature
+
+                        textMesh.position.copy(position);
+
+                        scene.add(textMesh);
+                    });
+                });
+            });
+        }
+
+        // Function to zoom camera to surface
+        function zoomToSurface() {
+            const vector = new THREE.Vector3();
+            const position = new THREE.Vector3();
+            sphere.getWorldPosition(position);
+            vector.subVectors(camera.position, position);
+            camera.position.addVectors(camera.position, vector.setLength(2.6)); // Adjusted zoom level
+        }
+    </script>
+</body>
+</html>
