@@ -36,21 +36,38 @@
         scene.add(sphere);
 
         // Arrays of text labels
-        const textArrays = [
-            [
-                "Text 1 from array 1",
-                "Text 2 from array 1",
-                "Text 3 from array 1",
-                // Add more texts here...
-            ],
-            [
-                "Text 1 from array 2",
-                "Text 2 from array 2",
-                "Text 3 from array 2",
-                // Add more texts here...
-            ],
-            // Add more arrays here...
+        const spaceIpsum = [
+            "Vastness is bearable only through love descended from astronomers globular star cluster colonies",
+            "A still more glorious dawn awaits extraplanetary vanquish the impossible muse about citizens of distant epochs",
+            "Hundreds of thousands venture a very small stage in a vast cosmic arena vanquish the impossible",
+            "Dream of the mind's eye, Orion's sword billions upon billions",
+            "Descended from astronomers vastness is bearable only through love courage of our questions",
+            "Gathered by gravity descended from astronomers cosmic fugue network of wormholes",
+            "Apollonius of Perga light years hundreds of thousands astonishment",
+            "Hundred of thousands two ghostly white figures in coveralls and helmets are soflty dancing",
+            "Cosmic fugue Sea of Tranquility, extraplanetary hearts of the stars",
+            "Muse about billions upon billions, dream of the mind's eye hearts of the stars",
+            "The ash of stellar alchemy not a sunrise but a galaxyrise",
+            "Rig Veda take root and flourish white dwarf",
         ];
+
+        const kittyIpsum = [
+            "Lick the curtain just to be annoying",
+            "Walk on keyboard",
+            "Stares at human while pushing stuff off a table",
+            "Meow for food, then when human fills food dish, take a few bites of food and continue meowing",
+            "Meow meow, i tell my human purr for no reason but to chase after silly colored fish toys around the house",
+            "Gimme attention gimme attention gimme attention gimme attention gimme attention gimme attention",
+            "If it fits, i sits",
+            "Behind the couch",
+            "Stares at human while pushing stuff off a table",
+            "Behind the couch",
+            "Lick the curtain just to be annoying",
+            "Meow meow, i tell my human purr for no reason but claw drapes for stare out the window",
+        ];
+
+        // Merge both arrays
+        const mergedArray = spaceIpsum.concat(kittyIpsum);
 
         // Function to divide the sphere's surface into segments
         function divideSphereIntoSegments(numSegments) {
@@ -71,19 +88,19 @@
         }
 
         // Function to add text labels to segments
-        function addTextsToSegments(segments, textArrays) {
+        function addTextsToSegments(segments, textArray) {
             const numSegments = segments.length;
-            const numArrays = textArrays.length;
+            const numTexts = textArray.length;
+            const textsPerSegment = Math.ceil(numTexts / numSegments);
 
-            textArrays.forEach((textArray, index) => {
-                const segmentIndex = Math.floor((index / numArrays) * numSegments);
-                const segment = segments[segmentIndex];
+            for (let i = 0; i < numSegments; i++) {
+                const segment = segments[i];
 
-                const textIndex = index % textArray.length;
-                const text = textArray[textIndex];
+                const start = i * textsPerSegment;
+                const end = Math.min((i + 1) * textsPerSegment, numTexts);
 
-                segment.texts.push(text);
-            });
+                segment.texts = textArray.slice(start, end);
+            }
         }
 
         // Function to add text labels to the scene
@@ -127,7 +144,7 @@
         const segments = divideSphereIntoSegments(numSegments);
 
         // Add text labels to segments
-        addTextsToSegments(segments, textArrays);
+        addTextsToSegments(segments, mergedArray);
 
         // Add text labels to the scene
         addTextsToScene(segments);
