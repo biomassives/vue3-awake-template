@@ -29,12 +29,6 @@
         // Add orbit controls
         const controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-        // Create a sphere
-        const geometry = new THREE.SphereGeometry(6, 128, 128); // Adjusted sphere size
-        const material = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true });
-        const sphere = new THREE.Mesh(geometry, material);
-        scene.add(sphere);
-
         // Arrays of text labels
         const spaceIpsum = [
             "Vastness is bearable only through love descended from astronomers globular star cluster colonies",
@@ -69,6 +63,25 @@
         // Merge both arrays
         const mergedArray = spaceIpsum.concat(kittyIpsum);
 
+        // Divide the sphere into segments
+        const numSegments = 5;
+        const segments = divideSphereIntoSegments(numSegments);
+
+        // Add text labels to segments
+        addTextsToSegments(segments, mergedArray);
+
+        // Add text labels to the scene
+        addTextsToScene(segments);
+
+        // Render loop
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
         // Function to divide the sphere's surface into segments
         function divideSphereIntoSegments(numSegments) {
             const segments = [];
@@ -76,13 +89,10 @@
                 const phiStart = Math.PI * (i / numSegments);
                 const phiEnd = Math.PI * ((i + 1) / numSegments);
 
-                const segment = {
-                    phiStart: phiStart,
-                    phiEnd: phiEnd,
+                segments.push({
+                    phiMid: (phiStart + phiEnd) / 2,
                     texts: []
-                };
-
-                segments.push(segment);
+                });
             }
             return segments;
         }
@@ -91,15 +101,10 @@
         function addTextsToSegments(segments, textArray) {
             const numSegments = segments.length;
             const numTexts = textArray.length;
-            const textsPerSegment = Math.ceil(numTexts / numSegments);
 
-            for (let i = 0; i < numSegments; i++) {
-                const segment = segments[i];
-
-                const start = i * textsPerSegment;
-                const end = Math.min((i + 1) * textsPerSegment, numTexts);
-
-                segment.texts = textArray.slice(start, end);
+            for (let i = 0; i < numTexts; i++) {
+                const segmentIndex = Math.floor((i / numTexts) * numSegments);
+                segments[segmentIndex].texts.push(textArray[i]);
             }
         }
 
@@ -110,14 +115,12 @@
                 const curveSegments = 12;
                 const material = new THREE.MeshBasicMaterial({ color: 0x000000 });
 
-                segments.forEach((segment, index) => {
-                    const phiMid = (segment.phiStart + segment.phiEnd) / 2;
-
+                segments.forEach(segment => {
                     segment.texts.forEach((text, textIndex) => {
                         const theta = Math.PI * 2 * (textIndex / segment.texts.length);
-                        const x = Math.sin(phiMid) * Math.cos(theta);
-                        const y = Math.sin(phiMid) * Math.sin(theta);
-                        const z = Math.cos(phiMid);
+                        const x = Math.sin(segment.phiMid) * Math.cos(theta);
+                        const y = Math.sin(segment.phiMid) * Math.sin(theta);
+                        const z = Math.cos(segment.phiMid);
                         const position = new THREE.Vector3(x, y, z).multiplyScalar(6); // Adjusted radius
 
                         const textGeometry = new THREE.TextGeometry(text, {
@@ -138,25 +141,6 @@
                 });
             });
         }
-
-        // Divide the sphere into segments
-        const numSegments = 5;
-        const segments = divideSphereIntoSegments(numSegments);
-
-        // Add text labels to segments
-        addTextsToSegments(segments, mergedArray);
-
-        // Add text labels to the scene
-        addTextsToScene(segments);
-
-        // Render loop
-        function animate() {
-            requestAnimationFrame(animate);
-            controls.update();
-            renderer.render(scene, camera);
-        }
-
-        animate();
     </script>
 </body>
 </html>
