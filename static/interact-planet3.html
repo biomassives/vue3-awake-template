@@ -142,14 +142,16 @@
             return { x, y, z };
         }
         
-        let col = 0, row = 0;
+
+        let col = 0, row = 0, angleX, angleY; // Declare angleX and angleY outside the loop
         for (const issue in issuesData) {
-            // ... (element creation) ...
-        
-            // Position on 120-degree sphere section
-            const { x, y, z } = hexToSphereCoords(col, row);
-            issueElement.style.transform = `translate3d(${x}px, ${y}px, ${z}px) rotateY(${angleX}rad) rotateX(${-angleY}rad)`;
-        
+          
+          // ... (element creation) ...
+          
+          // Position on 120-degree sphere section
+          ({x, y, z, angleX, angleY} = hexToSphereCoords(col, row)); // Destructure and assign values
+          issueElement.style.transform = `translate3d(${x}px, ${y}px, ${z}px) rotateY(${angleX}rad) rotateX(${-angleY}rad)`;
+
             // ... (event listeners - similar to before) ...
         
             col++;
@@ -158,6 +160,18 @@
                 row++;
             }
         }
+
+        
+        // Helper function to convert 2D to 3D coordinates (120-degree sphere section)
+        function hexToSphereCoords(col, row) {
+            angleX = ((col / 6) * 2 - 1) * Math.PI / 3; // -60 to 60 degrees
+            angleY = (row / 4 - 0.5) * Math.PI;
+            const x = radius * Math.sin(angleY) * Math.cos(angleX);
+            const y = radius * Math.cos(angleY);
+            const z = radius * Math.sin(angleY) * Math.sin(angleX);
+            return { x, y, z, angleX, angleY }; // Return all variables
+        }
+
         
         // Function to load images into faded hexagons
         function loadImagesIntoFadedHexagons() {
