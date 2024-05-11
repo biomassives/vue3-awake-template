@@ -178,7 +178,9 @@ document.body.appendChild(renderer.domElement);
 
 camera.position.z = 5;
 
-const hexagonalConeGeometry = new THREE.BufferGeometry().fromGeometry(new THREE.IcosahedronGeometry(1, 1));
+
+const hexagonalConeGeometry = new THREE.IcosahedronGeometry(1, 1);
+    
 const hexagonalConeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
 const hexagonalCone = new THREE.Mesh(hexagonalConeGeometry, hexagonalConeMaterial);
 scene.add(hexagonalCone);
