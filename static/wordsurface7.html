@@ -1,0 +1,85 @@
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Issue Tree Visualization</title> <style> body { margin: 0; overflow: hidden; }
+
+canvas { display: block; }
+
+.issue-container { position: relative; width: 100%; height: 100%; }
+
+.issue-info { position: absolute; background-color: rgba(0, 0, 0, 0.7); color: white; padding: 10px; border-radius: 5px; max-width: 200px; z-index: 1; display: none; }
+
+.issue { position: absolute; transition: transform 0.5s ease; cursor: pointer; }
+
+.icon { position: absolute; font-size: 16px; z-index: 1; color: white; transition: transform 0.5s ease; }
+
+.category-label { position: absolute; top: -15px; left: 10px; background-color: #333; color: white; padding: 5px; font-size: 14px; } </style>
+</head> <body> <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script> <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.0/gsap.min.js"></script> <script> const categories = { "Ocean Health": [ { name: "toxic algal blooms", info: "Excessive nutrients cause rapid algae growth, depleting oxygen and harming marine life.", icon: "fas fa-biohazard" }, { name: "storminess", info: "Increased frequency and intensity of storms due to climate change, causing damage and flooding.", icon: "fas fa-cloud-showers-heavy" }, { name: "dead zones", info: "Areas in oceans or lakes with low oxygen levels, often caused by excessive nutrient pollution.", icon: "fas fa-skull-crossbones" }, { name: "coral bleaching", info: "Rising temperatures stress corals, causing them to expel symbiotic algae, turning white and vulnerable.", icon: "fas fa-coral" }, { name: "pharmaceuticals", info: "Pharmaceutical pollution in water sources can harm aquatic life and potentially impact human health.", icon: "fas fa-prescription-bottle" }, { name: "loss of sea ice", info: "Diminishing sea ice due to warming temperatures affects wildlife, ocean currents, and global climate patterns.", icon: "fas fa-icicles" }, { name: "plastics", info: "Plastic pollution accumulates in oceans, harming marine life through entanglement, ingestion, and toxic effects.", icon: "fas fa-recycle" }, { name: "polluted runoff", info: "Pollutants from land activities wash into oceans, harming ecosystems and wildlife.", icon: "fas fa-faucet-drip" }, { name: "sea level rise", info: "Rising sea levels due to climate change threaten coastal communities, ecosystems, and infrastructure.", icon: "fas fa-water" } ], "Climate Change": [ { name: "biophysical collapse", info: "The breakdown of natural systems due to environmental stressors, leading to ecological instability.", icon: "fas fa-mountain" }, { name: "ocean heating", info: "Increasing ocean temperatures due to climate change impact marine ecosystems, weather patterns, and sea levels.", icon: "fas fa-temperature-high" }, { name: "acidification", info: "Absorption of excess carbon dioxide by oceans lowers pH, harming marine life, especially shellfish.", icon:"fas fa-lemon" }, { name: "deoxygenation", info: "Reduced oxygen levels in oceans due to climate change and pollution threaten marine biodiversity.", icon: "fas fa-lungs" }, { name: "disease", info: "Outbreaks of disease in marine life and humans can be exacerbated by environmental stress and pollution.", icon: "fas fa-virus" }, { name: "extreme weather", info: "More frequent and severe weather events (heatwaves, droughts, floods) are linked to climate change.", icon: "fas fa-bolt" }, { name: "climate change", info: "Long-term shifts in temperature and weather patterns caused by human activities, with widespread impacts.", icon: "fas fa-smog" }, { name: "megadrought", info: "Prolonged and severe droughts with significant ecological, social, and economic consequences.", icon: "fas fa-water-lower" } ], "Environmental Degradation": [ { name: "deforestation", info: "Clearing of forests for agriculture, logging, or other purposes, contributing to climate change and biodiversity loss.", icon: "fas fa-axe" }, { name: "extractive agriculture", info: "Intensive farming practices that deplete soil, pollute water, and harm biodiversity.", icon: "fas fa-tractor" }, { name: "defaunation", info: "Loss of animal populations due to hunting, habitat destruction, and environmental stress.", icon: "fas fa-paw" }, { name: "wildfire", info: "Uncontrolled fires in natural areas, often exacerbated by drought and climate change.", icon: "fas fa-fire" }, { name: "overfishing", info: "Harvesting fish at unsustainable rates, leading to depletion of fish stocks and ecological imbalances.", icon: "fas fa-fish" }, { name: "animal & plant extinction", info: "Irreversible loss of species due to human activities and environmental factors.", icon: "fas fa-dove" } ], "Social Issues": [ { name: "wealth disparity", info: "Unequal distribution of resources and wealth can lead to social unrest and environmental injustice.", icon: "fas fa-chart-line" }, { name: "social inequality", info: "Disparities in access to resources, healthcare, and opportunities based on social factors.", icon: "fas fa-scale-unbalanced" } ] };
+
+const root = new THREE.Object3D(); const group = new THREE.Group(); root.add(group);
+
+function createIssueCone(issue, yOffset, category) { const coneGeometry = new THREE.IcosahedronGeometry(1, 1); const color = new THREE.Color(Math.random(), Math.random(), Math.random()); const coneMaterial = new THREE.MeshStandardMaterial({ color: color, roughness: 0.5, metalness: 0.5, emissive: color }); const cone = new THREE.Mesh(coneGeometry, coneMaterial); cone.position.y = yOffset; cone.position.x = -3; group.add(cone);
+
+const text = document.createElement('div'); text.textContent = issue.name; text.className = 'issue-info'; document.body.appendChild(text);
+
+const icon = document.createElement('i'); icon.className = issue.icon + ' icon'; document.body.appendChild(icon);
+
+const categoryLabel = document.createElement('div'); categoryLabel.textContent = category; categoryLabel.className = 'category-label'; document.body.appendChild(categoryLabel);
+
+function update() { const x = cone.position.x; const y = cone.position.y; const z = cone.position.z; const distance = Math.sqrt(x * x + y * y + z * z); const screenPosition = new THREE.Vector3(x, y, z).project(camera);
+
+text.style.transform = translate(${screenPosition.x * window.innerWidth / 2 + window.innerWidth / 2}px, ${-screenPosition.y * window.innerHeight / 2 + window.innerHeight / 2}px); icon.style.transform = translate(${screenPosition.x * window.innerWidth / 2 + window.innerWidth / 2}px, ${-screenPosition.y * window.innerHeight / 2 + window.innerHeight / 2}px); categoryLabel.style.transform = translate(${screenPosition.x * window.innerWidth / 2 + window.innerWidth / 2}px, ${-screenPosition.y * window.innerHeight / 2 + window.innerHeight / 2}px); }
+
+update(); }
+
+const yOffset = 0; let categoryCount = 0;
+
+for (const category in issues) { for (const issue of issues[category]) { createIssueCone(issue, yOffset, category); }
+
+yOffset += 2; categoryCount++; }
+
+scene.add(root);
+
+const geometry = new THREE.BufferGeometry(); const vertices = new Float32Array([ -1, -1, 0, 1, -1, 0, 1, 1, 0, -1, 1, 0 ]); geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+
+const material = new THREE.LineBasicMaterial({ color: 0x000000 }); const line = new THREE.LineLoop(geometry, material); scene.add(line);
+
+camera.position.z = 10;
+
+const animate = function () { requestAnimationFrame(animate);
+
+const time = performance.now() * 0.001;
+
+root.rotation.y = time * 0.1;
+
+group.children.forEach((cone, index) => { cone.rotation.y = time * 0.1 + index * Math.PI / 10; });
+
+renderer.render(scene, camera); };
+
+animate();
+
+const zoomInButton = document.getElementById('zoom-in'); const zoomOutButton = document.getElementById('zoom-out');
+
+zoomInButton.addEventListener('click', () => { camera.position.z -= 2; });
+
+zoomOutButton.addEventListener('click', () => { camera.position.z += 2; });
+
+window.addEventListener('resize', () => { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix();
+
+renderer.setSize(window.innerWidth, window.innerHeight); });
+
+window.addEventListener('mousemove', (event) => { const mouseX = event.clientX; const mouseY = event.clientY;
+
+group.children.forEach((cone, index) => { if (mouseX > window.innerWidth / 2) { cone.position.x = mouseX - window.innerWidth / 2; } else { cone.position.x = mouseX; }
+
+if (mouseY > window.innerHeight / 2) { cone.position.y = mouseY - window.innerHeight / 2; } else { cone.position.y = mouseY; }
+
+group.children.forEach((text, index) => { const screenPosition = new THREE.Vector3(cone.position.x, cone.position.y, cone.position.z).project(camera);
+
+text.style.transform = translate(${screenPosition.x * window.innerWidth / 2 + window.innerWidth / 2}px, ${-screenPosition.y * window.innerHeight / 2 + window.innerHeight / 2}px); });
+
+group.children.forEach((icon, index) => { const screenPosition = new THREE.Vector3(cone.position.x, cone.position.y, cone.position.z).project(camera);
+
+icon.style.transform = translate(${screenPosition.x * window.innerWidth / 2 + window.innerWidth / 2}px, ${-screenPosition.y * window.innerHeight / 2 + window.innerHeight / 2}px); });
+
+group.children.forEach((categoryLabel, index) => { const screenPosition = new THREE.Vector3(cone.position.x, cone.position.y, cone.position.z).project(camera);
+
+categoryLabel.style.transform = translate(${screenPosition.x * window.innerWidth / 2 + window.innerWidth / 2}px, ${-screenPosition.y * window.innerHeight / 2 + window.innerHeight / 2}px); }); }); }); </script>
+</body> </html>
