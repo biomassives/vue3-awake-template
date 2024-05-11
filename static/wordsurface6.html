@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Issue Tree Visualization</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        .issue-info {
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            max-width: 200px;
+            z-index: 1;
+            display: none;
+        }
+
+        .issue {
+            position: absolute;
+            transition: transform 0.5s ease;
+            cursor: pointer;
+        }
+
+        .icon {
+            position: absolute;
+            font-size: 16px;
+            z-index: 1;
+            color: white;
+            transition: transform 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.0/gsap.min.js"></script>
+    <script>
+        const issues = [
+            "toxic algal blooms": { info: "Excessive nutrients cause rapid algae growth, depleting oxygen and harming marine life.", icon: "fas fa-biohazard" },
+            "storminess": { info: "Increased frequency and intensity of storms due to climate change, causing damage and flooding.", icon: "fas fa-cloud-showers-heavy" },
+            "dead zones": { info: "Areas in oceans or lakes with low oxygen levels, often caused by excessive nutrient pollution.", icon: "fas fa-skull-crossbones" },
+            "coral bleaching": { info: "Rising temperatures stress corals, causing them to expel symbiotic algae, turning white and vulnerable.", icon: "fas fa-coral" },
+            "pharmaceuticals": { info: "Pharmaceutical pollution in water sources can harm aquatic life and potentially impact human health.", icon: "fas fa-prescription-bottle" },
+            "loss of sea ice": { info: "Diminishing sea ice due to warming temperatures affects wildlife, ocean currents, and global climate patterns.", icon: "fas fa-icicles" },
+            "plastics": { info: "Plastic pollution accumulates in oceans, harming marine life through entanglement, ingestion, and toxic effects.", icon: "fas fa-recycle" },
+            "polluted runoff": { info: "Pollutants from land activities wash into oceans, harming ecosystems and wildlife.", icon: "fas fa-faucet-drip" },
+            "sea level rise": { info: "Rising sea levels due to climate change threaten coastal communities, ecosystems, and infrastructure.", icon: "fas fa-water" },
+            "biophysical collapse": { info: "The breakdown of natural systems due to environmental stressors, leading to ecological instability.", icon: "fas fa-mountain" },
+            "toxic metals": { info: "Heavy metal pollution from industrial and mining activities can bioaccumulate in organisms, causing health problems.", icon: "fas fa-industry" },
+            "endocrine disruptors": { info: "Chemicals that interfere with hormonal systems, potentially affecting reproduction and development.", icon: "fas fa-vial" },
+            "ocean heating": { info: "Increasing ocean temperatures due to climate change impact marine ecosystems, weather patterns, and sea levels.", icon: "fas fa-temperature-high" },
+            "acidification": { info: "Absorption of excess carbon dioxide by oceans lowers pH, harming marine life, especially shellfish.", icon: "fas fa-lemon" },
+            "deoxygenation": { info: "Reduced oxygen levels in oceans due to climate change and pollution threaten marine biodiversity.", icon: "fas fa-lungs" },
+            "disease": { info: "Outbreaks of disease in marine life and humans can be exacerbated by environmental stress and pollution.", icon: "fas fa-virus" },
+            "sewage": { info: "Untreated sewage released into water bodies contaminates them, posing risks to human health and ecosystems.", icon: "fas fa-toilet" },
+            "extreme weather": { info: "More frequent and severe weather events (heatwaves, droughts, floods) are linked to climate change.", icon: "fas fa-bolt" },
+            "climate change": { info: "Long-term shifts in temperature and weather patterns caused by human activities, with widespread impacts.", icon: "fas fa-smog" },
+            "megadrought": { info: "Prolonged and severe droughts with significant ecological, social, and economic consequences.", icon: "fas fa-water-lower" },
+            "population growth": { info: "Increasing human population puts pressure on resources, leading to environmental degradation.", icon: "fas fa-users" },
+            "toxic waste site": { info: "Areas contaminated with hazardous waste pose risks to human health and the environment.", icon: "fas fa-dumpster-fire" },
+            "flooding": { info: "Overwhelming of land by water, often due to heavy rainfall or storm surge, causing damage and displacement.", icon: "fas fa-house-flood-water" },
+            "animal feeding operations": { info: "Large-scale livestock farms can contribute to pollution, antibiotic resistance, and animal welfare concerns.", icon: "fas fa-cow" },
+            "extractive relationship with nature": { info: "Exploitation of natural resources without regard for sustainability or ecological consequences.", icon: "fas fa-hand-holding-usd" },
+            "wealth disparity": { info: "Unequal distribution of resources and wealth can lead to social unrest and environmental injustice.", icon: "fas fa-chart-line" },
+            "social inequality": { info: "Disparities in access to resources, healthcare, and opportunities based on social factors.", icon: "fas fa-scale-unbalanced" },
+            "heat wave": { info: "Prolonged periods of excessively hot weather can cause heatstroke, dehydration, and other health problems.", icon: "fas fa-sun" },
+            "public health emergencies": { info: "Situations that threaten public health, such as disease outbreaks or environmental disasters.", icon: "fas fa-hospital" },
+            "political and civil unrest": { info: "Social unrest and conflict can be exacerbated by environmental stress and resource scarcity.", icon: "fas fa-fist-raised" },
+            "biodiversity loss": { info: "Decline in the variety of life on Earth, threatening ecosystems and human well-being.", icon: "fas fa-seedling" },
+            "expanding vectors": { info: "Increased range of disease-carrying organisms due to climate change and environmental disruption.", icon: "fas fa-mosquito" },
+            "pandemics": { info: "Global outbreaks of infectious diseases with significant health and socioeconomic impacts.", icon: "fas fa-virus" },
+            "zoonotic disease": { info: "Diseases that can be transmitted between animals and humans, often linked to environmental factors.", icon: "fas fa-disease" },
+            "genetic diversity loss": { info: "Reduced genetic variation within populations makes species more vulnerable to extinction.", icon: "fas fa-dna" },
+            "displacement": { info: "Forced migration due to environmental disasters, conflict, or persecution.", icon: "fas fa-person-walking-arrow-right" },
+            "regional water crises": { info: "Shortages of freshwater due to overconsumption, pollution, and climate change.", icon: "fas fa-droplet" },
+            "ecosystem collapse": { info: "The irreversible breakdown of ecosystems, leading to loss of biodiversity and essential services.", icon: "fas fa-tree" },
+            "deforestation": { info: "Clearing of forests for agriculture, logging, or other purposes, contributing to climate change and biodiversity loss.", icon: "fas fa-axe" },
+            "extractive agriculture": { info: "Intensive farming practices that deplete soil, pollute water, and harm biodiversity.", icon: "fas fa-tractor" },
+            "defaunation": { info: "Loss of animal populations due to hunting, habitat destruction, and environmental stress.", icon: "fas fa-paw" },
+            "wildfire": { info: "Uncontrolled fires in natural areas, often exacerbated by drought and climate change.", icon: "fas fa-fire" },
+            "overfishing": { info: "Harvesting fish at unsustainable rates, leading to depletion of fish stocks and ecological imbalances.", icon: "fas fa-fish" },
+            "animal & plant extinction": { info: "Irreversible loss of species due to human activities and environmental factors.", icon: "fas fa-dove" }
+        ];
+
+        const root = new THREE.Object3D();
+        const group = new THREE.Group();
+        root.add(group);
+
+        function createIssueCone(issue, yOffset) {
+            const coneGeometry = new THREE.IcosahedronGeometry(1, 1);
+            const color = new THREE.Color(Math.random(), Math.random(), Math.random());
+            const coneMaterial = new THREE.MeshStandardMaterial({ color: color, roughness: 0.5, metalness: 0.5, emissive: color });
+            const cone = new THREE.Mesh(coneGeometry, coneMaterial);
+            cone.position.y = yOffset;
+            cone.position.x = -3;
+            group.add(cone);
+
+            const text = document.createElement('div');
+            text.textContent = issue.name;
+            text.className = 'issue-info';
+            document.body.appendChild(text);
+
+            const icon = document.createElement('i');
+            icon.className = issue.icon + ' icon';
+            document.body.appendChild(icon);
+
+            function update() {
+                const x = cone.position.x;
+                const y = cone.position.y;
+                const z = cone.position.z;
+                const distance = Math.sqrt(x * x + y * y + z * z);
+                const screenPosition = new THREE.Vector3(x, y, z).project(camera);
+
+                text.style.transform = `translate(${screenPosition.x * window.innerWidth / 2 + window.innerWidth / 2}px, ${-screenPosition.y * window.innerHeight / 2 + window.innerHeight / 2}px)`;
+                icon.style.transform = `translate(${screenPosition.x * window.innerWidth / 2 + window.innerWidth / 2}px, ${-screenPosition.y * window.innerHeight / 2 + window.innerHeight / 2}px)`;
+            }
+
+            cone.add(update);
+            cone.userData = { text: text, icon: icon };
+
+            cone.addEventListener('mouseover', () => {
+                text.style.display = 'block';
+                icon.style.transform = 'scale(1.2)';
+            });
+
+            cone.addEventListener('mouseout', () => {
+                text.style.display = 'none';
+                icon.style.transform = 'scale(1)';
+            });
+        }
+
+        function createChildrenCones(parentIssue, parentYOffset) {
+            parentIssue.children.forEach((childIssue, index) => {
+                const yOffset = parentYOffset + 3 + index * 2;
+                createIssueCone(childIssue, yOffset);
+            });
+        }
+
+        issues.forEach((mainIssue, index) => {
+            const yOffset = -15 + index * 5;
+            createIssueCone(mainIssue, yOffset);
+            createChildrenCones(mainIssue, yOffset);
+        });
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        camera.position.z = 5;
+
+        const tl = gsap.timeline();
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            tl.to(group.rotation, { y: 0.01, duration: 1, ease: "none" });
+            tl.to(group.rotation, { y: -0.01, duration: 1, ease: "none" }, 0.5);
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        window.addEventListener("resize", function () {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+
+            renderer.setSize(width, height);
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+        });
+
+        document.body.addEventListener('mousemove', (event) => {
+            const x = event.clientX;
+            const y = event.clientY;
+            const xOffset = x / window.innerWidth * 10 - 5;
+            const yOffset = y / window.innerHeight * 10 - 5;
+            group.position.x = xOffset;
+            group.position.y = yOffset;
+        });
+
+        document.body.addEventListener('wheel', (event) => {
+            event.preventDefault();
+            const delta = event.deltaY;
+            const currentDistance = camera.position.z;
+            const newDistance = currentDistance - delta * 0.01;
+            if (newDistance > 0.1 && newDistance < 100) {
+                camera.position.z = newDistance;
+            }
+        });
+    </script>
+</body>
+</html>
