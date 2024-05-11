@@ -1,0 +1,184 @@
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Issue Tree Visualization</title> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> <style> body { margin: 0; overflow: hidden; } #container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+    .issue-info {
+
+        display: none; /* Initially hide */
+
+        position: absolute;
+
+        background-color: rgba(0, 0, 0, 0.8);
+
+        color: white;
+
+        padding: 10px;
+
+        border-radius: 5px;
+
+        z-index: 10; /* Ensure it's on top */
+
+    }
+
+
+    .icon {
+
+        color: white;
+
+        font-size: 20px;
+
+        position: absolute;
+
+        cursor: pointer;
+
+    }
+
+
+    /* Hover styles */
+
+    .icon:hover + .issue-info {
+
+        display: block;
+
+    }
+
+</style>
+
+</head> <body> <div id="container"></div> <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script> <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.0/gsap.min.js"></script> <script> const issues = [ { name: "Environmental Degradation", icon: "fas fa-exclamation-triangle", info: "The deterioration of the environment through depletion of resources like air, water, and soil; the destruction of ecosystems; habitat destruction; the extinction of wildlife; and pollution.", children: [ { name: "Ocean Pollution", icon: "fas fa-water", info: "Contamination of the ocean with harmful substances, including plastics, chemicals, and sewage.", children: [ { name: "Toxic Algal Blooms", icon: "fas fa-biohazard", info: "Excessive nutrients cause rapid algae growth, depleting oxygen and harming marine life." }, { name: "Storminess", icon: "fas fa-cloud-showers-heavy", info: "Increased frequency and intensity of storms due to climate change, causing damage and flooding." }, { name: "Dead Zones", icon: "fas fa-skull-crossbones", info: "Areas in oceans or lakes with low oxygen levels, often caused by excessive nutrient pollution." }, { name: "Coral Bleaching", icon: "fas fa-coral", info: "Rising temperatures stress corals, causing them to expel symbiotic algae, turning white and vulnerable." }, { name: "Pharmaceuticals", icon: "fas fa-prescription-bottle", info: "Pharmaceutical pollution in water sources can harm aquatic life and potentially impact human health." }, { name: "Loss of Sea Ice", icon: "fas fa-icicles", info: "Diminishing sea ice due to warming temperatures affects wildlife, ocean currents, and global climate patterns." }, { name: "Plastics", icon: "fas fa-recycle", info: "Plastic pollution accumulates in oceans, harming marine life through entanglement, ingestion, and toxic effects." }, { name: "Polluted Runoff", icon: "fas fa-faucet-drip", info: "Pollutants from land activities wash into oceans, harming ecosystems and wildlife." }, { name: "Sea Level Rise", icon: "fas fa-water", info: "Rising sea levels due to melting ice caps and glaciers exacerbate the effects of coastal erosion and storminess." }, ], }, { name: "Climate Change", icon: "fas fa-thermometer-half", info: "Long-term shifts in weather patterns due to human activities, leading to global warming, rising sea levels, and other environmental changes.", children: [ { name: "Rising Temperatures", icon: "fas fa-fire", info: "Global temperature increase due to increased greenhouse gas emissions, such as carbon dioxide and methane." }, { name: "Melting Ice Caps", icon: "fas fa-snowflake", info: "Decreasing snow cover and ice on Earth due to rising temperatures, contributing to sea level rise." }, { name: "Acid Rain", icon: "fas fa-umbrella", info: "High levels of carbon dioxide in the atmosphere cause the increased production of acids in precipitation, harming ecosystems." }, { name: "Ozone Depletion", icon: "fas fa-cloud-sun-rain", info: "Diminished levels of ozone in Earth's atmosphere due to ozone depletion chemicals." }, { name: "Shrinking Glaciers", icon: "fas fa-ice-cream", info: "Decreasing ice volume due to global warming, impacting freshwater resources and coastal erosion." }, ], }, { name: "Biodiversity Loss", icon: "fas fa-dna", info: "Loss of genetic variety in living organisms, resulting from habitat destruction, pollution, climate change, and overexploitation.", children: [ { name: "Habitat Destruction", icon: "fas fa-truck-pickup", info: "Reduction or degradation of natural habitats, reducing species diversity and vulnerability." }, { name: "Invasive Species", icon: "fas fa-alien-monster", info: "Non-native organisms that are harmful to ecosystems, competing with native species for resources." }, { name: "Overexploitation", icon: "fas fa-hand-scissors", info: "Overuse of resources by humans, depleting wild populations and ecosystem health." }, { name: "Climate Change Effects", icon: "fas fa-thermometer-half", info: "Warming temperatures harm sensitive ecosystems and species." }, { name: "Deforestation", icon: "fas fa-tree", info: "Clearing of forests for agriculture, logging, and other human activities, disrupting ecosystems and harming wildlife." }, ], }, ], }, ];
+
+    const createIssueNode = (issue) => {
+
+        const group = new THREE.Group();
+
+
+        // Icon
+
+        const icon = document.createElement("i");
+
+        icon.className = issue.icon;
+
+        icon.style.fontSize = "50px";
+
+        group.add(new THREE.CSS3DObject(icon));
+
+
+        // Info box
+
+        const infoBox = document.createElement("div");
+
+        infoBox.className = "issue-info";
+
+        infoBox.textContent = issue.info;
+
+        group.add(new THREE.CSS3DObject(infoBox));
+
+
+        return group;
+
+    };
+
+
+    const createIssueTree = (issues, depth) => {
+
+        const container = new THREE.Group();
+
+
+        for (const issue of issues) {
+
+            const issueNode = createIssueNode(issue);
+
+            container.add(issueNode);
+
+
+            if (issue.children) {
+
+                const childrenContainer = createIssueTree(issue.children, depth + 1);
+
+                issueNode.add(childrenContainer);
+
+            }
+
+        }
+
+
+        const spread = 60;
+
+        const startPos = depth * spread;
+
+        const halfSpread = spread / 2;
+
+
+        container.children.forEach((issueNode, i) => {
+
+            const x = startPos + (i - (container.children.length - 1) / 2) * spread;
+
+            issueNode.position.x = x;
+
+            issueNode.position.y = depth * 2;
+
+        });
+
+
+        return container;
+
+    };
+
+
+    const scene = new THREE.Scene();
+
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+    const renderer = new THREE.CSS3DRenderer();
+
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    document.body.appendChild(renderer.domElement);
+
+
+    camera.position.z = 15; // Move camera back for better visibility
+
+
+    const issueTree = createIssueTree(issues, 0);
+
+    scene.add(issueTree);
+
+
+    const animate = () => {
+
+        requestAnimationFrame(animate);
+
+        renderer.render(scene, camera);
+
+    };
+
+
+    animate();
+
+
+    window.addEventListener("resize", () => {
+
+        camera.aspect = window.innerWidth / window.innerHeight;
+
+        camera.updateProjectionMatrix();
+
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+    });
+
+
+    document.body.addEventListener("mousemove", (event) => {
+
+        const rect = container.getBoundingClientRect();
+
+        const x = (event.clientX - rect.left) / rect.width * 2 - 1;
+
+        const y = -(event.clientY - rect.top) / rect.height * 2 + 1;
+
+
+        group.rotation.y = x * Math.PI / 180;
+
+        group.rotation.x = -y * Math.PI / 180;
+
+    });
+
+</script>
+
+</body> </html>
