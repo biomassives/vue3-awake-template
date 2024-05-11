@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Issue Tree Visualization</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .issue-info {
+            position: absolute;
+            color: white;
+            font-size: 24px;
+            pointer-events: none;
+        }
+
+        .icon {
+            position: absolute;
+            color: white;
+            font-size: 20px;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.0/gsap.min.js"></script>
+    <script>
+const issues = [
+    {
+        name: "Environmental Degradation",
+        icon: "fas fa-exclamation-triangle",
+        info: "The deterioration of the environment through depletion of resources like air, water, and soil; the destruction of ecosystems; habitat destruction; the extinction of wildlife; and pollution.",
+        children: [
+            {
+                name: "Ocean Pollution",
+                icon: "fas fa-water",
+                info: "Contamination of the ocean with harmful substances, including plastics, chemicals, and sewage.",
+                children: [
+                    { name: "Toxic Algal Blooms", icon: "fas fa-biohazard", info: "Excessive nutrients cause rapid algae growth, depleting oxygen and harming marine life." },
+                    { name: "Storminess", icon: "fas fa-cloud-showers-heavy", info: "Increased frequency and intensity of storms due to climate change, causing damage and flooding." },
+                    { name: "Dead Zones", icon: "fas fa-skull-crossbones", info: "Areas in oceans or lakes with low oxygen levels, often caused by excessive nutrient pollution." },
+                    { name: "Coral Bleaching", icon: "fas fa-coral", info: "Rising temperatures stress corals, causing them to expel symbiotic algae, turning white and vulnerable." },
+                    { name: "Pharmaceuticals", icon: "fas fa-prescription-bottle", info: "Pharmaceutical pollution in water sources can harm aquatic life and potentially impact human health." },
+                    { name: "Loss of Sea Ice", icon: "fas fa-icicles", info: "Diminishing sea ice due to warming temperatures affects wildlife, ocean currents, and global climate patterns." },
+                    { name: "Plastics", icon: "fas fa-recycle", info: "Plastic pollution accumulates in oceans, harming marine life through entanglement, ingestion, and toxic effects." },
+                    { name: "Polluted Runoff", icon: "fas fa-faucet-drip", info: "Pollutants from land activities wash into oceans, harming ecosystems and wildlife." },
+                    { name: "Sea Level Rise", icon: "fas fa-water", info: "Rising sea levels due to climate change threaten coastal communities, ecosystems, and infrastructure." },
+                    { name: "Biophysical Collapse", icon: "fas fa-mountain", info: "The breakdown of natural systems due to environmental stressors, leading to ecological instability." },
+                    { name: "Toxic Metals", icon: "fas fa-industry", info: "Heavy metal pollution from industrial and mining activities can bioaccumulate in organisms, causing health problems." },
+                    { name: "Endocrine Disruptors", icon: "fas fa-vial", info: "Chemicals that interfere with hormonal systems, potentially affecting reproduction and development." },
+                    { name: "Ocean Heating, Acidification, and Deoxygenation", icon: "fas fa-thermometer-half", info: "Increasing ocean temperatures, absorption of excess carbon dioxide, and reduced oxygen levels due to climate change and pollution threaten marine ecosystems and biodiversity." },
+                ]
+            },
+            {
+                name: "Air Pollution", 
+                icon: "fas fa-smog",
+                info: "Release of pollutants into the air that are detrimental to human health and the planet.",
+                children: [
+
+                    { name: "Industrial Emissions", icon: "fas fa-industry", info: "Release of pollutants from factories and power plants." },
+                    { name: "Vehicle Emissions", icon: "fas fa-car", info: "Pollutants released from cars, trucks, and other vehicles." },
+                    { name: "Agricultural Pollution", icon: "fas fa-tractor", info: "Air pollution from farming activities, including dust, pesticides, and ammonia." },
+                    { name: "Fossil Fuel Combustion", icon: "fas fa-fire", info: "Burning of coal, oil, and gas for energy production, a major source of air pollution." },
+                    { name: "Wildfires", icon: "fas fa-fire-alt", info: "Uncontrolled fires that release smoke and other pollutants into the air." },
+                    { name: "Dust Storms", icon: "fas fa-wind", info: "Natural events that can carry dust and other particles over long distances." },
+                    { name: "Volcanic Eruptions", icon: "fas fa-volcano", info: "Release of ash, gases, and other pollutants into the atmosphere." },
+                    { name: "Indoor Air Pollution", icon: "fas fa-home", info: "Pollution from sources within buildings, such as radon, mold, and cleaning products." }
+
+                ]
+            },
+            // Add more child issues as needed...
+        ]
+    },
+    {
+        name: "Social Inequality",
+        icon: "fas fa-scale-unbalanced",
+        info: "Inequality and discrimination based on social factors like race, gender, or socioeconomic status.",
+        children: [
+
+            { name: "Racial Inequality", icon: "fas fa-people-group", info: "Discrimination and disparities based on race or ethnicity." },
+            { name: "Gender Inequality", icon: "fas fa-venus-mars", info: "Unequal treatment or perceptions of individuals based on their gender." },
+            { name: "LGBTQ+ Discrimination", icon: "fas fa-rainbow", info: "Prejudice and discrimination against individuals based on their sexual orientation or gender identity." },
+            { name: "Income Inequality", icon: "fas fa-money-bill-wave", info: "Unequal distribution of income among individuals and households." },
+            { name: "Educational Inequality", icon: "fas fa-graduation-cap", info: "Disparities in access to and quality of education based on social factors." },
+            { name: "Healthcare Disparities", icon: "fas fa-user-md", info: "Differences in health outcomes and access to healthcare among different groups." },
+            { name: "Housing Discrimination", icon: "fas fa-house", info: "Unequal treatment in the housing market based on race, ethnicity, or other social factors." },
+            { name: "Food Insecurity", icon: "fas fa-utensils", info: "Limited or uncertain access to adequate food due to financial constraints." },
+            { name: "Criminal Justice Disparities", icon: "fas fa-gavel", info: "Unequal treatment and outcomes in the criminal justice system." },
+            { name: "Immigration Discrimination", icon: "fas fa-passport", info: "Prejudice and discrimination against immigrants based on their nationality or legal status." }
+
+        ]
+    },
+    {
+        name: "Economic Inequality",
+        icon: "fas fa-chart-line",
+        info: "Unequal distribution of wealth and income among individuals and groups.",
+        children: [
+            {
+                name: "Causes",
+                icon: "fas fa-question",
+                info: "Factors contributing to the unequal distribution of wealth and income.",
+                children: [
+                    { name: "Globalization", icon: "fas fa-globe-americas", info: "Integration of economies leading to job displacement and wage pressure." },
+                    { name: "Technological Change", icon: "fas fa-microchip", info: "Automation replacing jobs and favoring skilled workers." },
+                    { name: "Financialization", icon: "fas fa-money-bill-wave", info: "Increased focus on financial markets leading to wealth concentration." },
+                    { name: "Decline in Unionization", icon: "fas fa-people-group", info: "Weakening of worker bargaining power and wage stagnation." },
+                    { name: "Tax Policies", icon: "fas fa-landmark", info: "Tax systems favoring the wealthy and corporations." },
+                    { name: "Educational Disparities", icon: "fas fa-graduation-cap", info: "Unequal access to quality education hindering upward mobility." },
+                    { name: "Discrimination", icon: "fas fa-ban", info: "Bias based on race, gender, or other factors limiting opportunities." }
+                ]
+            },
+            {
+                name: "Consequences",
+                icon: "fas fa-exclamation-triangle",
+                info: "Negative effects arising from the unequal distribution of wealth and income.",
+                children: [
+                    { name: "Poverty and Hardship", icon: "fas fa-bed", info: "Limited access to basic necessities like food, shelter, and healthcare." },
+                    { name: "Social Unrest", icon: "fas fa-fist-raised", info: "Increased crime, violence, and political instability." },
+                    { name: "Reduced Economic Growth", icon: "fas fa-chart-line-down", info: "Lower consumer spending and investment due to wealth concentration." },
+                    { name: "Political Polarization", icon: "fas fa-people-arrows", info: "Increased political divisions and erosion of social cohesion." },
+                    { name: "Health Disparities", icon: "fas fa-stethoscope", info: "Higher rates of illness and lower life expectancy among the poor." },
+                    { name: "Lower Social Mobility", icon: "fas fa-stairs", info: "Reduced opportunities for upward mobility and increased intergenerational poverty." },
+                    { name: "Environmental Damage", icon: "fas fa-smog", info: "Unsustainable consumption patterns of the wealthy contributing to ecological degradation." }
+                ]
+            }
+        ]
+    },
+    // Add more main issues as needed...
+];
+
+
+        const root = new THREE.Object3D();
+        const group = new THREE.Group();
+        root.add(group);
+
+        function createIssueCone(issue, yOffset, camera) {
+            const coneGeometry = new THREE.IcosahedronGeometry(1, 1);
+            const coneMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+            const cone = new THREE.Mesh(coneGeometry, coneMaterial);
+            cone.position.y = yOffset;
+            cone.position.x = -3;
+            group.add(cone);
+
+            const text = document.createElement('div');
+            text.className = 'issue-info';
+            text.textContent = issue.name;
+            document.body.appendChild(text);
+
+            function update() {
+                const vector = new THREE.Vector3();
+                vector.setFromMatrixPosition(cone.matrixWorld);
+                vector.project(camera);
+
+                const widthHalf = window.innerWidth / 2;
+                const heightHalf = window.innerHeight / 2;
+
+                text.style.left = (vector.x * widthHalf + widthHalf) + 'px';
+                text.style.top = (-vector.y * heightHalf + heightHalf) + 'px';
+            }
+
+            function updateIcons() {
+                update();
+
+                issue.children.forEach((childIssue, index) => {
+                    const icon = document.getElementById(`icon_${index}`);
+                    if (icon) {
+                        const conePos = new THREE.Vector3().setFromMatrixPosition(cone.matrixWorld);
+                        const xOffset = conePos.x * (window.innerWidth / 2) + window.innerWidth / 2;
+                        const yOffset = -conePos.y * (window.innerHeight / 2) + window.innerHeight / 2;
+                        icon.style.left = `${xOffset}px`;
+                        icon.style.top = `${yOffset + index * 30}px`;
+                    }
+                });
+            }
+
+            cone.update = updateIcons;
+            updateIcons();
+        }
+
+        function createChildrenCones(parentIssue, parentYOffset, camera) {
+            parentIssue.children.forEach((childIssue, index) => {
+                const yOffset = parentYOffset + 3 + index * 2;
+                createIssueCone(childIssue, yOffset, camera);
+                const icon = document.createElement('i');
+                icon.className = `icon ${childIssue.icon}`;
+                icon.id = `icon_${index}`;
+                document.body.appendChild(icon);
+            });
+        }
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        camera.position.z = 5;
+
+        const tl = gsap.timeline();
+
+        issues.forEach((mainIssue, index) => {
+            const yOffset = -15 + index * 5;
+            createIssueCone(mainIssue, yOffset, camera);
+            createChildrenCones(mainIssue, yOffset, camera);
+        });
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            tl.to(group.rotation, { y: 0.01, duration: 1, ease: "none" });
+            tl.to(group.rotation, { y: -0.01, duration: 1, ease: "none" }, 0.5);
+
+            group.children.forEach(child => {
+                if (child.update) {
+                    child.update();
+                }
+            });
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        window.addEventListener("resize", function () {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+
+            renderer.setSize(width, height);
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+        });
+
+        document.body.addEventListener('mousemove', (event) => {
+            const x = event.clientX;
+            const y = event.clientY;
+            const xOffset = x / window.innerWidth * 10 - 5;
+            const yOffset = y / window.innerHeight * 10 - 5;
+            group.rotation.x = -yOffset * Math.PI / 180;
+            group.rotation.y = -xOffset * Math.PI / 180;
+        });
+    </script>
+</body>
+</html>
