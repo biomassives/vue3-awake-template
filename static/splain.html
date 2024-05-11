@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interconnected Issues</title>
-    <link rel="stylesheet" href="https://cdn.tailwindcss.com">
+    <link href="https://cdn.tailwindcss.com" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="splain.css">
+    <link rel="stylesheet" href="splain.scss">
 </head>
 <body>
     <div id="loading-screen" class="fixed inset-0 flex items-center justify-center bg-white z-50">
@@ -20,7 +20,12 @@
         <div class="sphere" id="issuesSphere"></div>
     </div>
     <div id="info-box" class="hidden fixed bottom-4 right-4 bg-white p-4 rounded shadow-md max-w-sm"></div>
-
+    <script>   
+    // Inside your <script> tag
+        let issueElement; // Declare outside the loop
+        let issueContent; // Declare outside the loop
+        let currentActiveIssue = null; // Declare outside the loop   
+    </script>
     <script src="splain.js"></script>
 </body>
 </html>
