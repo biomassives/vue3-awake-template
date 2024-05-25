@@ -66,18 +66,18 @@ export default {
   // Newsletter Subscribe
   newsletter: {
     on: true,
-    heading: 'Subscribe to Our Newsletter',
-    btnText: 'Subscribe',
+    heading: 'Eco ops Checkin',
+    btnText: 'checkin',
     // Can be the form action on a mail chimp form, a hubspot form,
     // or any other url you want to post the form data to
     mailchimp: {
-      on: true,
+      on: false,
       formAction:
-        'https://scdhub.us7.list-manage.com/subscribe/post?u=9793533008f558091af54dc45&amp;id=3ca89d34e8&amp;f_id=008682e2f0'
+        ''
     },
     custom: {
-      on: false,
-      formAction: ''
+      on: true,
+      formAction: 'https://www.ecocity.com/multi'
     }
   },
 
