@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eco Ops Thika</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-draw/dist/leaflet.draw.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap">
+  <style>
+    body {
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+    }
+
+    #header {
+      text-align: center;
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      font-size: 24px;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    #map-container {
+      position: relative;
+      height: 600px;
+    }
+
+    #map {
+      width: 100%;
+      height: 100%;
+    }
+
+    .map-overlay {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      padding: 10px;
+      background-color: rgba(255, 255, 255, 0.8);
+      border: 2px solid #4CAF50;
+      border-radius: 10px;
+      z-index: 1000;
+    }
+
+    #input-container {
+      position: absolute;
+      top: 70px;
+      right: 20px;
+      padding: 10px;
+      background-color: rgba(255, 255, 255, 0.8);
+      border: 2px solid #4CAF50;
+      border-radius: 10px;
+      z-index: 1000;
+      display: none;
+    }
+
+    #close-btn {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      cursor: pointer;
+      font-size: 20px;
+    }
+
+    #file-import-export {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    #file-import-export input[type="file"] {
+      display: none;
+    }
+
+    #file-import-export label {
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      text-align: center;
+    }
+
+    #import-export-toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 20px;
+      z-index: 1000;
+    }
+
+    @media only screen and (max-width: 600px) {
+      #input-container {
+        top: 120px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div id="header">Eco Ops Kathmandu</div>
+
+<div id="map-container">
+  <div id="map"></div>
+  <div id="map-overlay" class="map-overlay">
+    <div id="import-export-toggle" onclick="toggleImportExport()">≡</div>
+    <div id="file-import-export" style="display: none;">
+      <label for="import-zip">Import Zip</label>
+      <input type="file" id="import-zip" accept=".zip">
+      <button onclick="exportDataToZip()">Export Zip</button>
+    </div>
+  </div>
+  <div id="input-container">
+    <div id="close-btn" onclick="closeInputContainer()">×</div>
+    <label for="userInput" id="input-label">Note: Write or Upload:</label>
+    <textarea id="userInput" rows="4" cols="50"></textarea>
+    <input type="file" id="fileInput" accept="image/*, audio/*">
+    <button onclick="submitUserInput()">Submit</button>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-draw"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+<script>
+  const map = L.map('map').setView([27.7172, 85.3240], 12);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(map);
+
+  const drawnItems = new L.FeatureGroup();
+  map.addLayer(drawnItems);
+
+  const drawControl = new L.Control.Draw({
+    draw: {
+      polygon: true,
+      polyline: false,
+      rectangle: false,
+      circle: false,
+      marker: true,
+    },
+    edit: {
+      featureGroup: drawnItems,
+      remove: true,
+    },
+  });
+  map.addControl(drawControl);
+
+  map.on('draw:created', function (e) {
+    const type = e.layerType;
+    const layer = e.layer;
+
+    const userInput = document.getElementById('userInput').value;
+    const fileInput = document.getElementById('fileInput').files[0];
+    let popupContent = userInput;
+    if (fileInput) {
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const img = document.createElement('img');
+        img.src = event.target.result;
+        img.style.width = '100px';
+        img.style.height = '100px';
+        popupContent += `<br><img src="${img.src}" style="width: 100px; height: 100px;">`;
+        addEditLinkToPopup(layer, popupContent);
+      };
+      reader.readAsDataURL(fileInput);
+    } else {
+      addEditLinkToPopup(layer, popupContent);
+    }
+
+    drawnItems.addLayer(layer);
+
+    const inputContainer = document.getElementById('input-container');
+    inputContainer.style.display = 'block';
+  });
+
+  function addEditLinkToPopup(layer, popupContent) {
+    const editLink = '<br><a href="#" onclick="editLayer(' + layer._leaflet_id + ')">Edit</a>';
+    if (!popupContent.includes(editLink)) {
+      popupContent += editLink;
+    }
+    layer.bindPopup(popupContent);
+  }
+
+  function editLayer(layerId) {
+    const layer = drawnItems.getLayer(layerId);
+    const currentContent = layer.getPopup().getContent();
+    const newContent = prompt('Edit content:', currentContent.replace(/<br><a.*<\/a>/, '')); // Remove the existing edit link for prompt
+    if (newContent !== null) {
+      addEditLinkToPopup(layer, newContent);
+    }
+  }
+
+  map.on('draw:edited', function (e) {
+    const layers = e.layers;
+    layers.eachLayer(function (layer) {
+      // Get the updated layer data
+      const updatedData = {
+        type: layer instanceof L.Circle ? 'circle' : layer instanceof L.Polygon ? 'polygon' : 'point',
+        latlngs: layer.getLatLng(),
+        popupContent: layer.getPopup() ? layer.getPopup().getContent() : null,
+      };
+
+      // Log the updated data (for debugging)
+      console.log('Updated Layer Data:', updatedData);
+
+      // Update local storage with the new data
+      updateLocalStorage(layer._leaflet_id, updatedData);
+
+      // If you have a server, send the updated data to the server
+      // updateServer(layer._leaflet_id, updatedData);
+    });
+  });
+
+  function updateLocalStorage(layerId, updatedData) {
+    localforage.getItem('mapData')
+      .then(mapData => {
+        if (mapData) {
+          // Find the layer in the mapData and update it
+          for (let data of mapData) {
+            for (let layer of data.layers) {
+              if (layer._leaflet_id === layerId) {
+                layer.latlngs = updatedData.latlngs;
+                layer.popupContent = updatedData.popupContent;
+                break;
+              }
+            }
+          }
+          return localforage.setItem('mapData', mapData);
+        }
+      })
+      .then(() => console.log('Data updated locally'))
+      .catch(error => console.error('Error updating data locally:', error));
+  }
+
+  // Example function to send updated data to the server
+  function updateServer(layerId, updatedData) {
+    fetch('/update-layer', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ layerId, updatedData }),
+    })
+    .then(response => response.json())
+    .then(data => console.log('Data updated on server:', data))
+    .catch(error => console.error('Error updating data on server:', error));
+  }
+
+  function submitUserInput() {
+    const userInput = document.getElementById('userInput').value;
+    const fileInput = document.getElementById('fileInput');
+    const selectedFile = fileInput.files[0];
+
+    const submissionData = {
+      userInput,
+      selectedFile,
+      layers: [],
+    };
+
+    drawnItems.eachLayer(layer => {
+      const layerData = {
+        type: layer instanceof L.Circle ? 'circle' : layer instanceof L.Polygon ? 'polygon' : 'point',
+        latlngs: layer.getLatLng(),
+        popupContent: layer.getPopup() ? layer.getPopup().getContent() : null,
+      };
+
+      submissionData.layers.push(layerData);
+    });
+
+    console.log('Submission Data:', submissionData);
+
+    saveToLocalDatabase(submissionData);
+    closeInputContainer();
+  }
+
+  function closeInputContainer() {
+    const inputContainer = document.getElementById('input-container');
+    inputContainer.style.display = 'none';
+  }
+
+  function saveToLocalDatabase(data) {
+    localforage.getItem('mapData')
+      .then(mapData => {
+        if (!mapData) {
+          mapData = [];
+        }
+        mapData.push(data);
+        return localforage.setItem('mapData', mapData);
+      })
+      .then(() => console.log('Data saved locally'))
+      .catch(error => console.error('Error saving data locally:', error));
+  }
+
+  function loadFromLocalDatabase() {
+    localforage.getItem('mapData')
+      .then(mapData => {
+        if (mapData) {
+          mapData.forEach(data => {
+            if (data.layers) {
+              data.layers.forEach(layerData => {
+                let layer;
+                if (layerData.type === 'circle') {
+                  layer = L.circle(layerData.latlngs);
+                } else if (layerData.type === 'polygon') {
+                  layer = L.polygon(layerData.latlngs);
+                } else if (layerData.type === 'point') {
+                  layer = L.marker(layerData.latlngs);
+                  if (layerData.popupContent) {
+                    addEditLinkToPopup(layer, layerData.popupContent);
+                  }
+                }
+                drawnItems.addLayer(layer);
+              });
+            }
+          });
+          // Move view to the center of new points
+          if (mapData.length > 0) {
+            const lastData = mapData[mapData.length - 1];
+            if (lastData.layers && lastData.layers.length > 0) {
+              const lats = lastData.layers.map(layer => layer.latlngs.lat);
+              const lngs = lastData.layers.map(layer => layer.latlngs.lng);
+              const centerLat = lats.reduce((a, b) => a + b, 0) / lats.length;
+              const centerLng = lngs.reduce((a, b) => a + b, 0) / lngs.length;
+              map.setView([centerLat, centerLng], 12);
+            }
+          }
+        }
+      })
+      .catch(error => console.error('Error loading data locally:', error));
+  }
+
+  function exportDataToZip() {
+    localforage.getItem('mapData')
+      .then(mapData => {
+        if (!mapData) {
+          alert('No data to export');
+          return;
+        }
+
+        const zip = new JSZip();
+        zip.file('mapData.json', JSON.stringify(mapData));
+
+        zip.generateAsync({ type: 'blob' })
+          .then(blob => {
+            saveAs(blob, 'mapData.zip');
+          });
+      })
+      .catch(error => console.error('Error exporting data:', error));
+  }
+
+  document.getElementById('import-zip').addEventListener('change', function (event) {
+    const file = event.target.files[0];
+    if (file) {
+      const zip = new JSZip();
+      zip.loadAsync(file)
+        .then(zip => zip.file('mapData.json').async('string'))
+        .then(jsonData => {
+          const mapData = JSON.parse(jsonData);
+          return localforage.setItem('mapData', mapData);
+        })
+        .then(() => {
+          loadFromLocalDatabase();
+          alert('Data imported successfully');
+        })
+        .catch(error => console.error('Error importing data:', error));
+    }
+  });
+
+  function toggleImportExport() {
+    const fileImportExport = document.getElementById('file-import-export');
+    fileImportExport.style.display = fileImportExport.style.display === 'none' ? 'flex' : 'none';
+  }
+
+  // Load data from local storage on page load
+  loadFromLocalDatabase();
+</script>
+
+</body>
+</html>
