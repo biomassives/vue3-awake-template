@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eco Ops Thika</title>
+  <title>Thika Student Eco Club - Waste Management Map</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet-draw/dist/leaflet.draw.css" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap">
@@ -107,7 +107,7 @@
 </head>
 <body>
 
-<div id="header">Eco Ops Kathmandu</div>
+<div id="header">Thika Student Eco Club - Waste Management Map</div>
 
 <div id="map-container">
   <div id="map"></div>
@@ -134,7 +134,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 <script>
-  const map = L.map('map').setView([27.7172, 85.3240], 12);
+  const map = L.map('map').setView([-1.046560, 37.059891], 12);
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors'
@@ -216,8 +216,8 @@
       // Log the updated data (for debugging)
       console.log('Updated Layer Data:', updatedData);
 
-      // Update local storage with the new data
-      updateLocalStorage(layer._leaflet_id, updatedData);
+      // Update l storage with the new data
+      updatelStorage(layer._leaflet_id, updatedData);
 
       // If you have a server, send the updated data to the server
       // updateServer(layer._leaflet_id, updatedData);
