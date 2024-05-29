@@ -204,10 +204,12 @@
         img.style.height = '100px';
         popupContent += `<br><img src="${img.src}" style="width: 100px; height: 100px;">`;
         addEditLinkToPopup(layer, popupContent);
+        layer.bindPopup(popupContent).openPopup();
       };
       reader.readAsDataURL(fileInput);
     } else {
       addEditLinkToPopup(layer, popupContent);
+      layer.bindPopup(popupContent).openPopup();
     }
 
     drawnItems.addLayer(layer);
@@ -350,6 +352,7 @@
                   layer = L.marker(layerData.latlngs);
                   if (layerData.popupContent) {
                     addEditLinkToPopup(layer, layerData.popupContent);
+                    layer.bindPopup(layerData.popupContent);
                   }
                 }
                 drawnItems.addLayer(layer);
