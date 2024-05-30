@@ -164,7 +164,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 <script>
- document.addEventListener('DOMContentLoaded', function() {
+
+document.addEventListener('DOMContentLoaded', function() {
   const map = L.map('map').setView([-1.046560, 37.059891], 12);
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -288,15 +289,22 @@
       .catch(error => console.error('Error updating data locally:', error));
   }
 
-  function saveToLocalDatabase(data) {
-    localforage.getItem('mapData')
-      .then(mapData => {
-        if (!mapData) {
-          mapData = [];
-        }
-        mapData.push(data);
-        return localforage.setItem('mapData', mapData);
-      })
+  function saveToLocalDatabase() {
+    const data = {
+      layers: []
+    };
+
+    drawnItems.eachLayer(function(layer) {
+      const layerData = {
+        type: layer instanceof L.Circle ? 'circle' : layer instanceof L.Polygon ? 'polygon' : 'point',
+        latlngs: layer.getLatLng(),
+        popupContent: layer.getPopup() ? layer.getPopup().getContent() : null,
+      };
+
+      data.layers.push(layerData);
+    });
+
+    localforage.setItem('mapData', data)
       .then(() => console.log('Data saved locally'))
       .catch(error => console.error('Error saving data locally:', error));
   }
@@ -304,36 +312,30 @@
   function loadFromLocalDatabase() {
     localforage.getItem('mapData')
       .then(mapData => {
-        if (mapData) {
-          mapData.forEach(data => {
-            if (data.layers) {
-              data.layers.forEach(layerData => {
-                let layer;
-                if (layerData.type === 'circle') {
-                  layer = L.circle(layerData.latlngs);
-                } else if (layerData.type === 'polygon') {
-                  layer = L.polygon(layerData.latlngs);
-                } else if (layerData.type === 'point') {
-                  layer = L.marker(layerData.latlngs);
-                  if (layerData.popupContent) {
-                    addEditLinkToPopup(layer, layerData.popupContent);
-                    layer.bindPopup(layerData.popupContent);
-                  }
-                }
-                drawnItems.addLayer(layer);
-              });
+        if (mapData && mapData.layers) {
+          mapData.layers.forEach(layerData => {
+            let layer;
+            if (layerData.type === 'circle') {
+              layer = L.circle(layerData.latlngs);
+            } else if (layerData.type === 'polygon') {
+              layer = L.polygon(layerData.latlngs);
+            } else if (layerData.type === 'point') {
+              layer = L.marker(layerData.latlngs);
+              if (layerData.popupContent) {
+                addEditLinkToPopup(layer, layerData.popupContent);
+                layer.bindPopup(layerData.popupContent);
+              }
             }
+            drawnItems.addLayer(layer);
           });
 
-          if (mapData.length > 0) {
-            const lastData = mapData[mapData.length - 1];
-            if (lastData.layers && lastData.layers.length > 0) {
-              const lats = lastData.layers.map(layer => layer.latlngs.lat);
-              const lngs = lastData.layers.map(layer => layer.latlngs.lng);
-              const centerLat = lats.reduce((a, b) => a + b, 0) / lats.length;
-              const centerLng = lngs.reduce((a, b) => a + b, 0) / lngs.length;
-              map.setView([centerLat, centerLng], 12);
-            }
+          // Move view to the center of new points
+          if (mapData.layers.length > 0) {
+            const lats = mapData.layers.map(layer => layer.latlngs.lat);
+            const lngs = mapData.layers.map(layer => layer.latlngs.lng);
+            const centerLat = lats.reduce((a, b) => a + b, 0) / lats.length;
+            const centerLng = lngs.reduce((a, b) => a + b, 0) / lngs.length;
+            map.setView([centerLat, centerLng], 12);
           }
         }
       })
@@ -424,24 +426,20 @@
       .then(mapData => {
         if (mapData) {
           drawnItems.clearLayers();
-          mapData.forEach(data => {
-            if (data.layers) {
-              data.layers.forEach(layerData => {
-                let layer;
-                if (layerData.type === 'circle') {
-                  layer = L.circle(layerData.latlngs);
-                } else if (layerData.type === 'polygon') {
-                  layer = L.polygon(layerData.latlngs);
-                } else if (layerData.type === 'point') {
-                  layer = L.marker(layerData.latlngs);
-                  if (layerData.popupContent) {
-                    addEditLinkToPopup(layer, layerData.popupContent);
-                    layer.bindPopup(layerData.popupContent);
-                  }
-                }
-                drawnItems.addLayer(layer);
-              });
+          mapData.layers.forEach(layerData => {
+            let layer;
+            if (layerData.type === 'circle') {
+              layer = L.circle(layerData.latlngs);
+            } else if (layerData.type === 'polygon') {
+              layer = L.polygon(layerData.latlngs);
+            } else if (layerData.type === 'point') {
+              layer = L.marker(layerData.latlngs);
+              if (layerData.popupContent) {
+                addEditLinkToPopup(layer, layerData.popupContent);
+                layer.bindPopup(layerData.popupContent);
+              }
             }
+            drawnItems.addLayer(layer);
           });
           alert('Collection loaded successfully.');
         } else {
@@ -546,6 +544,9 @@
   loadUsername();
 });
 
+
+
+  
 </script>
 
 </body>
