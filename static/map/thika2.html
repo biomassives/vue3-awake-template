@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thika Student Eco Club - Waste Management Map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-draw/dist/leaflet.draw.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap">
+  <style>
+    body {
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+    }
+
+    #header {
+      text-align: center;
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      font-size: 24px;
+      font-family: 'Montserrat', sans-serif;
+      position: relative;
+    }
+
+    #icons-container {
+      position: absolute;
+      top: 5px;
+      right: 10px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .icon {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 20px;
+      z-index: 1000;
+      transition: background-color 0.3s;
+    }
+
+    .icon:hover {
+      background-color: #FFD700;
+    }
+
+    #profile-container, #settings-container {
+      position: absolute;
+      top: 50px;
+      right: 20px;
+      padding: 10px;
+      background-color: rgba(255, 255, 255, 0.8);
+      border: 2px solid #4CAF50;
+      border-radius: 10px;
+      z-index: 1000;
+      display: none;
+    }
+
+    #profile-container input, #settings-container input {
+      margin-bottom: 10px;
+      width: 100%;
+    }
+
+    @media only screen and (max-width: 600px) {
+      #input-container {
+        top: 120px;
+      }
+    }
+
+    #archive-section {
+      margin-top: 20px;
+    }
+
+    #archive-section input, #archive-section button {
+      margin-top: 10px;
+      width: 100%;
+    }
+
+    #clear-map, #save-map-view {
+      margin-top: 10px;
+      width: 100%;
+    }
+
+    #map-container {
+      position: relative;
+      height: 600px;
+    }
+
+    #map {
+      width: 100%;
+      height: 100%;
+    }
+
+    #input-container {
+      position: absolute;
+      top: 70px;
+      right: 20px;
+      padding: 10px;
+      background-color: rgba(255, 255, 255, 0.8);
+      border: 2px solid #4CAF50;
+      border-radius: 10px;
+      z-index: 1000;
+      display: none;
+      opacity: 1;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    #input-container.fade-out {
+      opacity: 0;
+    }
+  </style>
+</head>
+<body>
+
+<div id="header">Thika Student Eco Club - Waste Management Map
+  <div id="icons-container">
+    <div class="icon" id="profile-toggle" onclick="toggleSettings('profile-container')">👤</div>
+    <div class="icon" id="db-toggle" onclick="toggleSettings('settings-container')">🔒</div>
+    <div class="icon" id="export-toggle" onclick="exportDataToZip()">⬇️</div>
+  </div>
+</div>
+
+<div id="map-container">
+  <div id="map"></div>
+  <div id="settings-container">
+    <label for="supabase-url">Supabase URL</label>
+    <input type="text" id="supabase-url" placeholder="Enter Supabase URL">
+    <label for="supabase-key">Supabase Key</label>
+    <input type="text" id="supabase-key" placeholder="Enter Supabase Key">
+    <button onclick="saveSupabaseSettings()">Save Settings</button>
+    <label for="import-zip">Import Zip</label>
+    <input type="file" id="import-zip" accept=".zip">
+    <button onclick="exportDataToZip()">Export Zip</button>
+    <div>
+      <a href="https://supabase.io" target="_blank">Get a free Supabase account</a>
+    </div>
+    <div id="archive-section">
+      <label for="collection-name">Archive Collection</label>
+      <input type="text" id="collection-name" placeholder="Enter collection name">
+      <button onclick="archiveCollection()">Archive</button>
+      <label for="load-collection">Load Collection</label>
+      <select id="load-collection"></select>
+      <button onclick="loadCollection()">Load</button>
+    </div>
+    <button id="clear-map" onclick="clearMap()">Clear Map</button>
+    <button id="save-map-view" onclick="saveMapView()">Save Map View</button>
+  </div>
+  <div id="profile-container">
+    <label for="username">Username</label>
+    <input type="text" id="username" placeholder="Enter username">
+    <button onclick="saveUsername()">Save Username</button>
+  </div>
+  <div id="input-container">
+    <div id="close-btn" onclick="closeInputContainer()">×</div>
+    <label for="userInput" id="input-label">Note: Write or Upload:</label>
+    <textarea id="userInput" rows="4" cols="50"></textarea>
+    <input type="file" id="fileInput" accept="image/*, audio/*">
+    <button id="saveUserInput">Save</button>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-draw"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const map = L.map('map').setView([-1.046560, 37.059891], 12);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    const drawnItems = new L.FeatureGroup();
+    map.addLayer(drawnItems);
+
+    const drawControl = new L.Control.Draw({
+      draw: {
+        polygon: true,
+        polyline: false,
+        rectangle: false,
+        circle: false,
+        marker: true,
+      },
+      edit: {
+        featureGroup: drawnItems,
+        remove: true,
+      },
+    });
+    map.addControl(drawControl);
+
+    let currentLayer; // To store the layer being edited
+
+    map.on('draw:created', function (e) {
+      currentLayer = e.layer;
+
+      // Show the input form
+      const inputContainer = document.getElementById('input-container');
+      inputContainer.style.display = 'block';
+      inputContainer.classList.remove('fade-out');
+
+      // Reset form fields
+      document.getElementById('userInput').value = '';
+      document.getElementById('fileInput').value = '';
+
+      // Listen for form submission
+      document.getElementById('saveUserInput').onclick = function () {
+        const userInput = document.getElementById('userInput').value;
+        const fileInput = document.getElementById('fileInput').files[0];
+        let popupContent = userInput;
+
+        if (fileInput) {
+          const reader = new FileReader();
+          reader.onload = function (event) {
+            const img = document.createElement('img');
+            img.src = event.target.result;
+            img.style.width = '100px';
+            img.style.height = '100px';
+            popupContent += `<br><img src="${img.src}" style="width: 100px; height: 100px;">`;
+            addEditLinkToPopup(currentLayer, popupContent);
+            currentLayer.bindPopup(popupContent).openPopup();
+            drawnItems.addLayer(currentLayer);
+            saveToLocalDatabase();
+            closeInputContainer();
+          };
+          reader.readAsDataURL(fileInput);
+        } else {
+          addEditLinkToPopup(currentLayer, popupContent);
+          currentLayer.bindPopup(popupContent).openPopup();
+          drawnItems.addLayer(currentLayer);
+          saveToLocalDatabase();
+          closeInputContainer();
+        }
+      };
+    });
+
+    function addEditLinkToPopup(layer, popupContent) {
+      const editLink = '<br><a href="#" onclick="editLayer(' + layer._leaflet_id + ')">Edit</a>';
+      if (!popupContent.includes(editLink)) {
+        popupContent += editLink;
+      }
+      layer.bindPopup(popupContent);
+    }
+
+    function editLayer(layerId) {
+      const layer = drawnItems.getLayer(layerId);
+      const currentContent = layer.getPopup().getContent();
+      const newContent = prompt('Edit content:', currentContent.replace(/<br><a.*<\/a>/, '')); // Remove the existing edit link for prompt
+      if (newContent !== null) {
+        addEditLinkToPopup(layer, newContent);
+        layer.setPopupContent(newContent + '<br><a href="#" onclick="editLayer(' + layer._leaflet_id + ')">Edit</a>').openPopup();
+        saveToLocalDatabase();
+      }
+    }
+
+    map.on('draw:edited', function (e) {
+      const layers = e.layers;
+      layers.eachLayer(function (layer) {
+        const updatedData = {
+          type: layer instanceof L.Circle ? 'circle' : layer instanceof L.Polygon ? 'polygon' : 'point',
+          latlngs: layer.getLatLng(),
+          popupContent: layer.getPopup() ? layer.getPopup().getContent() : null,
+        };
+
+        console.log('Updated Layer Data:', updatedData);
+
+        updateLocalStorage(layer._leaflet_id, updatedData);
+      });
+    });
+
+    function updateLocalStorage(layerId, updatedData) {
+      localforage.getItem('mapData')
+        .then(mapData => {
+          if (mapData) {
+            for (let data of mapData.layers) {
+              if (data.layerId === layerId) {
+                data.latlngs = updatedData.latlngs;
+                data.popupContent = updatedData.popupContent;
+                break;
+              }
+            }
+            return localforage.setItem('mapData', mapData);
+          }
+        })
+        .then(() => console.log('Data updated locally'))
+        .catch(error => console.error('Error updating data locally:', error));
+    }
+
+    function saveToLocalDatabase() {
+      const data = {
+        layers: []
+      };
+
+      drawnItems.eachLayer(function(layer) {
+        const layerData = {
+          layerId: layer._leaflet_id,
+          type: layer instanceof L.Circle ? 'circle' : layer instanceof L.Polygon ? 'polygon' : 'point',
+          latlngs: layer.getLatLng(),
+          popupContent: layer.getPopup() ? layer.getPopup().getContent() : null,
+        };
+
+        data.layers.push(layerData);
+      });
+
+      localforage.setItem('mapData', data)
+        .then(() => console.log('Data saved locally'))
+        .catch(error => console.error('Error saving data locally:', error));
+    }
+
+    function loadFromLocalDatabase() {
+      localforage.getItem('mapData')
+        .then(mapData => {
+          if (mapData && mapData.layers) {
+            mapData.layers.forEach(layerData => {
+              let layer;
+              if (layerData.type === 'circle') {
+                layer = L.circle(layerData.latlngs);
+              } else if (layerData.type === 'polygon') {
+                layer = L.polygon(layerData.latlngs);
+              } else if (layerData.type === 'point') {
+                layer = L.marker(layerData.latlngs);
+                if (layerData.popupContent) {
+                  addEditLinkToPopup(layer, layerData.popupContent);
+                  layer.bindPopup(layerData.popupContent);
+                }
+              }
+              drawnItems.addLayer(layer);
+            });
+
+            // Move view to the center of new points
+            if (mapData.layers.length > 0) {
+              const lats = mapData.layers.map(layer => layer.latlngs.lat);
+              const lngs = mapData.layers.map(layer => layer.latlngs.lng);
+              const centerLat = lats.reduce((a, b) => a + b, 0) / lats.length;
+              const centerLng = lngs.reduce((a, b) => a + b, 0) / lngs.length;
+              map.setView([centerLat, centerLng], 12);
+            }
+          }
+        })
+        .catch(error => console.error('Error loading data locally:', error));
+    }
+
+    function exportDataToZip() {
+      localforage.getItem('mapData')
+        .then(mapData => {
+          if (!mapData) {
+            alert('No data to export');
+            return;
+          }
+
+          const zip = new JSZip();
+          zip.file('mapData.json', JSON.stringify(mapData));
+
+          zip.generateAsync({ type: 'blob' })
+            .then(blob => {
+              saveAs(blob, 'mapData.zip');
+            });
+        })
+        .catch(error => console.error('Error exporting data:', error));
+    }
+
+    document.getElementById('import-zip').addEventListener('change', function (event) {
+      const file = event.target.files[0];
+      if (file) {
+        const zip = new JSZip();
+        zip.loadAsync(file)
+          .then(zip => zip.file('mapData.json').async('string'))
+          .then(jsonData => {
+            const mapData = JSON.parse(jsonData);
+            return localforage.setItem('mapData', mapData);
+          })
+          .then(() => {
+            loadFromLocalDatabase();
+            alert('Data imported successfully');
+          })
+          .catch(error => console.error('Error importing data:', error));
+      }
+    });
+
+    function toggleSettings(containerId) {
+      const container = document.getElementById(containerId);
+      container.style.display = container.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function saveSupabaseSettings() {
+      const supabaseUrl = document.getElementById('supabase-url').value;
+      const supabaseKey = document.getElementById('supabase-key').value;
+
+      localforage.setItem('supabaseSettings', { supabaseUrl, supabaseKey })
+        .then(() => alert('Supabase settings saved successfully'))
+        .catch(error => console.error('Error saving Supabase settings:', error));
+    }
+
+    function archiveCollection() {
+      const collectionName = document.getElementById('collection-name').value;
+      if (!collectionName) {
+        alert('Please enter a collection name.');
+        return;
+      }
+
+      localforage.getItem('mapData')
+        .then(mapData => {
+          if (mapData) {
+            return localforage.setItem(collectionName, mapData);
+          } else {
+            alert('No data to archive.');
+          }
+        })
+        .then(() => {
+          alert('Collection archived successfully.');
+          updateCollectionList();
+        })
+        .catch(error => console.error('Error archiving collection:', error));
+    }
+
+    function loadCollection() {
+      const collectionName = document.getElementById('load-collection').value;
+      if (!collectionName) {
+        alert('Please select a collection.');
+        return;
+      }
+
+      localforage.getItem(collectionName)
+        .then(mapData => {
+          if (mapData) {
+            drawnItems.clearLayers();
+            mapData.layers.forEach(layerData => {
+              let layer;
+              if (layerData.type === 'circle') {
+                layer = L.circle(layerData.latlngs);
+              } else if (layerData.type === 'polygon') {
+                layer = L.polygon(layerData.latlngs);
+              } else if (layerData.type === 'point') {
+                layer = L.marker(layerData.latlngs);
+                if (layerData.popupContent) {
+                  addEditLinkToPopup(layer, layerData.popupContent);
+                  layer.bindPopup(layerData.popupContent);
+                }
+              }
+              drawnItems.addLayer(layer);
+            });
+            alert('Collection loaded successfully.');
+          } else {
+            alert('No data found for this collection.');
+          }
+        })
+        .catch(error => console.error('Error loading collection:', error));
+    }
+
+    function clearMap() {
+      drawnItems.clearLayers();
+      localforage.removeItem('mapData')
+        .then(() => {
+          alert('Map cleared and local data removed.');
+        })
+        .catch(error => console.error('Error clearing map data:', error));
+    }
+
+    function saveMapView() {
+      const mapData = {
+        center: map.getCenter(),
+        zoom: map.getZoom()
+      };
+      localforage.setItem('mapView', mapData)
+        .then(() => {
+          alert('Map view saved.');
+        })
+        .catch(error => console.error('Error saving map view:', error));
+    }
+
+    function loadMapView() {
+      localforage.getItem('mapView')
+        .then(mapView => {
+          if (mapView) {
+            map.setView(mapView.center, mapView.zoom);
+          }
+        })
+        .catch(error => console.error('Error loading map view:', error));
+    }
+
+    function updateCollectionList() {
+      const loadCollectionSelect = document.getElementById('load-collection');
+      loadCollectionSelect.innerHTML = '';
+
+      localforage.keys()
+        .then(keys => {
+          keys.forEach(key => {
+            if (key !== 'mapData' && key !== 'supabaseSettings' && key !== 'mapView') {
+              const option = document.createElement('option');
+              option.value = key;
+              option.text = key;
+              loadCollectionSelect.add(option);
+            }
+          });
+        })
+        .catch(error => console.error('Error updating collection list:', error));
+    }
+
+    function closeInputContainer() {
+      const inputContainer = document.getElementById('input-container');
+      inputContainer.classList.add('fade-out');
+      setTimeout(() => {
+        inputContainer.style.display = 'none';
+      }, 500); // Match the duration of the CSS transition
+    }
+
+    // Username handling
+    const usernames = ['Explorer123', 'MapMaster', 'GeoGuru', 'TrailBlazer', 'Navigator'];
+    function getRandomUsername() {
+      return usernames[Math.floor(Math.random() * usernames.length)];
+    }
+
+    function saveUsername() {
+      const username = document.getElementById('username').value;
+      if (username) {
+        localforage.setItem('username', username)
+          .then(() => alert('Username saved successfully'))
+          .catch(error => console.error('Error saving username:', error));
