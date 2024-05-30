@@ -25,6 +25,7 @@
       position: relative;
     }
 
+    
     #map-container {
       position: relative;
       height: 600px;
@@ -45,7 +46,7 @@
       border-radius: 10px;
       z-index: 1000;
     }
-
+    
     #input-container {
       position: absolute;
       top: 70px;
@@ -56,7 +57,14 @@
       border-radius: 10px;
       z-index: 1000;
       display: none;
+      opacity: 1;
+      transition: opacity 0.5s ease-in-out;
     }
+    
+    #input-container.fade-out {
+      opacity: 0;
+    }
+
 
     #close-btn {
       position: absolute;
