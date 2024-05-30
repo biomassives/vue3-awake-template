@@ -196,7 +196,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 <script>
-
 const map = L.map('map').setView([-1.046560, 37.059891], 12);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -229,6 +228,7 @@ map.on('draw:created', function (e) {
   // Show the input form
   const inputContainer = document.getElementById('input-container');
   inputContainer.style.display = 'block';
+  inputContainer.classList.remove('fade-out');
 
   // Reset form fields
   document.getElementById('userInput').value = '';
@@ -529,6 +529,14 @@ function updateCollectionList() {
       });
     })
     .catch(error => console.error('Error updating collection list:', error));
+}
+
+function closeInputContainer() {
+  const inputContainer = document.getElementById('input-container');
+  inputContainer.classList.add('fade-out');
+  setTimeout(() => {
+    inputContainer.style.display = 'none';
+  }, 500); // Match the duration of the CSS transition
 }
 
 // Load data from local storage on page load
