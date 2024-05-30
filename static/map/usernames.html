@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Username Generator</title>
+  <style>
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgb(0,0,0);
+      background-color: rgba(0,0,0,0.4);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background-color: #fefefe;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 400px;
+      border-radius: 10px;
+    }
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div id="usernameModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <div id="username-container">
+      <label for="username">Username</label>
+      <input type="text" id="username" readonly>
+      <button onclick="generateAndSetUsername()">Generate Username</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function generateUsername() {
+    const adjectives = ['Green', 'Eco', 'Sustainable', 'Clean', 'Bright', 'Organic', 'Fresh', 'Natural', 'Pure', 'Vibrant'];
+    const nouns = ['Forest', 'Meadow', 'River', 'Garden', 'Oasis', 'Grove', 'Trail', 'Haven', 'Field', 'Sanctuary'];
+    const animals = ['Hawk', 'Deer', 'Bear', 'Fox', 'Eagle', 'Owl', 'Wolf', 'Lynx', 'Falcon', 'Butterfly'];
+    const activities = ['Watcher', 'Guardian', 'Protector', 'Explorer', 'Conserver', 'Champion', 'Keeper', 'Defender', 'Preserver', 'Steward'];
+
+    const getRandomElement = arr => arr[Math.floor(Math.random() * arr.length)];
+
+    const adjective = getRandomElement(adjectives);
+    const noun = getRandomElement(nouns);
+    const animal = getRandomElement(animals);
+    const activity = getRandomElement(activities);
+
+    return `${adjective}${noun}${animal}${activity}`;
+  }
+
+  function generateAndSetUsername() {
+    const existingUsername = localStorage.getItem('username');
+    if (existingUsername) {
+      const generateNew = confirm('A username already exists. Do you want to generate a new one?');
+      if (!generateNew) {
+        document.getElementById('username').value = existingUsername;
+        return;
+      }
+    }
+    
+    const username = generateUsername();
+    document.getElementById('username').value = username;
+    localStorage.setItem('username', username);
+  }
+
+  function openModal() {
+    const modal = document.getElementById('usernameModal');
+    const existingUsername = localStorage.getItem('username');
+    if (existingUsername) {
+      document.getElementById('username').value = existingUsername;
+    } else {
+      generateAndSetUsername();
+    }
+    modal.style.display = 'flex';
+  }
+
+  function closeModal() {
+    const modal = document.getElementById('usernameModal');
+    modal.style.display = 'none';
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    openModal();
+  });
+</script>
+
+</body>
+</html>
