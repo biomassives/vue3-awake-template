@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eco Ops Action Interface</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+    }
+
+    .top-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: #0044cc;
+      width: 100%;
+      padding: 20px;
+    }
+
+    .top-section img {
+      margin: 5px;
+    }
+
+    .middle-section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #4CAF50;
+      width: 100%;
+      padding: 40px;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .bottom-section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #333;
+      width: 100%;
+      padding: 40px;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    @media only screen and (max-width: 600px) {
+      .middle-section, .bottom-section {
+        font-size: 18px;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="top-section">
+    <img src="https://example.com/image1.png" alt="Logo 1" width="150">
+    <img src="https://example.com/image2.png" alt="Logo 2" width="150">
+    <img src="https://example.com/image3.png" alt="Logo 3" width="150">
+    <img src="https://example.com/image4.png" alt="Logo 4" width="150">
+  </div>
+  <div class="middle-section" onclick="logActivities()">
+    Log activities
+  </div>
+  <div class="bottom-section" onclick="downloadReports()">
+    Download reports
+  </div>
+</div>
+
+<script>
+  function logActivities() {
+    alert('Log activities button clicked.');
+    // Add your functionality here
+  }
+
+  function downloadReports() {
+    alert('Download reports button clicked.');
+    // Add your functionality here
+  }
+</script>
+
+</body>
+</html>
