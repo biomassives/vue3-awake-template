@@ -8,6 +8,8 @@
         >
           <slot name="sidebar"></slot>
         </aside>
+
+        <div><iframe src="https://exotopia.org" style="width:90%;height:40%;"></iframe></div>
         <div
           :class="{
             column: true,
