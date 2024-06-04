@@ -8,7 +8,7 @@ category:
   - Decentralized approach
 author: G Willson
 date: 2023-11-02T04:27:56.800Z
-featureImage: /uploads/scdhub.png
+featureImage: /scdhub.png
 ---
 ## Eco Ops System Structure - March 16 2024
 
