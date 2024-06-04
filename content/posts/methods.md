@@ -10,7 +10,15 @@ author: G Willson
 date: 2023-11-02T04:27:56.800Z
 featureImage: /scdhub.png
 ---
-## Eco Ops System Structure - March 16 2024
+## Eco Ops System Updpated - June 4 2024
+
+- improved map system, tested integration with ipfs via nft.storage
+    - https://ecocity.com/maps/thikagroup
+    - https://ecocity.com/multi
+    - https://ecocity.com/up
+ 
+- worldbridger.one using africa host pro for staging with wordpress, but changes to automated system are imminent
+- function of worldbridger one to act as aftermarket and community support for nft via ecocity and exotopia communities
 
 - project workflow from volunteer registration, task selection, project completion and rewards. 
 
