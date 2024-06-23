@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Ops Volunteer Rewards System Presentation - Summer Solstice June 2024 </title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; line-height: 1.6; }
+        .slide { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; box-sizing: border-box; }
+        h1 { font-size: 2.5em; margin-bottom: 20px; }
+        h2 { font-size: 2em; margin-bottom: 15px; }
+        ul, ol { text-align: left; margin-bottom: 20px; }
+        .nav { position: fixed; bottom: 20px; right: 20px; }
+        button { margin: 0 10px; padding: 10px 20px; font-size: 1em; }
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; text-align: left; }
+        .grid-item { background-color: #f0f0f0; padding: 15px; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <div id="presentation"></div>
+    <div class="nav">
+        <button id="prevBtn">Previous</button>
+        <span id="slideCounter"></span>
+        <button id="nextBtn">Next</button>
+    </div>
+
+    <script>
+        const slides = [
+            {
+                title: "Volunteer Rewards System Integration",
+                content: "Empowering Sustainable Development in Kenya",
+                type: "title"
+            },
+            {
+                title: "Project Overview",
+                content: [
+                    "Integration of Eco Ops APP with Exotopia NFT Metaverse",
+                    "Incorporation of Sustainability Design Model NFTs",
+                    "Addressing Climate Change and Health Issues in Kenya",
+                    "Collaboration with SCD Hub & Thika Technical Eco Group"
+                ],
+                type: "list"
+            },
+            {
+                title: "Key Components",
+                content: [
+                    { title: "Eco Ops APP", description: "Volunteer rewards and activity tracking" },
+                    { title: "Exotopia NFT Metaverse", description: "Virtual real estate for volunteers" },
+                    { title: "Sustainability Design Model NFTs", description: "From Ecocity website" },
+                    { title: "Environmental Stakeholders Network", description: "Collaboration in Kenya" }
+                ],
+                type: "grid"
+            },
+            {
+                title: "Focus Areas",
+                content: [
+                    { title: "Water Management", details: "Drainage, flood prevention, contamination awareness" },
+                    { title: "Waste Management", details: "Mapping trash burn locations, proper disposal education" },
+                    { title: "Biodiversity Conservation", details: "Reporting activities, integrating biodiversity credits" },
+                    { title: "Climate Change and Health", details: "Education on climate-health link, promoting eco-health activities" }
+                ],
+                type: "grid"
+            },
+            {
+                title: "Eco Ops APP Features",
+                content: [
+                    "Check-in Log: Track volunteer activities",
+                    "Mapping: Visualize environmental issues",
+                    "Transparent Reporting: Generate reports from tagged media",
+                    "Integration with Exotopia: Earn virtual real estate and biodiversity credits"
+                ],
+                type: "list"
+            },
+            {
+                title: "Technology Stack",
+                content: [
+                    { name: "Blockchain", description: "For NFT minting and rewards distribution" },
+                    { name: "Leaflet & Open Street Map", description: "For mapping functionality" },
+                    { name: "nft.storage", description: "Permanent data storage for project milestones" },
+                    { name: "Vanilla JavaScript", description: "For frontend development" }
+                ],
+                type: "grid"
+            },
+            {
+                title: "Community Engagement",
+                content: [
+                    "Collaborate with local eco clubs",
+                    "Public awareness campaigns",
+                    "Educational workshops and training sessions",
+                    "Engage local authorities with data-driven insights"
+                ],
+                type: "list"
+            },
+            {
+                title: "Project Roadmap",
+                content: [
+                    { phase: "Planning & Research", tasks: "Define objectives, stakeholder mapping" },
+                    { phase: "Development", tasks: "Build Eco Ops APP, integrate with Exotopia" },
+                    { phase: "Testing", tasks: "User acceptance testing, performance optimization" },
+                    { phase: "Launch", tasks: "Phased rollout, monitor engagement" },
+                    { phase: "Post-Launch", tasks: "Gather feedback, plan future iterations" }
+                ],
+                type: "timeline"
+            },
+            {
+                title: "Get Involved!",
+                content: [
+                    "Join as a volunteer",
+                    "Participate in eco club activities",
+                    "Spread awareness about the project",
+                    "Provide feedback for continuous improvement"
+                ],
+                type: "list"
+            },
+            {
+                title: "Thank You!",
+                content: "Together, we can make a difference in Kenya's sustainable future.",
+                type: "title"
+            }
+        ];
+
+        let currentSlide = 0;
+
+        function renderSlide(slide) {
+            const slideElement = document.createElement('div');
+            slideElement.className = 'slide';
+
+            switch (slide.type) {
+                case 'title':
+                    slideElement.innerHTML = `
+                        <h1>${slide.title}</h1>
+                        <p>${slide.content}</p>
+                    `;
+                    break;
+                case 'list':
+                    slideElement.innerHTML = `
+                        <h2>${slide.title}</h2>
+                        <ul>${slide.content.map(item => `<li>${item}</li>`).join('')}</ul>
+                    `;
+                    break;
+                case 'grid':
+                    slideElement.innerHTML = `
+                        <h2>${slide.title}</h2>
+                        <div class="grid">
+                            ${slide.content.map(item => `
+                                <div class="grid-item">
+                                    <h3>${item.title || item.name}</h3>
+                                    <p>${item.description || item.details}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                    break;
+                case 'timeline':
+                    slideElement.innerHTML = `
+                        <h2>${slide.title}</h2>
+                        <ol>${slide.content.map(item => `
+                            <li><strong>${item.phase}:</strong> ${item.tasks}</li>
+                        `).join('')}</ol>
+                    `;
+                    break;
+            }
+
+            return slideElement;
+        }
+
+        function showSlide(index) {
+            const presentationElement = document.getElementById('presentation');
+            presentationElement.innerHTML = '';
+            presentationElement.appendChild(renderSlide(slides[index]));
+            
+            document.getElementById('slideCounter').textContent = `Slide ${index + 1} of ${slides.length}`;
+            document.getElementById('prevBtn').disabled = index === 0;
+            document.getElementById('nextBtn').disabled = index === slides.length - 1;
+        }
+
+        function nextSlide() {
+            if (currentSlide < slides.length - 1) {
+                currentSlide++;
+                showSlide(currentSlide);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                showSlide(currentSlide);
+            }
+        }
+
+        document.getElementById('nextBtn').addEventListener('click', nextSlide);
+        document.getElementById('prevBtn').addEventListener('click', prevSlide);
+
+        // Initialize the first slide
+        showSlide(currentSlide);
+    </script>
+</body>
+</html>
