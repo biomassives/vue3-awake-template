@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eco Ops Program: Enhanced Flowcharts</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>
+    const tabs = document.getElementById('tabs');
+    const tabButtons = tabs.querySelectorAll('ul li a');
+
+    tabButtons.forEach(button => {
+      button.addEventListener('click', (event) => {
+        event.preventDefault(); // Prevent default link behavior
+
+        const targetContent = document.querySelector(event.target.getAttribute('href'));
+        const activeTab = tabs.querySelector('.active');
+
+        activeTab.classList.remove('active');
+        targetContent.classList.add('active');
+      });
+    });
+
+    mermaid.initialize({ startOnLoad: true });
+  </script>
+</head>
+<body>
+  <div id="tabs">
+    <ul>
+      <li><a href="#tabs-1">System Overview</a></li>
+      <li><a href="#tabs-2">Volunteer Workflow</a></li>
+      <li><a href="#tabs-3">Project Review & Rewards</a></li>
+      <li><a href="#tabs-4">Community Engagement</a></li>
+      <li><a href="#tabs-5">Environmental Impact</a></li>
+    </ul>
+    <div id="tabs-1">
+      <h2>System Overview</h2>
+      <p>This diagram provides a high-level view of the Eco Ops program's core functionalities...</p>
+      <div class="mermaid">
+        graph LR
+          subgraph WorldbridgerOne [Worldbridger One Platform]
+            A[Project Ideation] --> B{Impact & Feasibility Assessment}
+            B --> |Approved| C{Project Development}
+            B --> |Not Approved| A
+            C --> |Create Project & Mint NFTs| D{NFT Marketplace}
+            D --> |Project NFTs Listed| E[Community Engagement & Fundraising]
+            E --> |Funds Raised| F{Project Implementation & Monitoring}
+            F --> |Data Collection & Reporting| G{Impact Analysis & Community Feedback}
+            G --> |Project Improvement| C
+            G --> |Success Story & Advocacy| H[Policy & Action]
+          end
+        
+          subgraph EcoOpsApp [Eco Ops App]
+            I[Participants & Creatives] --> |Register/Log In| J{Eco Ops System}
+            J --> |Discover & Support Projects| E
+            J --> |Contribute Skills & Expertise| F
+            J --> |Track Project Impact| G
+            J --> |Earn Rewards & Recognition| K{Rewards System}
+            K --> |Worldbridger One Integration| D
+            K --> |Community Building & Collaboration| E
+          end
+        
+          NFT Resellers --> D[Buy & Sell Project NFTs]
+          Artists & Promoters --> A
+        
+          E --> |NFT Reseller Activity| D
+          E --> |Community Events & Outreach| I
+        
+          H --> |Inform Policymakers & NGOs|
+          H --> |Advocate for Climate Action| I
+        
+          style WorldbridgerOne fill:#99CCFF,stroke:#333,stroke-width:2px
+          style EcoOpsApp fill:#FFFFCC,stroke:#333,stroke-width:2px
+
+      </div>
+    </div>
+    <div id="tabs-2">
+      <h2>Volunteer Workflow</h2>
+      <p>This diagram outlines the steps volunteers follow within the Eco Ops program...</p>
+      <div class="mermaid">
+graph LR
+  subgraph WorldbridgerOne2 Ecosystem [Worldbridger One Ecosystem]
+    ecoArtists[Eco-Artists] -->|Create & Mint NFTs| worldbridgerOne[Worldbridger One]
+    worldbridgerOne -->|Verify & Issue NFTs| ecoNFTMarket[Eco NFT Marketplace]
+    promoters[Promoters] -->|Invest & Promote NFTs| ecoNFTMarket
+    participants[Participants] -->|Contribute & Earn Rewards| ecoOps[Eco Ops App]
+    creatives[Creatives] -->|Offer Services & Collaborate| ecoOps
+    worldbridgerOne -->|Facilitate Transactions & Manage Data| ecoTreasury[Eco Treasury]
+    ecoTreasury -->|Fund Environmental Projects| ecoProjects[Eco Projects]
+    ecoTreasury -->|Distribute Rewards| participants, ecoArtists, creatives
+  end
+
+  ecoOps -->|Track Impact & Manage Projects| ecoProjects
+  ecoNFTMarket -->|Secondary Market Sales| nftResellers[NFT Resellers]
+  nftResellers -->|Contribute to Ecosystem| worldbridgerOne
+
+  ecoProjects -->|Improve Community Climate Resilience| community
+  community -->|Reduced Carbon Footprint & Increased Sustainability|
+
+  classDef verifiedNFT stroke:#0077cc, fill:#def;
+  classDef projectFunded stroke:#43a047, fill:#dafef2;
+
+  ecoNFTMarket.verifiedNFT
+  ecoProjects.projectFunded
+
+      </div>
+    </div>
+    <div id="tabs-3">
+      <h2>Project Review & Rewards</h2>
+      <p>This diagram explains the project review and reward system within Eco Ops...</p>
+      <div class="mermaid">
+        graph LR
+          ... (Continue your Mermaid code for Project Review & Rewards) ...
+      </div>
+    </div>
+    <div id="tabs-4">
+      <h2>Community Engagement</h2>
+      <p>This diagram illustrates how the community engages with Eco Ops projects...</p>
+      <div class="mermaid">
+        graph LR
+          ... (Continue your Mermaid code for Community Engagement) ...
+      </div>
+    </div>
+    <div id="tabs-5">
+      <h2>Environmental Impact</h2>
+      <p>This diagram highlights the environmental impact assessment process in Eco Ops...</p>
+      <div class="mermaid">
+        graph LR
+          ... (Continue your Mermaid code for Environmental Impact) ...
+      </div>
+    </div>
+  </div>
+</body>
+</html>
