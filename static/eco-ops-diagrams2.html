@@ -41,6 +41,35 @@ flowchart TD
 
     class L bigBox;
     style L fill:#f9f,stroke:#333,stroke-width:4px
+
+
+graph LR
+  participants --> contributeSkills[Contribute Skills & Expertise] --> projects
+  creatives --> contributeSkills[Contribute Skills & Expertise] --> projects
+  projectOwners[Project Owners/Initiators] --> proposeProject[Propose Project] --> projects
+  projects --> |Create & Mint NFTs| worldbridgerOne
+  worldbridgerOne --> |List NFTs on Marketplace| nftMarketplace
+  participants --> |Buy NFTs (Fiat Currency)| nftMarketplace
+  creatives --> |Buy NFTs (Fiat Currency)| nftMarketplace
+  nftMarketplace --> |Transaction Fee| ecoTreasury
+  nftMarketplace --> |Funds Raised| projectWallet
+  projectOwners[Project Owners/Initiators] --> |Direct Donations (Fiat Currency)| ecoOpsApp
+  ecoOpsApp --> |Donations to Project Wallet| projectWallet
+  ecoTreasury --> |Reward Distribution (Tokens)| participants, creatives
+  projectWallet --> |Project Implementation & Monitoring| projectDelivery
+  projectDelivery --> |Data & Reports| ecoOpsApp
+
+  style participants fill:#FFFFCC,stroke:#333,stroke-width:2px
+  style creatives fill:#CCEEFF,stroke:#333,stroke-width:2px
+  style projectOwners fill:#FFCC99,stroke:#333,stroke-width:2px
+  style worldbridgerOne fill:#99CCFF,stroke:#333,stroke-width:2px
+  style nftMarketplace fill:#FF9999,stroke:#333,stroke-width:2px
+  style ecoTreasury fill:#CCFFFF,stroke:#333,stroke-width:2px
+  style ecoOpsApp fill:#B3CCFF,stroke:#333,stroke-width:2px
+  style projectDelivery fill:#EEDD82,stroke:#333,stroke-width:2px
+
+
+      
   </div>
 </body>
 </html>
