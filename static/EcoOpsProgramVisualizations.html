@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eco Ops Program: Visualizations</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({ startOnLoad: true });
+  </script>
+  <style>
+    .navigation {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+    .navigation a {
+      text-decoration: none;
+      padding: 10px 20px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    .navigation a.active {
+      background-color: #eee;
+    }
+    .mermaid-container {
+      display: inline-block;
+      margin: 10px;
+      padding: 10px;
+      border: 1px solid #ddd;
+    }
+    .mermaid-container a {
+      display: block;
+      margin-bottom: 10px;
+      text-decoration: none;
+      color: #333;
+    }
+    .mermaid-container a:hover {
+      text-decoration: underline;
+    }
+    .mermaid-part {
+      display: inline-block;
+      vertical-align: top;
+      margin: 0 10px 10px 0;
+      padding: 5px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      text-align: center;
+      width: 150px; /* Adjust width as needed */
+      cursor: pointer;
+    }
+    .mermaid-part:hover {
+      background-color: #eee;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Eco Ops Program: Visualizations</h1>
+
+  <h2>Resource Flow (Click element for detailed view)</h2>
+
+  <div class="mermaid-container">
+    <div class="mermaid-part">
+      <a href="#knowledge-sharing">Knowledge Sharing</a>
+      <p>Participants and creatives contribute skills and expertise to projects.</p>
+    </div>
+    <div class="mermaid-part">
+      <a href="#financial-cycle">Financial Cycle</a>
+      <p>NFTs are created and sold, generating funds for projects.</p>
+    </div>
+    <div class="mermaid-part">
+      <a href="#project-implementation">Project Implementation</a>
+      <p>Funds are used to implement and monitor projects.</p>
+    </div>
+    <div class="mermaid-part">
+      <a href="#knowledge-feedback">Knowledge Feedback</a>
+      <p>Data and feedback from projects inform future actions.</p>
+    </div>
+
+
+  <div class="navigation">
+    <a href="#project-workflow" class="active">Community-Driven Workflow</a>
+    <a href="#resource-flow">Collaborative Resource Flow</a>
+    <a href="#project-impact">Project Impact Distribution (Placeholder)</a>
+  </div>
+
+  <div class="container">
+
+    <h1>Eco Ops Program: Visualizations</h1>
+
+    <h2>Community-Driven Workflow</h2>
+    <div class="mermaid-container">
+      <div class="mermaid-part">
+        <a href="#project-workflow">Community-Driven Workflow</a>
+        <p>See how volunteers, reviewers, and the community interact within the program.</p>
+      </div>
+   
+    </div>
+
+    <h2>Collaborative Resource Flow</h2>
+    <div class="mermaid-container">
+      <div class="mermaid-part">
+        <a href="#resource-flow">Collaborative Resource Flow</a>
+        <p>
+          This section illustrates how skills, expertise, and funds flow within the Eco Ops program, fostering a collaborative ecosystem.
+        </p>
+      </div>
+      <graph LR
+        subgraph knowledgeSharing id=knowledge-sharing-updated
+          participants --> contributeSkills[Contribute Skills & Expertise] --> projects
+          creatives --> contributeSkills[Contribute Skills & Expertise] --> projects
+          projectOwners[Project Owners/Initiators] --> proposeProject[Propose Project] --> projects
+        end
+        subgraph financialCycle id=financial-cycle
+          projects --> |Create & Mint NFTs| worldbridgerOne
+          worldbridgerOne --> |List NFTs on Marketplace| nftMarketplace
+          participants --> |Buy NFTs (Fiat Currency)| nftMarketplace
+          creatives --> |Buy NFTs (Fiat Currency)| nftMarketplace
+          nftMarketplace --> |Transaction Fee| ecoTreasury
+          nftMarketplace --> |Funds Raised| projectWallet
+          projectOwners[Project Owners/Initiators] --> |Direct Donations| ecoOpsApp
+          ecoOpsApp --> |Donations to Project Wallet| projectWallet
+        end
+        subgraph projectImplementation id=project-implementation
+          projectWallet --> |Project Implementation & Monitoring| projectDelivery
+          projectDelivery --> |Data & Reports| ecoOpsApp
+        end
+        subgraph knowledgeFeedback id=knowledge-feedback
+          projectDelivery --> |Community Engagement & Training| participants, creatives
+          participants --> |Feedback & Suggestions| ecoOpsApp
+          creatives --> |Feedback & Suggestions| ecoOpsApp
+        end
+        ecoTreasury --> |Reward Distribution (Tokens)| participants, creatives
+        projectWallet --> (Funds) projectDelivery
+
+        participants --> Knowledge Sharing
+        projectDelivery --> Knowledge Feedback
+
+        style participants fill:#FFFFCC,stroke:#333,stroke-width:2px
+        style creatives fill:#CCEEFF,stroke:#333,stroke-width:2px
+        style projectOwners fill:#FFCC99,stroke:#333,stroke-width:2px
+        style worldbridgerOne fill:#99CCFF,stroke:#333,stroke-width:2px
+        style nftMarketplace fill:#FF9999,stroke:#333,stroke-width:2px
+        style ecoTreasury fill:#CCFFFF,stroke:#333,stroke-width:2px
+        style ecoOpsApp fill:#B3CCFF,stroke:#333,stroke-width:2px
+        style projectDelivery fill:#EEDD82,stroke:#333,stroke-width:2px
+      </graph>
+    </div>
+
+    <h2>Project Impact Distribution (Placeholder)</h2>
+    <div class="mermaid-container">
+      <div class="mermaid-part">
+        <h2>Project Impact Distribution (Placeholder)</h2>
+        <p>This section will display a chart illustrating project impact distribution across different environmental areas (e.g., renewable energy, sustainable agriculture, waste reduction).</p>
+      </div>
+    </div>
+
+    <h2>DAO-Driven Project Implementation</h2>
+    <div class="mermaid-container">
+      <div class="mermaid-part">
+        <a href="#project-implementation">DAO-Driven Project Implementation</a>
+        <p>
+          Funds are used to implement and monitor projects through a collaborative decision-making process. 
+          The EcoCommunity DAO facilitates this process by:
+          <ul>
+            <li>Enabling quadratic voting for project selection and resource allocation.</li>
+            <li>Issuing code bounties via a Git service to incentivize developers to address technical challenges across the ecosystem.</li>
+          </ul>
+        </p>
+      </div>
+      </div>
+
+  </div>
+
+</body>
+</html>
+
+
+        
