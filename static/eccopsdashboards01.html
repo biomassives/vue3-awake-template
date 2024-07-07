@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eco Ops Program Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.9.0/localforage.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      margin: 0;
+      padding: 0;
+    }
+    .header {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 0;
+      text-align: center;
+    }
+    .header h1 {
+      margin: 0;
+    }
+    .nav-bar {
+      display: flex;
+      justify-content: center;
+      background-color: #333;
+      padding: 10px 0;
+      position: relative;
+    }
+    .nav-bar a {
+      color: white;
+      padding: 10px 20px;
+      text-decoration: none;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      cursor: pointer;
+    }
+    .nav-bar a:hover {
+      background-color: #ddd;
+      color: black;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      margin: 0 auto;
+      max-width: 1200px;
+    }
+    .overview {
+      background-color: white;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+    }
+    .overview h2 {
+      margin-top: 0;
+    }
+    .tabs {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+      width: 100%;
+    }
+    .tabs button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 5px;
+    }
+    .tabs button.active {
+      background-color: #45a049;
+    }
+    .tabs button:hover {
+      background-color: #45a049;
+    }
+    .tab-content {
+      display: none;
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .text-writeup, .fun-interlude {
+      margin-top: 20px;
+    }
+    .fun-interlude button {
+      background-color: #ff0066;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      margin: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+    .fun-interlude button:hover {
+      background-color: #ff3399;
+    }
+    /* Draggable and Resizable Window Styles */
+    .window {
+      display: none;
+      position: absolute;
+      background-color: #fff;
+      border: 2px solid #00ffff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+      padding: 20px;
+      z-index: 10;
+      resize: both;
+      overflow: auto;
+      top: 100px;
+      left: 100px;
+    }
+    .window-header {
+      cursor: move;
+      background-color: #00ffff;
+      padding: 10px;
+      color: #000;
+      border-radius: 8px 8px 0 0;
+      text-align: center;
+    }
+    .close-btn {
+      float: right;
+      cursor: pointer;
+      font-size: 20px;
+      color: #000;
+    }
+    .save-zone {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 150px;
+      height: 150px;
+      border: 2px dashed #00ffff;
+      border-radius: 10px;
+      text-align: center;
+      padding: 20px;
+      background-color: rgba(255, 255, 255, 0.9);
+    }
+    .save-zone p {
+      margin: 0;
+      font-size: 14px;
+      color: #000;
+    }
+    .action-icon {
+      display: block;
+      margin: 0 auto 10px;
+      width: 50px;
+      height: 50px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Eco Ops Program Dashboard</h1>
+  </div>
+
+  <div class="nav-bar">
+    <a class="open-window" data-window="overview-window">Overview</a>
+    <a class="open-window" data-window="sections-window">Sections</a>
+    <a class="open-window" data-window="actions-window">Actions</a>
+  </div>
+
+  <div class="container">
+    <div id="overview" class="overview">
+      <h2>Welcome to the Eco Ops Program</h2>
+      <p>The Eco Ops Program is dedicated to fostering collaborative and community-driven projects that address pressing environmental issues. Through a combination of knowledge sharing, financial support via NFTs, and community feedback, the program ensures that projects are well-funded, expertly managed, and continuously improved upon.</p>
+    </div>
+
+    <div class="tabs">
+      <button class="active">Community-Driven Workflow</button>
+      <button>Collaborative Resource Flow</button>
+      <button>Project Impact Distribution</button>
+      <button>DAO-Driven Project Implementation</button>
+    </div>
+
+    <div class="tab-content active">
+      <h2>Community-Driven Workflow</h2>
+      <p>See how volunteers, reviewers, and the community interact within the program.</p>
+      <div class="mermaid">
+        graph TD
+        subgraph knowledgeSharing
+          participants --> contributeSkills[Contribute Skills & Expertise] --> projects
+          creatives --> contributeSkills[Contribute Skills & Expertise] --> projects
+          projectOwners[Project Owners/Initiators] --> proposeProject[Propose Project] --> projects
+        end
+      </div>
+    </div>
+
+    <div class="tab-content">
+      <h2>Collaborative Resource Flow</h2>
+      <p>This section illustrates how skills, expertise, and funds flow within the Eco Ops program, fostering a collaborative ecosystem.</p>
+      <div class="mermaid">
+        graph LR
+        subgraph knowledgeSharing id=knowledge-sharing-updated
+          participants --> contributeSkills[Contribute Skills & Expertise] --> projects
+          creatives --> contributeSkills[Contribute Skills & Expertise] --> projects
+          projectOwners[Project Owners/Initiators] --> proposeProject[Propose Project] --> projects
+        end
+        subgraph financialCycle id=financial-cycle
+          projects --> |Create & Mint NFTs| worldbridgerOne
+          worldbridgerOne --> |List NFTs on Marketplace| nftMarketplace
+          participants --> |Buy NFTs (Fiat Currency)| nftMarketplace
+          creatives --> |Buy NFTs (Fiat Currency)| nftMarketplace
+          nftMarketplace --> |Transaction Fee| ecoTreasury
+          nftMarketplace --> |Funds Raised| projectWallet
+          projectOwners[Project Owners/Initiators] --> |Direct Donations| ecoOpsApp
+          ecoOpsApp --> |Donations to Project Wallet| projectWallet
+        end
+        subgraph projectImplementation id=project-implementation
+          projectWallet --> |Project Implementation & Monitoring| projectDelivery
+          projectDelivery --> |Data & Reports| ecoOpsApp
+        end
+        subgraph knowledgeFeedback id=knowledge-feedback
+          projectDelivery --> |Community Engagement & Training| participants, creatives
+          participants --> |Feedback & Suggestions| ecoOpsApp
+          creatives --> |Feedback & Suggestions| ecoOpsApp
+        end
+        ecoTreasury --> |Reward Distribution (Tokens)| participants, creatives
+        projectWallet --> (Funds) projectDelivery
+
+        participants --> Knowledge Sharing
+        projectDelivery --> Knowledge Feedback
+
+        style participants fill:#FFFFCC,stroke:#333,stroke-width:2px
+        style creatives fill:#CCEEFF,stroke:#333,stroke-width:2px
+        style projectOwners fill:#FFCC99,stroke:#333,stroke-width:2px
+        style worldbridgerOne fill:#99CCFF,stroke:#333,stroke-width:2px
+        style nftMarketplace fill:#FF9999,stroke:#333,stroke-width:2px
+        style ecoTreasury fill:#CCFFFF,stroke:#333,stroke-width:2px
+        style ecoOpsApp fill:#B3CCFF,stroke:#333,stroke-width:2px
+        style projectDelivery fill:#EEDD82,stroke:#333,stroke-width:2px
+      </div>
+    </div>
+
+    <div class="tab-content">
+      <h2>Project Impact Distribution</h2>
+      <p>This section will display a chart illustrating project impact distribution across different environmental areas (e.g., renewable energy, sustainable agriculture, waste reduction).</p>
+      <div class="mermaid">
+        graph TD
+        A[Project Impact Distribution] --> B[Renewable Energy]
+        A --> C[Sustainable Agriculture]
+        A --> D[Waste Reduction]
+        style B fill:#ffcc00,stroke:#333,stroke-width:2px
+        style C fill:#ff6600,stroke:#333,stroke-width:2px
+        style D fill:#66ccff,stroke:#333,stroke-width:2px
+      </div>
+    </div>
+
+    <div class="tab-content">
+      <h2>DAO-Driven Project Implementation</h2>
+      <p>Funds are used to implement and monitor projects through a collaborative decision-making process. The EcoCommunity DAO facilitates this process by:</p>
+      <ul>
+        <li>Enabling quadratic voting for project selection and resource allocation.</li>
+        <li>Issuing code bounties via a Git service to incentivize developers to address technical challenges across the ecosystem.</li>
+      </ul>
+      <div class="mermaid">
+        graph LR
+        subgraph daoDriven
+          funds --> projects
+          projects --> monitoring
+          monitoring --> reports
+          reports --> feedback
+        end
+        projects --> codeBounties
+        codeBounties --> gitService
+        gitService --> incentivizeDevelopers
+      </div>
+    </div>
+
+    <!-- Text Write-Up Section -->
+    <div class="text-writeup">
+      <h2>Text Write-Up</h2>
+      <p>
+        The Eco Ops Program is dedicated to fostering collaborative and community-driven projects that address pressing environmental issues. Through a combination of knowledge sharing, financial support via NFTs, and community feedback, the program ensures that projects are well-funded, expertly managed, and continuously improved upon.
+      </p>
+      <p>
+        Our DAO-driven approach allows for transparent decision-making and resource allocation, empowering participants to contribute their skills and expertise effectively. By leveraging the power of blockchain technology and community engagement, we aim to create a sustainable and impactful ecosystem for environmental action.
+      </p>
+    </div>
+
+    <!-- Fun Interlude Section -->
+    <div class="fun-interlude">
+      <button onclick="alert('Action 1 triggered!')">Action 1</button>
+      <button onclick="alert('Action 2 triggered!')">Action 2</button>
+      <button onclick="alert('Action 3 triggered!')">Action 3</button>
+    </div>
+  </div>
+
+  <!-- Draggable and Resizable Windows -->
+  <div id="overview-window" class="window" style="top: 150px; left: 200px;">
+    <div class="window-header">
+      Overview
+      <span class="close-btn" onclick="closeWindow('overview-window')">&times;</span>
+    </div>
+    <div class="window-content">
+      <img src="https://via.placeholder.com/50" alt="Overview Icon" class="action-icon">
+      <h2>Overview</h2>
+      <img src="https://via.placeholder.com/400" alt="Overview Image">
+      <p>This is the overview window content.</p>
+      <div class="modal-buttons">
+        <button onclick="alert('Action 1 from window!')">Action 1</button>
+        <button onclick="alert('Action 2 from window!')">Action 2</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="sections-window" class="window" style="top: 150px; left: 400px;">
+    <div class="window-header">
+      Sections
+      <span class="close-btn" onclick="closeWindow('sections-window')">&times;</span>
+    </div>
+    <div class="window-content">
+      <img src="https://via.placeholder.com/50" alt="Sections Icon" class="action-icon">
+      <h2>Sections</h2>
+      <img src="https://via.placeholder.com/400" alt="Sections Image">
+      <p>This is the sections window content.</p>
+      <div class="modal-buttons">
+        <button onclick="alert('Action 1 from window!')">Action 1</button>
+        <button onclick="alert('Action 2 from window!')">Action 2</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="actions-window" class="window" style="top: 150px; left: 600px;">
+    <div class="window-header">
+      Actions
+      <span class="close-btn" onclick="closeWindow('actions-window')">&times;</span>
+    </div>
+    <div class="window-content">
+      <img src="https://via.placeholder.com/50" alt="Actions Icon" class="action-icon">
+      <h2>Actions</h2>
+      <img src="https://via.placeholder.com/400" alt="Actions Image">
+      <p>This is the actions window content.</p>
+      <div class="modal-buttons">
+        <button onclick="alert('Action 1 from window!')">Action 1</button>
+        <button onclick="alert('Action 2 from window!')">Action 2</button>
+      </div>
+      <div id="quiz">
+        <p>Quiz to earn an NFT badge:</p>
+        <form onsubmit="event.preventDefault(); submitQuiz();">
+          <label for="question1">Question 1:</label>
+          <input type="text" id="question1" name="question1">
+          <button type="submit">Submit Quiz</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Save Zone -->
+  <div class="save-zone" id="save-zone">
+    <p>Drop Here to Save</p>
+  </div>
+
+  <script>
+    function makeDraggable(element) {
+      let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+      const header = element.querySelector('.window-header');
+      if (header) {
+        header.onmousedown = dragMouseDown;
+      } else {
+        element.onmousedown = dragMouseDown;
+      }
+
+      function dragMouseDown(e) {
+        e.preventDefault();
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        document.onmouseup = closeDragElement;
+        document.onmousemove = elementDrag;
+      }
+
+      function elementDrag(e) {
+        e.preventDefault();
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        element.style.top = (element.offsetTop - pos2) + "px";
+        element.style.left = (element.offsetLeft - pos1) + "px";
+      }
+
+      function closeDragElement() {
+        document.onmouseup = null;
+        document.onmousemove = null;
+
+        const saveZone = document.getElementById('save-zone');
+        const rect = saveZone.getBoundingClientRect();
+        const windowRect = element.getBoundingClientRect();
+
+        if (
+          windowRect.left >= rect.left &&
+          windowRect.top >= rect.top &&
+          windowRect.right <= rect.right &&
+          windowRect.bottom <= rect.bottom
+        ) {
+          alert('Window saved!');
+          saveWindowPosition(element.id, windowRect);
+        }
+      }
+    }
+
+    function openWindow(id) {
+      const window = document.getElementById(id);
+      window.style.display = 'block';
+      makeDraggable(window);
+    }
+
+    function closeWindow(id) {
+      const window = document.getElementById(id);
+      window.style.display = 'none';
+    }
+
+    function submitQuiz() {
+      const question1 = document.getElementById('question1').value;
+      const quizData = { question1, date: new Date() };
+      localforage.setItem('quizData', quizData).then(() => {
+        alert('Quiz submitted! You earned an NFT badge.');
+      }).catch(err => {
+        console.error('Error saving quiz data:', err);
+      });
+    }
+
+    function saveWindowPosition(id, position) {
+      localforage.setItem(id + '-position', position).then(() => {
+        console.log('Window position saved:', position);
+      }).catch(err => {
+        console.error('Error saving window position:', err);
+      });
+    }
+
+    function restoreWindowPosition(id) {
+      localforage.getItem(id + '-position').then(position => {
+        if (position) {
+          const window = document.getElementById(id);
+          window.style.top = position.top + 'px';
+          window.style.left = position.left + 'px';
+          openWindow(id);
+        }
+      }).catch(err => {
+        console.error('Error restoring window position:', err);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const openWindowButtons = document.querySelectorAll('.open-window');
+      openWindowButtons.forEach(button => {
+        button.addEventListener('click', function () {
+          const windowId = this.getAttribute('data-window');
+          openWindow(windowId);
+        });
+      });
+
+      // Restore window positions on load
+      restoreWindowPosition('overview-window');
+      restoreWindowPosition('sections-window');
+      restoreWindowPosition('actions-window');
+
+      mermaid.initialize({ startOnLoad: true });
+    });
+  </script>
+</body>
+</html>
