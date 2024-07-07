@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eco Ops Program: Visualizations</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      mermaid.initialize({ startOnLoad: true });
+
+      document.querySelectorAll(".mermaid-part a").forEach(link => {
+        link.addEventListener("click", function (event) {
+          event.preventDefault();
+          const targetId = this.getAttribute("href").substring(1);
+          const targetElement = document.getElementById(targetId);
+
+          if (targetElement) {
+            document.querySelectorAll('.diagram').forEach(el => el.style.display = 'none');
+            targetElement.style.display = "block";
+            mermaid.contentLoaded();
+            
+            // Animation
+            gsap.from(targetElement, {duration: 1, opacity: 0, y: 50, ease: "power3.out"});
+          }
+        });
+      });
+    });
+
+    function highlightNode(nodeId) {
+      const node = document.querySelector(`[id="${nodeId}"]`);
+      if (node) {
+        gsap.to(node, {duration: 0.3, scale: 1.1, fillOpacity: 0.8, yoyo: true, repeat: 1});
+      }
+    }
+  </script>
+  <style>
+    /* ... (previous styles remain the same) ... */
+
+    .mermaid g.node rect {
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navigation">
+    <a href="#project-workflow" class="active">Community-Driven Workflow</a>
+    <a href="#resource-flow">Collaborative Resource Flow</a>
+    <a href="#project-impact">Project Impact Distribution</a>
+    <a href="#project-implementation">DAO-Driven Implementation</a>
+  </div>
+
+  <div class="container">
+
+    <h1>Eco Ops Program: Visualizations</h1>
+
+  
+
+  <div class="navigation">
+    <a href="#project-workflow" class="active">Community-Driven Workflow</a>
+    <a href="#resource-flow">Collaborative Resource Flow</a>
+    <a href="#project-impact">Project Impact Distribution (Placeholder)</a>
+  </div>
+
+  <div class="container">
+
+    <h1>Eco Ops Program: Visualizations</h1>
+
+    <h2>Community-Driven Workflow</h2>
+    <div class="mermaid-container">
+      <div class="mermaid-part">
+        <a href="#project-workflow">Community-Driven Workflow</a>
+        <p>See how volunteers, reviewers, and the community interact within the program.</p>
+      </div>
+      <div class="diagram" id="project-workflow">
+        <div class="mermaid">
+          graph TD
+          subgraph knowledgeSharing
+            participants --> contributeSkills[Contribute Skills & Expertise] --> projects
+            creatives --> contributeSkills[Contribute Skills & Expertise] --> projects
+            projectOwners[Project Owners/Initiators] --> proposeProject[Propose Project] --> projects
+          end
+        </div>
+      </div>
+    </div>
+
+    <h2>Collaborative Resource Flow</h2>
+    <div class="mermaid-container">
+      <div class="mermaid-part">
+        <a href="#resource-flow">Collaborative Resource Flow</a>
+        <p>This section illustrates how skills, expertise, and funds flow within the Eco Ops program, fostering a collaborative ecosystem.</p>
+      </div>
+      <div class="diagram" id="resource-flow">
+        <div class="mermaid">
+          graph LR
+          subgraph knowledgeSharing id=knowledge-sharing-updated
+            participants --> contributeSkills[Contribute Skills & Expertise] --> projects
+            creatives --> contributeSkills[Contribute Skills & Expertise] --> projects
+            projectOwners[Project Owners/Initiators] --> proposeProject[Propose Project] --> projects
+          end
+          subgraph financialCycle id=financial-cycle
+            projects --> |Create & Mint NFTs| worldbridgerOne
+            worldbridgerOne --> |List NFTs on Marketplace| nftMarketplace
+            participants --> |Buy NFTs (Fiat Currency)| nftMarketplace
+            creatives --> |Buy NFTs (Fiat Currency)| nftMarketplace
+            nftMarketplace --> |Transaction Fee| ecoTreasury
+            nftMarketplace --> |Funds Raised| projectWallet
+            projectOwners[Project Owners/Initiators] --> |Direct Donations| ecoOpsApp
+            ecoOpsApp --> |Donations to Project Wallet| projectWallet
+          end
+          subgraph projectImplementation id=project-implementation
+            projectWallet --> |Project Implementation & Monitoring| projectDelivery
+            projectDelivery --> |Data & Reports| ecoOpsApp
+          end
+          subgraph knowledgeFeedback id=knowledge-feedback
+            projectDelivery --> |Community Engagement & Training| participants, creatives
+            participants --> |Feedback & Suggestions| ecoOpsApp
+            creatives --> |Feedback & Suggestions| ecoOpsApp
+          end
+          ecoTreasury --> |Reward Distribution (Tokens)| participants, creatives
+          projectWallet --> (Funds) projectDelivery
+
+          participants --> Knowledge Sharing
+          projectDelivery --> Knowledge Feedback
+
+          style participants fill:#FFFFCC,stroke:#333,stroke-width:2px
+          style creatives fill:#CCEEFF,stroke:#333,stroke-width:2px
+          style projectOwners fill:#FFCC99,stroke:#333,stroke-width:2px
+          style worldbridgerOne fill:#99CCFF,stroke:#333,stroke-width:2px
+          style nftMarketplace fill:#FF9999,stroke:#333,stroke-width:2px
+          style ecoTreasury fill:#CCFFFF,stroke:#333,stroke-width:2px
+          style ecoOpsApp fill:#B3CCFF,stroke:#333,stroke-width:2px
+          style projectDelivery fill:#EEDD82,stroke:#333,stroke-width:2px
+        </div>
+      </div>
+    </div>
+
+    <h2>Project Impact Distribution (Placeholder)</h2>
+    <div class="mermaid-container">
+      <div class="mermaid-part">
+        <a href="#project-impact">Project Impact Distribution (Placeholder)</a>
+        <p>This section will display a chart illustrating project impact distribution across different environmental areas (e.g., renewable energy, sustainable agriculture, waste reduction).</p>
+      </div>
+      <div class="diagram" id="project-impact">
+        <div class="mermaid">
+          graph LR
+          projectImpact --> renewableEnergy[Renewable Energy]
+          projectImpact --> sustainableAgriculture[Sustainable Agriculture]
+          projectImpact --> wasteReduction[Waste Reduction]
+        </div>
+      </div>
+    </div>
+
+    <h2>DAO-Driven Project Implementation</h2>
+    <div class="mermaid-container">
+      <div class="mermaid-part">
+        <a href="#project-implementation">DAO-Driven Project Implementation</a>
+        <p>Funds are used to implement and monitor projects through a collaborative decision-making process. The EcoCommunity DAO facilitates this process by:
+          <ul>
+            <li>Enabling quadratic voting for project selection and resource allocation.</li>
+            <li>Issuing code bounties via a Git service to incentivize developers to address technical challenges across the ecosystem.</li>
+          </ul>
+        </p>
+      </div>
+      <div class="diagram" id="project-implementation">
+        <div class="mermaid">
+          graph LR
+          subgraph daoDriven
+            funds --> projects
+            projects --> monitoring
+            monitoring --> reports
+            reports --> feedback
+          end
+          projects --> codeBounties
+          codeBounties --> gitService
+          gitService --> incentivizeDevelopers
+        </div>
+      </div>
+    </div>
+
+    <!-- Text Write-Up Section -->
+    <div class="text-writeup">
+      <h2>Text Write-Up</h2>
+      <p>
+        The Eco Ops Program is dedicated to fostering collaborative and community-driven projects that address pressing environmental issues. Through a combination of knowledge sharing, financial support via NFTs, and community feedback, the program ensures that projects are well-funded, expertly managed, and continuously improved upon.
+      </p>
+      <p>
+        Our DAO-driven approach allows for transparent decision-making and resource allocation, empowering participants to contribute their skills and expertise effectively. By leveraging the power of blockchain technology and community engagement, we aim to create a sustainable and impactful ecosystem for environmental action.
+      </p>
+    </div>
+
+    <!-- Fun Interlude Section -->
+    <div class="fun-interlude">
+      <button onclick="alert('Action 1 triggered!')">Action 1</button>
+      <button onclick="alert('Action 2 triggered!')">Action 2</button>
+      <button onclick="alert('Action 3 triggered!')">Action 3</button>
+    </div>
+
+
+    <h2>Project Impact Distribution</h2>
+    <div class="mermaid-container">
+      <div class="mermaid-part">
+        <a href="#project-impact">Project Impact Distribution</a>
+        <p>This section displays a chart illustrating project impact distribution across different environmental areas.</p>
+      </div>
+      <div class="diagram" id="project-impact">
+        <div class="mermaid">
+          pie title Project Impact Distribution
+            "Renewable Energy" : 30
+            "Sustainable Agriculture" : 25
+            "Waste Reduction" : 20
+            "Water Conservation" : 15
+            "Biodiversity Protection" : 10
+        </div>
+      </div>
+    </div>
+
+    <h2>DAO-Driven Project Implementation</h2>
+    <div class="mermaid-container">
+      <div class="mermaid-part">
+        <a href="#project-implementation">DAO-Driven Project Implementation</a>
+        <p>Illustrates how the EcoCommunity DAO facilitates project implementation and decision-making.</p>
+      </div>
+      <div class="diagram" id="project-implementation">
+        <div class="mermaid">
+          graph TD
+            A[EcoCommunity DAO] -->|Quadratic Voting| B(Project Selection)
+            A -->|Resource Allocation| C(Fund Distribution)
+            A -->|Issue Bounties| D(Code Development)
+            B --> E{Selected Projects}
+            C --> E
+            D --> F[Git Service]
+            F -->|Incentivize Developers| G[Ecosystem Improvement]
+            E --> H[Project Implementation]
+            H --> I[Monitoring & Reporting]
+            I --> J[Community Feedback]
+            J -->|Continuous Improvement| A
+
+            click A callback "highlightNode('A')"
+            click B callback "highlightNode('B')"
+            click C callback "highlightNode('C')"
+            click D callback "highlightNode('D')"
+            click E callback "highlightNode('E')"
+            click F callback "highlightNode('F')"
+            click G callback "highlightNode('G')"
+            click H callback "highlightNode('H')"
+            click I callback "highlightNode('I')"
+            click J callback "highlightNode('J')"
+        </div>
+      </div>
+    </div>
+
+    <!-- ... (text write-up section remains the same) ... -->
+
+    <!-- Updated Fun Interlude Section -->
+    <div class="fun-interlude">
+      <button onclick="simulateProjectProposal()">Simulate Project Proposal</button>
+      <button onclick="simulateNFTMinting()">Simulate NFT Minting</button>
+      <button onclick="simulateDAOVoting()">Simulate DAO Voting</button>
+    </div>
+
+  </div>
+
+  <script>
+    function simulateProjectProposal() {
+      alert('New project proposed: "Reforestation in Amazon Rainforest"');
+      highlightNode('proposeProject');
+    }
+
+    function simulateNFTMinting() {
+      alert('New NFT minted: "Amazon Guardian #001"');
+      highlightNode('worldbridgerOne');
+    }
+
+    function simulateDAOVoting() {
+      alert('DAO voting initiated for resource allocation');
+      highlightNode('A');
+    }
+  </script>
+
+</body>
+</html>
