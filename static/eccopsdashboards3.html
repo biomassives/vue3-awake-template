@@ -8,7 +8,12 @@
   <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
+        try {
       mermaid.initialize({ startOnLoad: true });
+      console.log("Mermaid initialized successfully");
+      } catch (error) {
+        console.error("Error initializing Mermaid:", error);
+      }
 
       const tabs = document.querySelectorAll(".tabs button");
       const tabContents = document.querySelectorAll(".tab-content");
