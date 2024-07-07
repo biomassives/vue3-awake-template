@@ -1,14 +1,34 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Eco Ops Program Further Enhanced Flow</title>
-   <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-   <script>mermaid.initialize({startOnLoad:true});</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eco Ops Program  Visualizations of Further Enhanced Flow</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({ startOnLoad: true });
+  </script>
+  <style>
+    .mermaid-container {
+      display: inline-block;
+      margin: 10px;
+      border: 1px solid #ddd;
+      padding: 10px;
+    }
+    .chart-container {
+      width: 50%;
+      float: left;
+      margin-bottom: 20px;
+    }
+  </style>
 </head>
 <body>
-   <div class="mermaid">
-flowchart TD
+  <h1>Eco Ops Program: Visualizations</h1>
+
+  <div class="mermaid-container">
+    <h2>Project Workflow</h2>
+    <div class="mermaid">
+      flowchart TD
     A[Volunteers] -->|Register/Log In| B[System]
     B --> |Select Tasks/Projects| C[Tasks and Projects]
     C --> |Submit Work| D[Verification Process]
@@ -41,15 +61,13 @@ flowchart TD
 
     class L bigBox;
     style L fill:#f9f,stroke:#333,stroke-width:4px
+        </div>
+  </div>
 
-   </div>
-
-
-
-      <script>mermaid2.initialize({startOnLoad:true});</script>
-
-   <div class="mermaid2">
-
+  <div class="mermaid-container">
+    <h2>Resource Flow</h2>
+    <div class="mermaid">
+      
 graph LR
   participants --> contributeSkills[Contribute Skills & Expertise] --> projects
   creatives --> contributeSkills[Contribute Skills & Expertise] --> projects
@@ -76,8 +94,14 @@ graph LR
   style projectDelivery fill:#EEDD82,stroke:#333,stroke-width:2px
 
 
-      
+        </div>
   </div>
+
+  <div class="chart-container">
+    <h2>Project Impact Distribution (Placeholder)</h2>
+    <p>This section will display a chart illustrating project impact distribution across different environmental areas (e.g., renewable energy, sustainable agriculture, waste reduction).</p>
+  </div>
+
 </body>
 </html>
-     
+
