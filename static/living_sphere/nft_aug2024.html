@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Optimized 3D Möbius Strip</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="threeCanvas"></canvas>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+    // Set up Three.js scene, camera, and renderer
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('threeCanvas') });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    // Create a custom BufferGeometry for the Möbius strip
+const geometry = new THREE.BufferGeometry();
+const vertices = [
+  // Define 52 shared vertex positions here
+  -1, 1, 0, 1, 1, 0, 1, -1, 0, -1, -1, 0,
+  // ... additional vertices
+];
+const indices = [
+  // Define the triangle indices here
+  0, 1, 2, 0, 2, 3,
+  // ... additional indices
+];
+geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(vertices), 3));
+geometry.setIndex(indices);
+
+// Create a custom ShaderMaterial for the Möbius strip
+const material = new THREE.ShaderMaterial({
+  uniforms: {
+    // Define any custom shader uniforms here
+  },
+  vertexShader: `
+    // Define your custom vertex shader here
+  `,
+  fragmentShader: `
+    // Define your custom fragment shader here
+  `
+});
+
+// Create the 3D object and add it to the scene
+const mobius = new THREE.Mesh(geometry, material);
+scene.add(mobius);
+
+// Touch event handling
+let isDragging = false;
+let previousMousePosition = {
+  x: 0,
+  y: 0
+};
+
+document.addEventListener('touchstart', (event) => {
+  isDragging = true;
+  previousMousePosition = {
+    x: event.touches[0].clientX,
+    y: event.touches[0].clientY
+  };
+});
+
+document.addEventListener('touchmove', (event) => {
+  if (!isDragging) {
+    return;
+  }
+
+  const deltaMove = {
+    x: event.touches[0].clientX - previousMousePosition.x,
+    y: event.touches[0].clientY - previousMousePosition.y
+  };
+
+  previousMousePosition = {
+    x: event.touches[0].clientX,
+    y: event.touches[0].clientY
+  };
+
+  // Update camera position, rotation, and scale based on touch events
+  updateCameraTransform(deltaMove);
+});
+
+document.addEventListener('touchend', () => {
+  isDragging = false;
+});
+
+// Camera transform update function
+function updateCameraTransform(deltaMove) {
+  camera.position.x += deltaMove.x * 0.01;
+  camera.position.y += deltaMove.y * 0.01;
+  camera.lookAt(scene.position);
+}
+
+// Resize handler
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// Animation loop
+function animate() {
+  requestAnimationFrame(animate);
+  mobius.rotation.x += 0.001;
+  mobius.rotation.y += 0.002;
+  renderer.render(scene, camera);
+}
+
+animate();
+  </script>
+  ><!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Optimized 3D Möbius Strip</title> <style> body { margin: 0; padding: 0; overflow: hidden; } canvas { width: 100%; height: 100%; display: block; } </style> </head> <body> <canvas id="threeCanvas"></canvas> <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script> <script> // Set up Three.js scene, camera, and renderer const scene = new THREE.Scene(); const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000); const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('threeCanvas') }); renderer.setSize(window.innerWidth, window.innerHeight);
+
+// Create a custom BufferGeometry for the Möbius strip
+const geometry = new THREE.BufferGeometry();
+const vertices = [
+  // Define 52 shared vertex positions here
+  -1, 1, 0, 1, 1, 0, 1, -1, 0, -1, -1, 0,
+  // ... additional vertices
+];
+const indices = [
+  // Define the triangle indices here
+  0, 1, 2, 0, 2, 3,
+  // ... additional indices
+];
+geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(vertices), 3));
+geometry.setIndex(indices);
+
+// Create a custom ShaderMaterial for the Möbius strip
+const material = new THREE.ShaderMaterial({
+  uniforms: {
+    // Define any custom shader uniforms here
+  },
+  vertexShader: `
+    // Define your custom vertex shader here
+  `,
+  fragmentShader: `
+    // Define your custom fragment shader here
+  `
+});
+
+// Create the 3D object and add it to the scene
+const mobius = new THREE.Mesh(geometry, material);
+scene.add(mobius);
+
+// Touch event handling
+let isDragging = false;
+let previousMousePosition = {
+  x: 0,
+  y: 0
+};
+
+document.addEventListener('touchstart', (event) => {
+  isDragging = true;
+  previousMousePosition = {
+    x: event.touches[0].clientX,
+    y: event.touches[0].clientY
+  };
+});
+
+document.addEventListener('touchmove', (event) => {
+  if (!isDragging) {
+    return;
+  }
+
+  const deltaMove = {
+    x: event.touches[0].clientX - previousMousePosition.x,
+    y: event.touches[0].clientY - previousMousePosition.y
+  };
+
+  previousMousePosition = {
+    x: event.touches[0].clientX,
+    y: event.touches[0].clientY
+  };
+
+  // Update camera position, rotation, and scale based on touch events
+  updateCameraTransform(deltaMove);
+});
+
+document.addEventListener('touchend', () => {
+  isDragging = false;
+});
+
+// Camera transform update function
+function updateCameraTransform(deltaMove) {
+  camera.position.x += deltaMove.x * 0.01;
+  camera.position.y += deltaMove.y * 0.01;
+  camera.lookAt(scene.position);
+}
+
+// Resize handler
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// Animation loop
+function animate() {
+  requestAnimationFrame(animate);
+  mobius.rotation.x += 0.001;
+  mobius.rotation.y += 0.002;
+  renderer.render(scene, camera);
+}
+
+animate();
+
+</script> </body> </html>
