@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Ops 3D NFT Portal - Interactive Vertex Lighting</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+       body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            background-color: #000;
+        }
+        #threeCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+        .nft-info {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 300px;
+        }
+        .nft-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .btn {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #colorPicker {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        .color-btn {
+            width: 30px;
+            height: 30px;
+            margin: 5px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        #rotateLeft, #rotateRight {
+            position: absolute;
+            top: 50%;
+            font-size: 24px;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+        #rotateLeft { left: 20px; }
+        #rotateRight { right: 20px; }
+        .neon-icon {
+            position: absolute;
+            font-size: 48px;
+            color: #fff;
+            text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #ff00de, 0 0 35px #ff00de, 0 0 40px #ff00de, 0 0 50px #ff00de, 0 0 75px #ff00de;
+        }
+    </style>
+</head>
+<body>
+  <canvas id="threeCanvas"></canvas>
+    
+    <div class="nft-info">
+        <h2 id="nftTitle"></h2>
+        <p id="nftDescription"></p>
+        <p>Access: <span id="nftAccess"></span></p>
+        <p>How to collect: <span id="nftCollect"></span></p>
+        <p>Edition: <span id="nftEdition"></span></p>
+        <i id="nftIcon" class="fas"></i>
+    </div>
+
+    <div class="nft-controls">
+        <button class="btn" id="prevBtn">Previous</button>
+        <button class="btn" id="nextBtn">Next</button>
+        <button class="btn" id="claimBtn">Claim NFT</button>
+        <button class="btn" id="resetBtn">Reset Diagram</button>
+    </div>
+
+    <div id="colorPicker">
+        <button class="color-btn" style="background-color: #ff00ff;"></button>
+        <button class="color-btn" style="background-color: #00ffff;"></button>
+        <button class="color-btn" style="background-color: #ffff00;"></button>
+        <button class="color-btn" style="background-color: #ff0000;"></button>
+        <button class="color-btn" style="background-color: #00ff00;"></button>
+    </div>
+
+    <button id="rotateLeft">&#8634;</button>
+    <button id="rotateRight">&#8635;</button>
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Global variables
+        let scene, camera, renderer, torus, torusGeometry, torusMaterial;
+        let vertexObjects = [];
+        let raycaster, mouse;
+        let currentNFT = 0;
+        let selectedColor = '#ff00ff';
+
+        // NFT data
+        const nfts = [
+            { title: "Green Earth", description: "A beautiful representation of our planet", access: "Early access to eco-friendly product launches", collect: "Follow our Twitter and retweet the pinned post", icon: "fa-globe" },
+            { title: "Solar Power", description: "Harnessing the energy of the sun", access: "Exclusive solar panel discounts", collect: "Sign up for our newsletter and complete a short survey", icon: "fa-sun" },
+            { title: "Wind Farm", description: "Clean energy from the wind", access: "Virtual tour of our newest wind farm", collect: "Share our Facebook post and tag 3 friends", icon: "fa-wind" },
+            { title: "Electric Vehicle", description: "The future of transportation", access: "Priority test drives of new EV models", collect: "Post about sustainable transportation on Instagram with #EcoOpsEV", icon: "fa-car-battery" },
+            { title: "Recycling Initiative", description: "Turning waste into resources", access: "Personalized recycling guide for your area", collect: "Upload a photo of your recycling setup to our website", icon: "fa-recycle" }
+        ];
+
+        // Initialization
+        function init() {
+            initScene();
+            createTorus();
+            createVertices();
+            addLighting();
+            setupInteraction();
+            createNeonIcons();
+            addEventListeners();
+            updateNFT();
+            loadDiagramState();
+            animate();
+        }
+
+        // Scene setup
+        function initScene() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({canvas: document.getElementById('threeCanvas'), antialias: true});
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            camera.position.z = 20;
+        }
+
+        // Torus creation
+        function createTorus() {
+            torusGeometry = new THREE.TorusGeometry(10, 3, 50, 50);
+            torusMaterial = new THREE.MeshPhongMaterial({color: 0x00ff00, wireframe: true});
+            torus = new THREE.Mesh(torusGeometry, torusMaterial);
+            scene.add(torus);
+        }
+
+        // Vertex creation
+        function createVertices() {
+            for (let i = 0; i < torusGeometry.attributes.position.count; i++) {
+                const x = torusGeometry.attributes.position.getX(i);
+                const y = torusGeometry.attributes.position.getY(i);
+                const z = torusGeometry.attributes.position.getZ(i);
+                
+                const vertexGeometry = new THREE.SphereGeometry(0.2, 16, 16);
+                const vertexMaterial = new THREE.MeshPhongMaterial({color: 0xffffff});
+                const vertex = new THREE.Mesh(vertexGeometry, vertexMaterial);
+                vertex.position.set(x, y, z);
+                vertex.userData = {index: i, isLit: false, color: '#ffffff'};
+                vertexObjects.push(vertex);
+                scene.add(vertex);
+            }
+        }
+
+        // Lighting setup
+        function addLighting() {
+            const ambientLight = new THREE.AmbientLight(0x404040);
+            scene.add(ambientLight);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+            directionalLight.position.set(1, 1, 1);
+            scene.add(directionalLight);
+        }
+
+        // Interaction setup
+        function setupInteraction() {
+            raycaster = new THREE.Raycaster();
+            mouse = new THREE.Vector2();
+        }
+
+        // Neon icons creation
+        function createNeonIcons() {
+            nfts.forEach((nft, index) => {
+                const icon = document.createElement('i');
+                icon.className = `fas ${nft.icon} neon-icon`;
+                icon.style.left = `${Math.random() * 80 + 10}%`;
+                icon.style.top = `${Math.random() * 80 + 10}%`;
+                icon.style.opacity = 0.7;
+                document.body.appendChild(icon);
+            });
+        }
+
+        // Event listeners
+        function addEventListeners() {
+            window.addEventListener('resize', onWindowResize);
+            window.addEventListener('mousemove', onMouseMove);
+            window.addEventListener('click', onMouseClick);
+
+            document.getElementById('prevBtn').addEventListener('click', () => {
+                currentNFT = (currentNFT - 1 + nfts.length) % nfts.length;
+                updateNFT();
+            });
+
+            document.getElementById('nextBtn').addEventListener('click', () => {
+                currentNFT = (currentNFT + 1) % nfts.length;
+                updateNFT();
+            });
+
+            document.getElementById('claimBtn').addEventListener('click', () => {
+                alert('Thank you for your interest! Please follow the collection instructions to claim your NFT.');
+            });
+
+            document.getElementById('resetBtn').addEventListener('click', resetDiagram);
+
+            document.querySelectorAll('.color-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    selectedColor = e.target.style.backgroundColor;
+                });
+            });
+
+            document.getElementById('rotateLeft').addEventListener('click', () => {
+                torus.rotation.y -= Math.PI / 4;
+            });
+
+            document.getElementById('rotateRight').addEventListener('click', () => {
+                torus.rotation.y += Math.PI / 4;
+            });
+        }
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            torus.rotation.x += 0.005;
+            torus.rotation.y += 0.005;
+            vertexObjects.forEach(vertex => {
+                vertex.rotation.x += 0.005;
+                vertex.rotation.y += 0.005;
+            });
+            renderer.render(scene, camera);
+        }
+
+        // Window resize handler
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        // Mouse move handler
+        function onMouseMove(event) {
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+            highlightVertices();
+        }
+
+        // Vertex highlighting
+        function highlightVertices() {
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(vertexObjects);
+
+            vertexObjects.forEach(vertex => {
+                if (!vertex.userData.isLit) {
+                    vertex.material.emissive.setHex(0x000000);
+                }
+            });
+
+            if (intersects.length > 0) {
+                const hoveredVertex = intersects[0].object;
+                if (!hoveredVertex.userData.isLit) {
+                    hoveredVertex.material.emissive.setHex(0x444444);
+                }
+            }
+        }
+
+        // Mouse click handler
+        function onMouseClick(event) {
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+            toggleVertexLight();
+        }
+
+        // Vertex lighting toggle
+        function toggleVertexLight() {
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(vertexObjects);
+
+            if (intersects.length > 0) {
+                const clickedVertex = intersects[0].object;
+                clickedVertex.userData.isLit = true;
+                clickedVertex.userData.color = selectedColor;
+                clickedVertex.material.color.setStyle(selectedColor);
+                clickedVertex.material.emissive.setStyle(selectedColor);
+                colorNearbyVertices(clickedVertex);
+                saveDiagramState();
+            }
+        }
+
+        // Color nearby vertices
+        function colorNearbyVertices(centralVertex) {
+            const radius = 1;
+            vertexObjects.forEach(vertex => {
+                if (vertex !== centralVertex) {
+                    const distance = centralVertex.position.distanceTo(vertex.position);
+                    if (distance < radius) {
+                        vertex.userData.isLit = true;
+                        vertex.userData.color = selectedColor;
+                        vertex.material.color.setStyle(selectedColor);
+                        vertex.material.emissive.setStyle(selectedColor);
+                    }
+                }
+            });
+
+            updateTorusColors();
+        }
+
+        // Update torus colors
+        function updateTorusColors() {
+            const colors = [];
+            for (let i = 0; i < torusGeometry.attributes.position.count; i++) {
+                const vertex = vertexObjects[i];
+                const color = new THREE.Color(vertex.userData.color);
+                colors.push(color.r, color.g, color.b);
+            }
+            torusGeometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+            torusMaterial.vertexColors = true;
+            torusMaterial.needsUpdate = true;
+        }
+
+        // NFT update
+        function updateNFT() {
+            const nft = nfts[currentNFT];
+            document.getElementById('nftTitle').textContent = nft.title;
+            document.getElementById('nftDescription').textContent = nft.description;
+            document.getElementById('nftAccess').textContent = nft.access;
+            document.getElementById('nftCollect').textContent = nft.collect;
+            document.getElementById('nftEdition').textContent = `${currentNFT + 1} of ${nfts.length}`;
+            document.getElementById('nftIcon').className = `fas ${nft.icon}`;
+
+            const hue = (nft.title.length * 10) % 360;
+            torus.material.color.setHSL(hue / 360, 1, 0.5);
+        }
+
+        // Save diagram state
+        function saveDiagramState() {
+            const state = vertexObjects.map(v => ({
+                index: v.userData.index,
+                isLit: v.userData.isLit,
+                color: v.userData.color
+            }));
+            localStorage.setItem('diagramState', JSON.stringify(state));
+        }
+
+        // Load diagram state
+        function loadDiagramState() {
+            const savedState = localStorage.getItem('diagramState');
+            if (savedState) {
+                const state = JSON.parse(savedState);
+                state.forEach(item => {
+                    const vertex = vertexObjects[item.index];
+                    vertex.userData.isLit = item.isLit;
+                    vertex.userData.color = item.color;
+                    if (item.isLit) {
+                        vertex.material.color.setStyle(item.color);
+                        vertex.material.emissive.setStyle(item.color);
+                    }
+                });
+                updateTorusColors();
+            }
+        }
+
+        // Reset diagram
+        function resetDiagram() {
+            vertexObjects.forEach(vertex => {
+                vertex.userData.isLit = false;
+                vertex.userData.color = '#ffffff';
+                vertex.material.color.setStyle('#ffffff');
+                vertex.material.emissive.setHex(0x000000);
+            });
+            updateTorusColors();
+            saveDiagramState();
+        }
+
+        // Initialize the application
+        init();
+    </script>
+</body>
+</html>
