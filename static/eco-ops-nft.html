@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glitchy Eco Ops 3D POAP Token Graffiti</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Courier New', monospace;
+    background-color: #0a0a0a;
+    color: #00ff00;
+    overflow: hidden;
+  }
+
+  .content-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  .poap-container {
+    background-color: rgba(17, 17, 17, 0.8);
+    border: 2px solid #00ff00;
+    box-shadow: 0 0 10px #00ff00;
+    padding: 20px;
+    text-align: center;
+    max-width: 800px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #penroseCanvas {
+    width: 100%;
+    height: 500px;
+    margin-bottom: 20px;
+    border: 1px solid #00ff00;
+    overflow: hidden;
+  }
+
+  .claim-button {
+    background-color: #00ff00;
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .claim-button:hover {
+    background-color: #00cc00;
+  }
+
+  .poap-info {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #00cc00;
+  }
+
+  .color-picker {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+
+  .color-option {
+    width: 30px;
+    height: 30px;
+    border: 2px solid #fff;
+    margin: 0 5px;
+    cursor: pointer;
+  }
+
+  .color-option.selected {
+    border-color: #00ff00;
+  }
+
+  .dialogue {
+    margin-bottom: 15px;
+    font-style: italic;
+    color: #00cc00;
+  }
+
+  .controls {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+
+  .control-button {
+    background-color: #004400;
+    color: #00ff00;
+    border: 1px solid #00ff00;
+    padding: 5px 10px;
+    margin: 0 5px;
+    cursor: pointer;
+  }
+
+  /* New styles for glitchy effect */
+  @keyframes flicker {
+    0% { opacity: 0.8; }
+    5% { opacity: 0.9; }
+    10% { opacity: 0.8; }
+    15% { opacity: 1; }
+    20% { opacity: 0.9; }
+    25% { opacity: 0.8; }
+    30% { opacity: 1; }
+    35% { opacity: 0.9; }
+    40% { opacity: 1; }
+    45% { opacity: 0.8; }
+    50% { opacity: 0.9; }
+    55% { opacity: 1; }
+    60% { opacity: 0.8; }
+    65% { opacity: 0.9; }
+    70% { opacity: 1; }
+    75% { opacity: 0.8; }
+    80% { opacity: 0.9; }
+    85% { opacity: 1; }
+    90% { opacity: 0.8; }
+    95% { opacity: 0.9; }
+    100% { opacity: 1; }
+  }
+
+  .poap-container {
+    animation: flicker 5s infinite;
+  }
+
+  .glitch-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(255, 255, 0, 0.1), rgba(0, 255, 0, 0.1));
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  @keyframes glitch {
+    0% { transform: translate(0); }
+    20% { transform: translate(-5px, 5px); }
+    40% { transform: translate(-5px, -5px); }
+    60% { transform: translate(5px, 5px); }
+    80% { transform: translate(5px, -5px); }
+    100% { transform: translate(0); }
+  }
+
+  .glitch-text {
+    animation: glitch 1s infinite;
+    display: inline-block;
+  }
+</style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="poap-container">
+      <div class="glitch-overlay"></div>
+      <h2><span class="glitch-text">Glitchy Eco Ops 3D POAP Token Graffiti</span></h2>
+      <p>Create Your Eco-Warrior Masterpiece!</p>
+      <div class="dialogue" id="dialogue">Welcome, Eco Artist! Spray your mark on this 3D POAP!</div>
+      <div class="controls">
+        <button class="control-button" id="rotateButton">Toggle Rotation</button>
+        <button class="control-button" id="resetButton">Reset View</button>
+      </div>
+      <div class="color-picker">
+        <div class="color-option selected" data-color="#00ff00" style="background-color: #00ff00;"></div>
+        <div class="color-option" data-color="#ff00ff" style="background-color: #ff00ff;"></div>
+        <div class="color-option" data-color="#ffff00" style="background-color: #ffff00;"></div>
+        <div class="color-option" data-color="#00ffff" style="background-color: #00ffff;"></div>
+        <div class="color-option" data-color="#ff0000" style="background-color: #ff0000;"></div>
+      </div>
+      <div id="penroseCanvas"></div>
+      <p>Spray your eco-message on this 3D canvas!</p>
+      <button class="claim-button" id="claimButton">Claim POAP</button>
+      <div class="poap-info" id="poapInfo">
+        Click and drag to spray paint. Use controls to adjust view.
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+    let scene, camera, renderer, pentagonalPrism, raycaster, mouse;
+    let selectedColor = '#00ff00';
+    let isRotating = false;
+    let isMouseDown = false;
+    const dialogue = document.getElementById('dialogue');
+    const dialogues = [
+      "Awesome spray technique! You're a true eco-artist!",
+      "Tagging for the planet! Your message is powerful!",
+      "Wow, this 3D graffiti is seriously eco-cool!",
+      "Your green creativity is off the charts!",
+      "This 3D POAP will inspire eco-warriors everywhere!"
+    ];
+
+    function init() {
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera(75, 8/5, 0.1, 1000);
+      renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer.setSize(800, 500);
+      document.getElementById('penroseCanvas').appendChild(renderer.domElement);
+
+      createPentagonalPrism();
+      
+      camera.position.z = 3;
+
+      raycaster = new THREE.Raycaster();
+      mouse = new THREE.Vector2();
+
+      renderer.domElement.addEventListener('mousedown', onMouseDown, false);
+      renderer.domElement.addEventListener('mousemove', onMouseMove, false);
+      renderer.domElement.addEventListener('mouseup', onMouseUp, false);
+
+      const colorOptions = document.querySelectorAll('.color-option');
+      colorOptions.forEach(option => {
+        option.addEventListener('click', () => {
+          selectedColor = option.dataset.color;
+          colorOptions.forEach(opt => opt.classList.remove('selected'));
+          option.classList.add('selected');
+          playGlitchyBeep();
+        });
+      });
+
+      document.getElementById('rotateButton').addEventListener('click', toggleRotation);
+      document.getElementById('resetButton').addEventListener('click', resetView);
+
+      animate();
+    }
+
+    function createPentagonalPrism() {
+      const geometry = new THREE.CylinderGeometry(1.5, 1.5, 3, 5, 1);
+      const material = new THREE.MeshPhongMaterial({ 
+        color: 0x004400, 
+        specular: 0x009900, 
+        shininess: 30,
+        side: THREE.DoubleSide
+      });
+      pentagonalPrism = new THREE.Mesh(geometry, material);
+      scene.add(pentagonalPrism);
+
+      const light = new THREE.PointLight(0xffffff, 1, 100);
+      light.position.set(0, 0, 5);
+      scene.add(light);
+    }
+
+    function onMouseDown(event) {
+      isMouseDown = true;
+      paintGraffiti(event);
+    }
+
+    function onMouseMove(event) {
+      if (isMouseDown) {
+        paintGraffiti(event);
+      }
+    }
+
+    function onMouseUp() {
+      isMouseDown = false;
+    }
+
+    function paintGraffiti(event) {
+      event.preventDefault();
+      mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
+      mouse.y = - (event.clientY / renderer.domElement.clientHeight) * 2 + 1;
+
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObject(pentagonalPrism);
+
+      if (intersects.length > 0) {
+        const intersect = intersects[0];
+        const face = intersect.face;
+        const geometry = pentagonalPrism.geometry;
+        
+        // Create a small sphere at the intersection point
+        const sphereGeometry = new THREE.SphereGeometry(0.02, 32, 32);
+        const sphereMaterial = new THREE.MeshBasicMaterial({ color: selectedColor });
+        const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+        sphere.position.copy(intersect.point);
+        scene.add(sphere);
+
+        updateDialogue();
+        playGlitchyBeep();
+      }
+    }
+
+    function toggleRotation() {
+      isRotating = !isRotating;
+      playGlitchyBeep();
+    }
+
+    function resetView() {
+      pentagonalPrism.rotation.set(0, 0, 0);
+      camera.position.set(0, 0, 3);
+      playGlitchyBeep();
+    }
+
+    function updateDialogue() {
+      const randomDialogue = dialogues[Math.floor(Math.random() * dialogues.length)];
+      dialogue.textContent = randomDialogue;
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+      if (isRotating) {
+        pentagonalPrism.rotation.y += 0.01;
+      }
+      renderer.render(scene, camera);
+    }
+
+    function playGlitchyBeep() {
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const oscillator = audioContext.createOscillator();
+      oscillator.type = 'square';
+      oscillator.frequency.setValueAtTime(Math.random() * 500 + 200, audioContext.currentTime);
+      
+      const gainNode = audioContext.createGain();
+      gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      oscillator.start();
+      oscillator.stop(audioContext.currentTime + 0.2);
+    }
+
+    function flashScreen() {
+      const flash = document.createElement('div');
+      flash.style.position = 'fixed';
+      flash.style.top = '0';
+      flash.style.left = '0';
+      flash.style.width = '100%';
+      flash.style.height = '100%';
+      flash.style.backgroundColor = 'white';
+      flash.style.opacity = '0';
+      flash.style.pointerEvents = 'none';
+      flash.style.zIndex = '9999';
+      flash.style.transition = 'opacity 0.1s';
+      
+      document.body.appendChild(flash);
+      
+      setTimeout(() => {
+        flash.style.opacity = '0.3';
+        setTimeout(() => {
+          flash.style.opacity = '0';
+          setTimeout(() => {
+            document.body.removeChild(flash);
+          }, 100);
+        }, 50);
+      }, 0);
+    }
+
+    setInterval(flashScreen, 10000); // Flash every 10 seconds
+
+    init();
+
+    // POAP claim logic
+    const claimButton = document.getElementById('claimButton');
+    const poapInfo = document.getElementById('poapInfo');
+
+    claimButton.addEventListener('click', async function() {
+      poapInfo.textContent = "Processing your 3D Graffiti POAP claim...";
+      dialogue.textContent = "Awesome! Let's immortalize your eco-art on the blockchain!";
+      playGlitchyBeep();
+
+      try {
+        // Simulating an API call
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        const success = Math.random() < 0.8; // 80% success rate for demonstration
+        
+        if (success) {
+          poapInfo.textContent = "3D Graffiti POAP claimed successfully! Check your wallet for the token.";
+          dialogue.textContent = "Congrats, Eco Artist! Your 3D graffiti POAP is now a digital masterpiece!";
+        } else {
+          poapInfo.textContent = "3D Graffiti POAP claim failed. Please try again.";
+          dialogue.textContent = "Oops! Looks like our eco-servers need a green boost. Let's try again!";
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        poapInfo.textContent = "An error occurred. Please try again later.";
+        dialogue.textContent = "Even digital art faces challenges. Let's give it another shot soon!";
+      }
+    });
+  </script>
+</body>
+</html>
