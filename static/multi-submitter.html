@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Ops App</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script> <style>
+        .file-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .file-item {
+            border: 1px solid #ccc;
+            padding: 0.5rem;
+            cursor: move; /* Indicate draggability */
+        }
+
+        .file-item img, .file-item .sound-icon {
+            max-width: 100px;
+            max-height: 100px;
+            margin-bottom: 0.5rem;
+        }
+
+        .sound-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #eee;
+            font-size: 2rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-8">
+    <div id="app" class="max-w-2xl mx-auto bg-white p-8 rounded shadow">
+        <h1>IPFS Upload Form</h1>
+        <form id="uploadForm">
+            <div class="mt-4">
+                <input type="text" id="title" placeholder="Title" required><br>
+                <textarea id="description" placeholder="Description" required></textarea><br>
+                <input type="text" id="user" placeholder="User" required><br>
+                <input type="date" id="date" required><br>
+                <input type="text" id="location" placeholder="Location (optional)"><br>
+
+                <div class="mb-4">
+                    <label for="images" class="block text-sm font-medium text-gray-700">Images</label>
+                    <input type="file" id="images" accept="image/*" multiple class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <div id="imagePreviews" class="file-list mt-2"></div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="sounds" class="block text-sm font-medium text-gray-700">Sound Files</label>
+                    <input type="file" id="sounds" accept="audio/*" multiple class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <div id="soundPreviews" class="file-list mt-2"></div>
+                </div>
+
+                <button type="submit" class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">
+                    Upload to IPFS
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const imageInput = document.getElementById('images');
+        const imagePreviews = document.getElementById('imagePreviews');
+        const soundsInput = document.getElementById('sounds');
+        const soundPreviews = document.getElementById('soundPreviews');
+
+        imageInput.addEventListener('change', () => {
+            imagePreviews.innerHTML = ''; 
+
+            for (const file of imageInput.files) {
+                const previewContainer = document.createElement('div');
+                previewContainer.classList.add('file-item', 'image-preview'); 
+
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+                img.alt = file.name;
+                previewContainer.appendChild(img);
+
+                const removeButton = document.createElement('button');
+                removeButton.textContent = 'Remove';
+                removeButton.addEventListener('click', () => {
+                    previewContainer.remove();
+                });
+                previewContainer.appendChild(removeButton);
+
+                imagePreviews.appendChild(previewContainer);
+            }
+        });
+
+        soundsInput.addEventListener('change', () => {
+            soundPreviews.innerHTML = ''; 
+
+            for (const file of soundsInput.files) {
+                const previewContainer = document.createElement('div');
+                previewContainer.classList.add('file-item');
+
+                const icon = document.createElement('div');
+                icon.classList.add('sound-icon');
+                icon.innerHTML = '<i class="fas fa-volume-up"></i>'; 
+                previewContainer.appendChild(icon);
+
+                const fileName = document.createElement('p');
+                fileName.textContent = file.name;
+                previewContainer.appendChild(fileName);
+
+                const removeButton = document.createElement('button');
+                removeButton.textContent = 'Remove';
+                removeButton.addEventListener('click', () => {
+                    previewContainer.remove();
+                });
+                previewContainer.appendChild(removeButton);
+
+                soundPreviews.appendChild(previewContainer);
+            }
+        });
+
+        // Drag and Drop functionality 
+        new Sortable(imagePreviews, {
+            animation: 150
+        });
+        new Sortable(soundPreviews, {
+            animation: 150
+        });
+
+        document.getElementById('uploadForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            async function uploadToIPFS(file) {
+                const apiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDZhRmQ5M0JiNzQwM2RlQ2Y4NGVmRWRCRjlBNUFkNWM5RUQ1YjhFRjQiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY0NzU1NTQ4NTA4MSwibmFtZSI6Inlvb2NhdHMifQ.aZot4G1rrH-ED9tXIV9VAa3OCS87g6nBQEM1paBiIxI'; 
+                const formData = new FormData();
+                formData.append('file', file);
+
+                try {
+                    const response = await fetch('https://api.nft.storage/upload', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${apiKey}`,
+                        },
+                        body: formData,
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`Failed to upload file to IPFS. Status: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    return data.value.cid; 
+                } catch (error) {
+                    console.error('Error uploading file to IPFS:', error);
+                    throw error; 
+                }
+            }
+
+            const title = document.getElementById('title').value;
+            const description = document.getElementById('description').value;
+            const user = document.getElementById('user').value;
+          
+
+            const date = document.getElementById('date').value;
+            const location = document.getElementById('location').value;
+
+            // Get staged images and sounds in the reordered sequence
+            const stagedImages = Array.from(imagePreviews.querySelectorAll('.image-preview img'))
+                .map(img => imageInput.files[Array.from(imageInput.files).findIndex(f => f.name === img.alt)]);
+
+            const stagedSounds = Array.from(soundPreviews.querySelectorAll('.file-item'))
+                .map(item => soundsInput.files[Array.from(soundsInput.files).findIndex(f => f.name === item.querySelector('p').textContent)]);
+
+            // Upload all files and collect CIDs
+            const allFiles = [...stagedImages, ...stagedSounds];
+            const cidPromises = allFiles.map(uploadToIPFS);
+            const cids = await Promise.all(cidPromises);
+
+            // Separate image and sound CIDs
+            const imageCIDs = cids.slice(0, stagedImages.length);
+            const soundCIDs = cids.slice(stagedImages.length);
+
+            // Prepare the metadata file
+            const metadata = {
+                title,
+                description,
+                user,
+                date,
+                location,
+                imageCIDs: imageCIDs,
+                soundCIDs: soundCIDs
+            };
+
+            // Convert metadata object to a Blob for IPFS upload
+            const metadataBlob = new Blob([JSON.stringify(metadata)], { type: 'application/json' });
+
+            // Upload metadata and retrieve CID
+            const metadataCID = await uploadToIPFS(metadataBlob);
+
+            console.log('Metadata CID:', metadataCID);
+            alert(`Upload successful! Metadata CID: ${metadataCID}`);
+        });
+    </script>
+</body>
+</html>
+
+
+              
