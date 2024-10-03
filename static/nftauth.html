@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Ops App</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+</head>
+<body class="bg-gray-100 p-8">
+    <div id="app" class="max-w-2xl mx-auto bg-white p-8 rounded shadow">
+        <h1>IPFS Upload Form</h1>
+        <form id="uploadForm">
+            <div class="mt-4">
+                <input type="text" id="title" placeholder="Title" required><br>
+                <textarea id="description" placeholder="Description" required></textarea><br>
+                <input type="text" id="user" placeholder="User" required><br>
+                <input type="date" id="date" required><br>
+                <input type="text" id="location" placeholder="Location (optional)"><br>
+                <input type="file" id="image1" accept="image/*" required><br>
+                <input type="file" id="image2" accept="image/*"><br>
+                <button type="submit">Upload to IPFS</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            // Function to upload to IPFS via NFT.Storage
+            async function uploadToIPFS(file) {
+                const apiKey = 'your-nft-storage-api-key'; // Replace with your NFT.storage API key
+                const formData = new FormData();
+                formData.append('file', file);
+                
+                try {
+                    const response = await fetch('https://api.nft.storage/upload', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${apiKey}`,
+                        },
+                        body: formData,
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`Failed to upload file to IPFS. Status: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    return data.value.cid; // Return the CID of the uploaded file
+                } catch (error) {
+                    console.error('Error uploading file to IPFS:', error);
+                    throw error;
+                }
+            }
+
+            // Benefit assessment functions
+            const calculateBiodiversityImpact = () => {
+                return Math.floor(Math.random() * 30) + 1; // Mock impact calculation
+            };
+
+            const calculateHumanRightsImpact = () => {
+                return Math.floor(Math.random() * 30) + 1; // Mock impact calculation
+            };
+
+            const calculateClimateImpact = () => {
+                return Math.floor(Math.random() * 30) + 1; // Mock impact calculation
+            };
+
+            // Concurrently calculate beneficial impacts
+            const biodiversityImpact = calculateBiodiversityImpact();
+            const humanRightsImpact = calculateHumanRightsImpact();
+            const climateImpact = calculateClimateImpact();
+            const totalImpact = biodiversityImpact + humanRightsImpact + climateImpact;
+
+            // Collect form inputs
+            const title = document.getElementById('title').value;
+            const description = document.getElementById('description').value;
+            const user = document.getElementById('user').value;
+            const date = document.getElementById('date').value;
+            const location = document.getElementById('location').value;
+            const image1 = document.getElementById('image1').files[0];
+            const image2 = document.getElementById('image2').files.length > 0 ? document.getElementById('image2').files[0] : null;
+
+            // Upload images to IPFS
+            const cidPromises = [uploadToIPFS(image1)];
+            if (image2) cidPromises.push(uploadToIPFS(image2));
+            const cids = await Promise.all(cidPromises);
+
+            // Prepare metadata
+            const metadata = {
+                title,
+                description,
+                user,
+                date,
+                location,
+                imageCIDs: cids,
+                impacts: {
+                    biodiversity: biodiversityImpact,
+                    humanRights: humanRightsImpact,
+                    climate: climateImpact,
+                    totalImpact
+                }
+            };
+
+            // Convert metadata to JSON blob for IPFS upload
+            const metadataBlob = new Blob([JSON.stringify(metadata)], { type: 'application/json' });
+            const metadataCID = await uploadToIPFS(metadataBlob);
+
+            console.log('Metadata CID:', metadataCID);
+            alert(`Upload successful! Metadata CID: ${metadataCID}`);
+        });
+    </script>
+</body>
+</html>
