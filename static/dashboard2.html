@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>User Dashboard</title>
+
+  <!-- Tailwind CSS CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+  <style>
+    body {
+      background-color: #f3f4f6;
+      font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+    .card {
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body class="bg-gray-100 text-gray-900">
+
+  <!-- Header -->
+  <header class="bg-gray-800 text-white p-4 shadow-md">
+    <h1 class="text-center text-3xl font-semibold">User Dashboard</h1>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container mx-auto mt-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+
+      <!-- User Stats Cards -->
+      <div class="card p-4 text-center">
+        <h2 class="text-2xl font-semibold" id="total-users">0</h2>
+        <p>Total Users</p>
+      </div>
+      <div class="card p-4 text-center">
+        <h2 class="text-2xl font-semibold" id="active-users">0</h2>
+        <p>Active Users</p>
+      </div>
+      <div class="card p-4 text-center">
+        <h2 class="text-2xl font-semibold" id="admin-users">0</h2>
+        <p>Admin Users</p>
+      </div>
+      <div class="card p-4 text-center">
+        <h2 class="text-2xl font-semibold" id="premium-users">0</h2>
+        <p>Premium Users</p>
+      </div>
+
+    </div>
+
+    <!-- Chart Section -->
+    <div class="card p-6 mb-6">
+      <canvas id="userChart"></canvas>
+    </div>
+
+    <!-- Data Table Section -->
+    <div class="card p-6">
+      <h2 class="text-xl font-semibold mb-4">User Details</h2>
+      <table class="table-auto w-full">
+        <thead>
+          <tr class="bg-gray-200">
+            <th class="px-4 py-2">ID</th>
+            <th class="px-4 py-2">Username</th>
+            <th class="px-4 py-2">Email</th>
+            <th class="px-4 py-2">Role</th>
+            <th class="px-4 py-2">Joined</th>
+          </tr>
+        </thead>
+        <tbody id="userTable">
+          <!-- Data will be inserted here -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <script>
+    // Supabase Client Initialization
+    const supabaseUrl = 'https://vlvbodwrtblttvwnxkjx.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZsdmJvZHdydGJsdHR2d254a2p4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODY3NDk2NzIsImV4cCI6MjAwMjMyNTY3Mn0.TRT1HeX85vP1zDxnU7qBz5GqNPgYZUj-BOdek4qmtEg';
+    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+    // Fetch and display user statistics from Supabase
+    async function fetchUserStats() {
+      const { data, error } = await supabase
+        .from('user_stats')
+        .select('*')
+        .order('updated_at', { ascending: false })
+        .limit(1);
+
+      if (error) {
+        console.error('Error fetching user stats:', error);
+      } else if (data.length > 0) {
+        const stats = data[0];
+        document.getElementById('total-users').textContent = stats.total_users;
+        document.getElementById('active-users').textContent = stats.active_users;
+        document.getElementById('admin-users').textContent = stats.admin_users;
+        document.getElementById('premium-users').textContent = stats.premium_users;
+      }
+    }
+
+    // Fetch and display users from Supabase
+    async function fetchUsers() {
+      const { data, error } = await supabase
+        .from('users')
+        .select('*');
+
+      if (error) {
+        console.error('Error fetching users:', error);
+      } else {
+        const userTable = document.getElementById('userTable');
+        data.forEach(user => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td class="px-4 py-2">${user.id}</td>
+            <td class="px-4 py-2">${user.username}</td>
+            <td class="px-4 py-2">${user.email}</td>
+            <td class="px-4 py-2">${user.role}</td>
+            <td class="px-4 py-2">${new Date(user.joined).toLocaleDateString()}</td>
+          `;
+          userTable.appendChild(row);
+        });
+      }
+    }
+
+    // Initialize the dashboard by fetching stats and users
+    fetchUserStats();
+    fetchUsers();
+
+    // Create a Chart.js Line Chart for active users
+    const ctx = document.getElementById('userChart').getContext('2d');
+    const userChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        datasets: [{
+          label: 'Active Users Over Time',
+          data: [30, 50, 70, 60, 80, 85, 90],
+          borderColor: 'rgba(75, 192, 192, 1)',
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>
