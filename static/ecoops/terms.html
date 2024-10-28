@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ApproVideo - Community Guidelines</title>
+    <style>
+        :root {
+            --primary-color: #2C7744;
+            --secondary-color: #88B04B;
+            --background-color: #F5F7F2;
+            --text-color: #333;
+            --header-height: 60px;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background: var(--background-color);
+            color: var(--text-color);
+        }
+
+        .header {
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+        }
+
+        .header-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .content {
+            max-width: 800px;
+            margin: calc(var(--header-height) + 2rem) auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .section {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            font-size: 1.5rem;
+            margin: 2rem 0 1rem;
+        }
+
+        .highlight-box {
+            background: #f8f9fa;
+            border-left: 4px solid var(--secondary-color);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #eee;
+            overflow-x: auto; /* Enable horizontal scrolling for small screens */
+        }
+
+        .tab {
+            padding: 1rem 2rem;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            white-space: nowrap; /* Prevent tabs from wrapping */
+        }
+
+        .tab.active {
+            border-bottom: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Animation for welcome message */
+        .welcome-animation {
+            animation: slideIn 1s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* SVG Styling */
+        .svg-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 0.5rem;
+            fill: var(--secondary-color);
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-logo">ApproVideo.org</div>
+    </header>
+
+    <div class="content">
+        <div class="welcome-animation">
+            <h1>Welcome to ApproVideo!</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('terms')">Terms & Conditions</div>
+            <div class="tab" onclick="switchTab('legal')">Legal Information</div>
+        </div>
+
+        <div id="terms" class="tab-content active">
+            <h1>Community Guidelines & Terms of Use</h1>
+
+            <div class="section">
+                <h2>
+                    <svg class="svg-icon" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-6v-2h2v2H11zm1 2c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
+                    </svg>
+                    1. Community Participation Agreement
+                </h2>
+                <p>By participating in ApproVideo.org's interactive features, you agree to:</p>
+                <ul>
+                    <li>Share knowledge and experiences related to sustainable technology and DIY projects</li>
+                    <li>Respect intellectual property rights and provide proper attribution</li>
+                    <li>Maintain civil discourse focused on sustainability and appropriate technology</li>
+                    <li>Avoid sharing personal information or locations</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>
+                    <svg class="svg-icon" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    </svg>
+                    2. Content Moderation
+                </h2>
+                <p>Our community is supported by AI moderation to ensure content remains:</p>
+                <ul>
+                    <li>Free from harassment, threats, and personal attacks</li>
+                    <li>Focused on sustainable technology and DIY projects</li>
+                    <li>Safe for all community members</li>
+                    <li>Free from doxxing or personal information sharing</li>
+                </ul>
+                <div class="highlight-box">
+                    Note: AI moderation is used to assist human moderators in maintaining community standards. All final decisions are reviewed by human moderators.
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>
+                    <svg class="svg-icon" viewBox="0 0 24 24">
+                        <path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.90-9 4.03-9 9c4.97 0 9 4.03 9 9h-2l-3.89-3.89-.07-.14L15 18h3c1.93 0 3.68.79 4.94 2.06l1.42-1.42C19.73 19.99 17.49 21 15 21c-4.97 0-9-4.03-9-9s4.03-9 9-9H21l-3.89 3.89.07.14L15 6h3c3.87 0 7 3.13 7 7s-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 13.99 10.51 13 13 13z"/>
+                    </svg>
+                    3. Interactive Features
+                </h2>
+                <p>By opting into interactive features, you acknowledge:</p>
+                <ul>
+                    <li>Comments and discussions are publicly visible</li>
+                    <li>Content may be moderated or removed if it violates guidelines</li>
+                    <li>Repeated violations may result in feature access restriction</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="legal" class="tab-content">
+            <h1>Legal Information</h1>
+
+            <div class="section">
+                <h2>
+                    <svg class="svg-icon" viewBox="0 0 24 24">
+                        <path d="M19 4H5c-1.11 0-2 .9-2 2v12c0 1.1.89 2 2 2h4v-2H5V8h14v10h-4v2h4c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-7 6c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H7c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V4c0-1.1-.89-2-2-2zm0 16H7V4h10v14z"/>
+                    </svg>
+                    Content Usage Rights
+                </h2>
+                <p>Videos and content on ApproVideo.org are:</p>
+                <ul>
+                    <li>Shared for educational and informational purposes only</li>
+                    <li>Subject to original creators' copyright and usage rights</li>
+                    <li>Not to be reproduced without proper attribution and permission</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>
+                    <svg class="svg-icon" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                    </svg>
+                    Safety & Liability
+                </h2>
+                <div class="highlight-box">
+                    Projects and tutorials are shared for educational purposes. Users assume all responsibility for safety when implementing projects.
+                </div>
+                <p>Users acknowledge:</p>
+                <ul>
+                    <li>The need to follow local regulations and building codes</li>
+                    <li>Personal responsibility for safety measures</li>
+                    <li>The importance of proper research and preparation</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>
+                    <svg class="svg-icon" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-8c0-1.74-1.41-3.13-3.13-3.13-.87 0-1.64.39-2.13 1.01L11 14h-4v-4h4l1.28-1.28c.5-.49 1.26-.99 2.13-.99 1.73 0 3.13 1.39 3.13 3.13z"/>
+                    </svg>
+                    Data Privacy
+                </h2>
+                <p>We protect your privacy by:</p>
+                <ul>
+                    <li>Minimizing data collection to essential information only</li>
+                    <li>Never sharing personal information with third parties</li>
+                    <li>Providing opt-in only interactive features</li>
+                    <li>Allowing users to delete their account and data</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            document.querySelector(`.tab[onclick="switchTab('${tabName}')"]`).classList.add('active');
+        }
+    </script>
+</body>
+</html>
