@@ -1,0 +1,204 @@
+SCDHub Eco Ops Project: Testing, Implementation, Promotion & Fundraising Strategy
+Draft Document
+Date: November 5, 2024
+Project: SCDHub Eco Ops Project Coordination and Transparency Volunteer Incentives Biodiversity Credit System
+Program: Worldbridger One
+Websites: Exotopia, Ecocity
+Technology: POAP, SBT NFTs
+Focus: WATSAN Nexus (Water, Sanitation, and Hygiene), Peace Engineering, Basic Needs, Ecosystem Restoration
+Vision: To create a robust and transparent system that incentivizes volunteer participation in eco-ops projects, fosters community engagement, and promotes biodiversity conservation through innovative technology and education.
+I. Testing
+    • Phase 1: Closed Beta Testing 
+        ◦ Timeline: [Specify timeline] 
+        ◦ Participants: Select a small group of core volunteers and community members. 
+        ◦ Focus: 
+            ▪ Test the core functionality of the platform (video admin, NFT issuance, check-in verification, etc.) 
+            ▪ Gather feedback on user experience and identify any bugs or areas for improvement. 
+            ▪ Refine the incentive structure and ensure it effectively motivates volunteers. 
+    • Phase 2: Open Beta Testing 
+        ◦ Timeline: [Specify timeline] 
+        ◦ Participants: Expand to a wider group of volunteers and interested individuals. 
+        ◦ Focus: 
+            ▪ Test scalability and performance under increased user load. 
+            ▪ Gather feedback on a larger scale and identify any remaining issues. 
+            ▪ Refine the platform based on feedback and prepare for full launch. 
+II. Implementation
+    • Platform Development: 
+        ◦ Utilize Basejump to build the core platform features (video management, NFT issuance, etc.). 
+        ◦ Integrate POAP and SBT NFT technology for issuing biodiversity credits and recognizing volunteer contributions. 
+        ◦ Develop user-friendly interfaces for project coordination, communication, and tracking progress. 
+    • Community Onboarding: 
+        ◦ Create clear and engaging onboarding materials to guide new users. 
+        ◦ Host workshops and training sessions to familiarize volunteers with the platform and its features. 
+        ◦ Provide ongoing support and resources to ensure successful adoption. 
+    • Project Launch: 
+        ◦ Announce the official launch of the platform through various channels (website, social media, email, etc.). 
+        ◦ Highlight the benefits of participation and the impact volunteers can make. 
+        ◦ Begin actively promoting projects and encouraging volunteer engagement. 
+III. Promotion
+    • Online Channels: 
+        ◦ Utilize social media platforms (Twitter, Facebook, Instagram, etc.) to share project updates, highlight volunteer stories, and showcase the impact of the initiative. 
+        ◦ Create engaging content (videos, blog posts, infographics) that educates and inspires. 
+        ◦ Leverage online communities and forums related to sustainability, biodiversity, and community development. 
+    • Offline Channels: 
+        ◦ Participate in relevant events and conferences to promote the project and connect with potential volunteers. 
+        ◦ Organize workshops and presentations in local communities to raise awareness and encourage participation. 
+        ◦ Partner with schools, universities, and other organizations to reach a wider audience. 
+    • Content Marketing: 
+        ◦ Develop high-quality content that showcases the project's impact, highlights volunteer stories, and educates the public about the importance of biodiversity and WATSAN nexus issues. 
+        ◦ Create case studies and success stories to demonstrate the effectiveness of the platform and its impact on the community. 
+        ◦ Utilize SEO strategies to improve online visibility and attract organic traffic. 
+IV. Fundraising
+    • Grant Proposals: 
+        ◦ Research and apply for grants from foundations, government agencies, and other organizations that support environmental conservation, community development, and technology-driven solutions. 
+        ◦ Develop compelling grant proposals that clearly articulate the project's goals, objectives, and expected outcomes. 
+    • Crowdfunding: 
+        ◦ Launch a crowdfunding campaign on platforms like Kickstarter or Indiegogo to raise funds from the public. 
+        ◦ Create engaging campaign materials (videos, images, compelling stories) to attract donors. 
+        ◦ Offer rewards and incentives to donors, such as exclusive NFTs, early access to platform features, or recognition on the project website. 
+    • Partnerships: 
+        ◦ Seek partnerships with businesses, organizations, and individuals who align with the project's values and mission. 
+        ◦ Explore opportunities for corporate sponsorships, joint ventures, and collaborative fundraising initiatives. 
+    • NFT Sales: 
+        ◦ Consider offering limited-edition NFTs or special collections that provide unique benefits or access to exclusive content. 
+        ◦ Utilize the proceeds from NFT sales to support the project's development and ongoing operations. 
+V. Current Strategies
+    • Platform Development: Actively developing the core platform features using Basejump and integrating POAP/SBT NFT technology. 
+    • Community Building: Engaging with existing volunteer networks and building relationships with potential partners. 
+    • Content Creation: Developing initial website content and social media presence. 
+    • Fundraising: Exploring potential grant opportunities and planning a crowdfunding campaign. 
+VI. Next Steps
+    • Finalize Testing Plan: Define specific timelines and participant selection criteria for beta testing phases. 
+    • Refine Incentive Structure: Ensure the biodiversity credit system is compelling and effectively motivates volunteers. 
+    • Develop Onboarding Materials: Create comprehensive guides and tutorials for new users. 
+    • Launch Marketing Campaign: Develop a detailed marketing plan to promote the platform and attract volunteers. 
+    • Secure Funding: Submit grant proposals and prepare for crowdfunding campaign launch. 
+This draft document provides a framework for the testing, implementation, promotion, and fundraising strategy for the SCDHub Eco Ops project. It will be further refined and updated as the project progresses and new information becomes available.
+
+
+
+  TECH ADDENDUM
+
+     testing use of basejump core
+
+├── appro.json
+├── components.json
+├── next.config.js
+├── next-env.d.ts
+├── package.json
+├── postcss.config.js
+├── public
+│   └── images
+│       ├── basejump-logo.png
+│       └── basejump-team-page.png
+├── README.md
+├── src
+│   ├── ~2
+│   ├── api
+│   │   └── auth
+│   │       └── signup.ts
+│   ├── app
+│   │   ├── auth
+│   │   │   └── callback
+│   │   │       └── route.ts
+│   │   ├── dashboard
+│   │   │   ├── [accountSlug]
+│   │   │   │   ├── layout.tsx
+│   │   │   │   ├── page.tsx
+│   │   │   │   └── settings
+│   │   │   │       ├── billing
+│   │   │   │       │   └── page.tsx
+│   │   │   │       ├── layout.tsx
+│   │   │   │       ├── members
+│   │   │   │       │   └── page.tsx
+│   │   │   │       └── page.tsx
+│   │   │   └── (personalAccount)
+│   │   │       ├── layout.tsx
+│   │   │       ├── page.tsx
+│   │   │       └── settings
+│   │   │           ├── billing
+│   │   │           │   └── page.tsx
+│   │   │           ├── layout.tsx
+│   │   │           ├── page.tsx
+│   │   │           └── teams
+│   │   │               └── page.tsx
+│   │   ├── favicon.ico
+│   │   ├── globals.css
+│   │   ├── invitation
+│   │   │   └── page.tsx
+│   │   ├── layout.tsx
+│   │   ├── login
+│   │   │   └── page.tsx
+│   │   └── page.tsx
+│   ├── components
+│   │   ├── basejump
+│   │   │   ├── accept-team-invitation.tsx
+│   │   │   ├── account-billing-status.tsx
+│   │   │   ├── account-selector.tsx
+│   │   │   ├── create-team-invitation-button.tsx
+│   │   │   ├── delete-team-invitation-button.tsx
+│   │   │   ├── delete-team-member-form.tsx
+│   │   │   ├── edit-personal-account-name.tsx
+│   │   │   ├── edit-team-member-role-form.tsx
+│   │   │   ├── edit-team-name.tsx
+│   │   │   ├── edit-team-slug.tsx
+│   │   │   ├── manage-team-invitations.tsx
+│   │   │   ├── manage-team-members.tsx
+│   │   │   ├── manage-teams.tsx
+│   │   │   ├── new-invitation-form.tsx
+│   │   │   ├── new-team-form.tsx
+│   │   │   ├── team-member-options.tsx
+│   │   │   └── user-account-button.tsx
+│   │   ├── dashboard
+│   │   │   ├── dashboard-header.tsx
+│   │   │   ├── dashboard-title.tsx
+│   │   │   ├── navigation-account-selector.tsx
+│   │   │   └── settings-navigation.tsx
+│   │   ├── getting-started
+│   │   │   ├── basejump-logo.tsx
+│   │   │   ├── header.tsx
+│   │   │   ├── next-logo.tsx
+│   │   │   └── supabase-logo.tsx
+│   │   ├── ui
+│   │   │   ├── alert.tsx
+│   │   │   ├── badge.tsx
+│   │   │   ├── button.tsx
+│   │   │   ├── card.tsx
+│   │   │   ├── checkbox.tsx
+│   │   │   ├── command.tsx
+│   │   │   ├── dialog.tsx
+│   │   │   ├── dropdown-menu.tsx
+│   │   │   ├── input.tsx
+│   │   │   ├── label.tsx
+│   │   │   ├── popover.tsx
+│   │   │   ├── select.tsx
+│   │   │   ├── separator.tsx
+│   │   │   ├── sheet.tsx
+│   │   │   ├── submit-button.tsx
+│   │   │   ├── submitButton.tsx
+│   │   │   └── table.tsx
+│   │   └── VideoList.tsx
+│   ├── context
+│   │   └── AuthContext.tsx
+│   ├── lib
+│   │   ├── actions
+│   │   │   ├── billing.ts
+│   │   │   ├── invitations.ts
+│   │   │   ├── members.ts
+│   │   │   ├── personal-account.ts
+│   │   │   └── teams.ts
+│   │   ├── full-invitation-url.ts
+│   │   ├── hooks
+│   │   │   └── use-accounts.ts
+│   │   ├── supabase
+│   │   │   ├── client.ts
+│   │   │   ├── handle-edge-error.ts
+│   │   │   ├── middleware.ts
+│   │   │   └── server.ts
+│   │   └── utils.ts
+│   ├── middleware.ts
+│   └── pages
+│       └── _app.tsx
+├── tailwind.config.ts
+├── tsconfig.json
+└── yarn.lock
