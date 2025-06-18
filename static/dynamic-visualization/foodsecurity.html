@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Future of Food: Intersections for a Resilient Planet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Earthy Harmony -->
+    <!-- Application Structure Plan: The SPA will evolve from a narrative journey focused on mycelium to an exploration of interconnected solutions for global food resilience. It starts with a re-framed introduction setting the broader thesis of Fungi, Insects, Agriculture, Algae, and Home/Kitchen/Acoustic Construction, emphasizing humanitarian and peace engineering, food security, and open-source principles. It then delves into Mycelium and Insect innovations as specific examples within this larger framework. A new "Building Resilient Futures" section will explicitly address the humanitarian, WASH, and open-source dimensions, providing a conceptual hub for the evolved thesis. This structure guides the user from a macro-level vision to micro-level innovations and back to the societal impact, fostering a holistic understanding. -->
+    <!-- Visualization & Content Choices:
+        - Nutritional Comparison (Goal: Compare): Bar chart (Chart.js) comparing mycoprotein nutritional benefits, contextualized within sustainable agriculture.
+        - Waste Upcycling (Goal: Organize/Inform): Interactive HTML/CSS diagram with JS for bioconversion, showcasing circular economy principles relevant to agriculture.
+        - Fungus Comparison (Goal: Compare): Tabbed content with a bar chart for Cordycepin yield, highlighting fungal enhancement of insect protein as part of diverse food solutions.
+        - Innovator Showcase (Goal: Organize/Inform): Filterable grid of cards for key players, illustrating progress in the intersectional food tech space.
+        - Building Resilient Futures (Goal: Inform/Inspire): Textual content combined with conceptual HTML/CSS elements to discuss humanitarian engineering, WASH, and open-source contributions to food security, acting as a concluding synthesis of the evolved thesis.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF5;
+            color: #4A4A4A;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #D97706; /* Amber-600 */
+            border-bottom-color: #D97706;
+        }
+        .section-title {
+            color: #8C5A3B;
+        }
+        .card {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .btn-primary {
+            background-color: #8FBC8F;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #7DAA7D;
+        }
+        .tab.active {
+            background-color: #D2B48C;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .icon-circle {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 4rem;
+            height: 4rem;
+            border-radius: 50%;
+            background-color: #8FBC8F;
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-3">
+            <div class="flex justify-between items-center">
+                <h1 class="text-xl font-bold text-gray-800">Intersectional Food Futures</h1>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#introduction" class="nav-link active">Overview</a>
+                    <a href="#mycelium-revolution" class="nav-link">Fungi & Agriculture</a>
+                    <a href="#bioconversion" class="nav-link">Insects & Beyond</a>
+                    <a href="#resilient-futures" class="nav-link">Building Futures</a>
+                    <a href="#innovators" class="nav-link">Innovators</a>
+                </div>
+                <button id="mobile-menu-button" class="md:hidden focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+            <div id="mobile-menu" class="hidden md:hidden mt-4">
+                 <a href="#introduction" class="block py-2 px-4 text-sm nav-link">Overview</a>
+                 <a href="#mycelium-revolution" class="block py-2 px-4 text-sm nav-link">Fungi & Agriculture</a>
+                 <a href="#bioconversion" class="block py-2 px-4 text-sm nav-link">Insects & Beyond</a>
+                 <a href="#resilient-futures" class="block py-2 px-4 text-sm nav-link">Building Futures</a>
+                 <a href="#innovators" class="block py-2 px-4 text-sm nav-link">Innovators</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="introduction" class="container mx-auto px-6 py-16 text-center">
+            <h2 class="text-4xl md:text-5xl font-bold section-title mb-4">The Future of Food: At the Intersection of Fungi, Insects, Agriculture, Algae, and Home/Kitchen/Acoustic Construction</h2>
+            <p class="max-w-3xl mx-auto text-lg text-gray-600">
+                This report delves into how groundbreaking innovations in food technology are converging with humanitarian and peace engineering to forge global food security. We explore the transformative potential of fungi, insects, sustainable agriculture, and algae, alongside revolutionary approaches to home, kitchen, and even acoustic construction that empower communities. Our open-source commitment empowers developers and promotes sharing for a more peaceful and resilient future, focusing on fundamental needs like water, sanitation, energy, and shelter as cornerstones of sustainable food systems.
+            </p>
+        </section>
+
+        <section id="mycelium-revolution" class="py-16 bg-green-50/50">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center section-title mb-2">Fungi & Sustainable Agriculture: Mycelium's Role</h2>
+                <p class="text-center max-w-3xl mx-auto text-gray-600 mb-12">
+                   Mycelium, the vegetative body of fungi, offers a complete protein profile that significantly reduces environmental impact compared to traditional agriculture. This section highlights its nutritional advantages and its remarkable ability to upcycle agricultural waste, demonstrating how fungi are revolutionizing sustainable food production and contributing to broader food security goals.
+                </p>
+
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-4 text-gray-800">Nutritional Powerhouse</h3>
+                        <p class="text-gray-600 mb-6">Mycelium-based foods, or mycoproteins, are not just sustainable; they are packed with nutrition. Containing all nine essential amino acids, high fiber, and various micronutrients, they present a healthy alternative to conventional protein. The chart illustrates how mycoprotein compares to a traditional source like beef, showcasing its potential in diverse diets globally.</p>
+                        <div class="chart-container">
+                            <canvas id="nutritionChart"></canvas>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-4 text-gray-800">The Circular Advantage: Waste to Wonder</h3>
+                        <p class="text-gray-600 mb-6">A key advantage of mycelium is its ability to grow on agricultural and food industry byproducts, turning low-value waste into high-value food. This process, known as bioconversion, reduces waste and lowers the environmental footprint of food production, making agriculture more circular and efficient. Click on a waste stream below to see how it's transformed into valuable food resources.</p>
+                        <div class="bg-white p-6 rounded-lg shadow-lg">
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <button data-substrate="okara" class="substrate-btn px-4 py-2 text-sm font-medium text-white bg-amber-500 rounded-full hover:bg-amber-600 focus:outline-none">Soy/Oat Okara</button>
+                                <button data-substrate="coffee" class="substrate-btn px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-full hover:bg-gray-300 focus:outline-none">Spent Coffee</button>
+                                <button data-substrate="rapeseed" class="substrate-btn px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-full hover:bg-gray-300 focus:outline-none">Rapeseed Cake</button>
+                            </div>
+                            <div id="bioconversion-display">
+                                <!-- JS will populate this -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="bioconversion" class="py-16">
+            <div class="container mx-auto px-6">
+                 <h2 class="text-3xl font-bold text-center section-title mb-2">Insects & Beyond: Enhancing Novel Proteins</h2>
+                <p class="text-center max-w-3xl mx-auto text-gray-600 mb-12">
+                   Beyond direct consumption, mycelium can fundamentally improve other novel foods, such as edible insects. While insects offer a sustainable protein source for a growing population, they face challenges in flavor and consumer acceptance. Fungal fermentation offers a revolutionary solution, enhancing nutrition, taste, and even adding medicinal properties, expanding the horizon for alternative proteins.
+                </p>
+                <div class="grid md:grid-cols-5 gap-8">
+                    <div class="md:col-span-2">
+                        <h3 class="text-2xl font-semibold mb-4 text-gray-800">Fungi as Food Enhancers</h3>
+                        <p class="text-gray-600 mb-6">Different fungi can be used to "myceliate" mealworms, each imparting unique benefits. Select a fungus below to explore its specific impact on the final product's properties, from boosting protein to infusing potent bioactive compounds, diversifying the applications of insect-based foods.</p>
+                         <div class="flex flex-col space-y-3">
+                            <button class="fungus-tab tab text-left p-4 rounded-lg transition active" data-fungus="cordyceps">
+                                <h4 class="font-bold">Cordyceps militaris</h4>
+                                <p class="text-sm">For Medicinal & Protein Boost</p>
+                            </button>
+                            <button class="fungus-tab tab text-left p-4 rounded-lg transition" data-fungus="pleurotus">
+                                <h4 class="font-bold">Pleurotus (Oyster)</h4>
+                                <p class="text-sm">For Flavor & Texture</p>
+                            </button>
+                            <button class="fungus-tab tab text-left p-4 rounded-lg transition" data-fungus="ganoderma">
+                                 <h4 class="font-bold">Ganoderma (Reishi)</h4>
+                                <p class="text-sm">For Adaptogenic Fortification</p>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="md:col-span-3 bg-white p-6 rounded-lg shadow-inner">
+                        <div id="fungus-cordyceps" class="tab-content active">
+                             <h4 class="text-xl font-bold mb-2 text-amber-700">Cordyceps: The "Superfood" Enhancer</h4>
+                             <p class="text-gray-600 mb-4">This fungus dramatically increases protein and infuses the mealworms with cordycepin, a valuable medicinal compound. Research shows that growing Cordyceps on insects can increase cordycepin yield by up to 100 times compared to traditional grain substrates. This represents a significant leap for functional insect-based foods.</p>
+                             <div class="chart-container h-64 sm:h-80">
+                                 <canvas id="cordycepinChart"></canvas>
+                             </div>
+                        </div>
+                        <div id="fungus-pleurotus" class="tab-content">
+                            <h4 class="text-xl font-bold mb-2 text-lime-700">Pleurotus: The Gourmet Enhancer</h4>
+                            <p class="text-gray-600 mb-4">Oyster mushroom mycelium transforms mealworms by breaking down compounds that cause off-flavors and introducing rich, savory umami notes. It also improves texture, creating a cohesive, meat-like product reminiscent of tempeh but with an insect protein base. The process increases protein bioavailability and adds beneficial fibers like beta-glucans, making insect consumption more appealing.</p>
+                            <div class="bg-lime-50 p-4 rounded-lg">
+                                <p class="text-center font-semibold text-lime-800">Creates a "Mealworm Tempeh" with meaty, savory flavor.</p>
+                            </div>
+                        </div>
+                        <div id="fungus-ganoderma" class="tab-content">
+                             <h4 class="text-xl font-bold mb-2 text-red-700">Ganoderma: The Medicinal Enhancer</h4>
+                             <p class="text-gray-600 mb-4">Reishi mycelium fortifies mealworm powder with its famous medicinal compounds, including immune-supporting beta-glucans and anti-inflammatory triterpenes. This creates a functional "adaptogenic protein" powder, offering enhanced health benefits from insect-based sources. The main challenge is balancing the health benefits with the characteristic bitterness of Reishi.</p>
+                              <div class="bg-red-50 p-4 rounded-lg">
+                                 <p class="text-center font-semibold text-red-800">Results in a high-protein powder with added immune-support benefits.</p>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="resilient-futures" class="py-16 bg-blue-50/50">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl font-bold section-title mb-2">Building Resilient Futures: Humanitarian & Open-Source Impact</h2>
+                <p class="max-w-3xl mx-auto text-gray-600 mb-12">
+                   Achieving global food security requires more than just innovative food sources; it demands an integrated approach rooted in humanitarian and peace engineering. This section explores how foundational elements of water, sanitation, energy, and shelter (WASH + S) are indispensable for creating the resilient environments where these food innovations can truly thrive, all driven by an open-source ethos.
+                </p>
+                <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-8">
+                    <div class="flex flex-col items-center p-6 bg-white rounded-lg shadow-lg">
+                        <div class="icon-circle">💧</div>
+                        <h3 class="text-xl font-semibold mb-2 text-gray-800">Water Security</h3>
+                        <p class="text-gray-600 text-sm">Access to clean water is fundamental for both human consumption and sustainable agricultural practices, enabling efficient fungal and algal cultivation.</p>
+                    </div>
+                    <div class="flex flex-col items-center p-6 bg-white rounded-lg shadow-lg">
+                        <div class="icon-circle">🚽</div>
+                        <h3 class="text-xl font-semibold mb-2 text-gray-800">Sanitation & Health</h3>
+                        <p class="text-gray-600 text-sm">Proper sanitation reduces disease burden, ensuring a healthy workforce and preventing contamination in food production systems.</p>
+                    </div>
+                    <div class="flex flex-col items-center p-6 bg-white rounded-lg shadow-lg">
+                        <div class="icon-circle">⚡</div>
+                        <h3 class="text-xl font-semibold mb-2 text-gray-800">Energy Access</h3>
+                        <p class="text-gray-600 text-sm">Reliable energy powers modern agricultural techniques, processing facilities, and supports climate-controlled environments for novel food production.</p>
+                    </div>
+                    <div class="flex flex-col items-center p-6 bg-white rounded-lg shadow-lg">
+                        <div class="icon-circle">🏡</div>
+                        <h3 class="text-xl font-semibold mb-2 text-gray-800">Shelter & Construction</h3>
+                        <p class="text-gray-600 text-sm">Innovative, localized construction methods (including acoustic considerations for urban farms) provide controlled environments for food cultivation and community living.</p>
+                    </div>
+                     <div class="md:col-span-3 lg:col-span-4 p-6 bg-white rounded-lg shadow-lg mt-8">
+                        <h3 class="text-2xl font-semibold mb-4 text-gray-800">Open-Source for Peace</h3>
+                        <p class="text-gray-600 text-base">
+                            Our commitment to open-source development in these vital areas fosters collaboration, transparency, and rapid innovation. By making designs, data, and methodologies freely available, we empower local communities and developers worldwide to adapt and scale solutions for food production, WASH, and sustainable living, thereby building resilience and promoting peace through shared knowledge and accessible technology.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="innovators" class="py-16 bg-stone-50">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center section-title mb-2">Market & Innovation Landscape</h2>
+                <p class="text-center max-w-3xl mx-auto text-gray-600 mb-12">
+                    A growing number of startups, researchers, and established companies are pioneering the mycelium food space. Their innovations range from creating consumer-facing meat alternatives to developing high-performance B2B ingredients. Explore some of the key players shaping this exciting industry, contributing to the broader vision of intersectional food futures.
+                </p>
+
+                <div class="flex justify-center flex-wrap gap-2 mb-8">
+                    <button class="innovator-filter-btn px-4 py-2 text-sm font-medium rounded-full btn-primary" data-filter="all">All</button>
+                    <button class="innovator-filter-btn px-4 py-2 text-sm font-medium rounded-full bg-gray-200 text-gray-700" data-filter="meat-analog">Meat Analogs</button>
+                    <button class="innovator-filter-btn px-4 py-2 text-sm font-medium rounded-full bg-gray-200 text-gray-700" data-filter="ingredient">Ingredients</button>
+                    <button class="innovator-filter-btn px-4 py-2 text-sm font-medium rounded-full bg-gray-200 text-gray-700" data-filter="bioconversion">Bioconversion</button>
+                </div>
+
+                <div id="innovators-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-white">
+        <div class="container mx-auto px-6 py-8 text-center">
+            <p>&copy; 2025 Intersectional Food Futures. An interactive summary based on public reports.</p>
+            <p class="text-sm text-gray-400 mt-2">Driven by humanitarian and peace engineering principles for a resilient planet.</p>
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('main section');
+
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.5
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.getAttribute('id');
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === `#${id}`) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    if (mobileMenu.classList.contains('hidden') === false) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+
+            const nutritionData = {
+                labels: ['Protein (g/100g)', 'Fat (g/100g)', 'Fiber (g/100g)'],
+                datasets: [
+                    {
+                        label: 'Mycoprotein',
+                        data: [11, 2.9, 6],
+                        backgroundColor: 'rgba(143, 188, 143, 0.6)',
+                        borderColor: 'rgba(143, 188, 143, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Beef (ground, lean)',
+                        data: [20, 15, 0],
+                        backgroundColor: 'rgba(210, 180, 140, 0.6)',
+                        borderColor: 'rgba(210, 180, 140, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            };
+
+            const nutritionCtx = document.getElementById('nutritionChart').getContext('2d');
+            new Chart(nutritionCtx, {
+                type: 'bar',
+                data: nutritionData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Nutritional Comparison per 100g'
+                        }
+                    }
+                }
+            });
+
+            const bioconversionData = {
+                okara: {
+                    title: 'Kynda on Soy/Oat Okara',
+                    text: 'Using wet fiber from plant milk production, Kynda produces a high-protein (~37% dry) mycelial biomass in just 48 hours. It contains all essential amino acids and valuable fiber, a sustainable outcome for agriculture.'
+                },
+                coffee: {
+                    title: 'Pleurotus on Spent Coffee Grounds',
+                    text: 'In projects like Nam in Lisbon, fresh oyster mushrooms are grown in shipping containers on local café waste. This provides local produce, diverts waste, and raises urban food consciousness, integrating food into the built environment.'
+                },
+                rapeseed: {
+                    title: 'Millow Foods on Rapeseed Press-Cake',
+                    text: 'Mycelium is grown on oilseed residue for human and animal food. This aligns with carbon reduction goals and is backed by large food companies to integrate mycoprotein into supply chains, promoting circular agriculture.'
+                }
+            };
+
+            const bioconversionDisplay = document.getElementById('bioconversion-display');
+            const substrateBtns = document.querySelectorAll('.substrate-btn');
+            
+            function updateBioconversion(substrate) {
+                 const data = bioconversionData[substrate];
+                 bioconversionDisplay.innerHTML = `
+                    <h4 class="text-lg font-bold mb-2">${data.title}</h4>
+                    <p class="text-gray-600">${data.text}</p>
+                 `;
+                 substrateBtns.forEach(btn => {
+                     btn.classList.remove('bg-amber-500', 'text-white');
+                     btn.classList.add('bg-gray-200', 'text-gray-700');
+                 });
+                 const activeBtn = document.querySelector(`.substrate-btn[data-substrate="${substrate}"]`);
+                 activeBtn.classList.add('bg-amber-500', 'text-white');
+                 activeBtn.classList.remove('bg-gray-200', 'text-gray-700');
+            }
+            
+            substrateBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    updateBioconversion(e.target.dataset.substrate);
+                });
+            });
+
+            updateBioconversion('okara');
+            
+            const fungusTabs = document.querySelectorAll('.fungus-tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            fungusTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const fungus = tab.dataset.fungus;
+                    
+                    fungusTabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        if (content.id === `fungus-${fungus}`) {
+                            content.classList.add('active');
+                        }
+                    });
+                });
+            });
+            
+            const cordycepinData = {
+                labels: ['Brown Rice', 'Mealworm', 'Silkworm Pupae', 'Beetle Larva'],
+                datasets: [{
+                    label: 'Cordycepin Yield (mg/g)',
+                    data: [0.9, 13.75, 2.6, 89.5],
+                    backgroundColor: 'rgba(217, 119, 6, 0.6)',
+                    borderColor: 'rgba(217, 119, 6, 1)',
+                    borderWidth: 1
+                }]
+            };
+
+            const cordycepinCtx = document.getElementById('cordycepinChart').getContext('2d');
+            new Chart(cordycepinCtx, {
+                type: 'bar',
+                data: cordycepinData,
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'Cordycepin Yield on Various Substrates'
+                        }
+                    },
+                    scales: {
+                         x: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'mg/g (dry weight)'
+                            }
+                        }
+                    }
+                }
+            });
+
+
+            const innovatorsData = [
+                { name: 'MyForest Foods', category: 'meat-analog', description: 'Grows whole-cut meat analogues like MyBacon from mushroom mycelium slabs, contributing to diversified protein sources.' },
+                { name: 'Kynda', category: 'ingredient', description: 'Uses food byproducts (okara) in a rapid fermentation process to produce B2B mycoprotein ingredients, embodying agricultural circularity.' },
+                { name: 'The Better Meat Co.', category: 'ingredient', description: 'Patented a method to create shelf-stable, rehydratable mycoprotein powder (Rhiza), enhancing food security through robust storage.' },
+                { name: 'Millow', category: 'bioconversion', description: 'Uses solid-state fermentation on grains to create a textured mycelium-grain matrix for foods like meatballs, a method applicable to home/kitchen production.' },
+                { name: 'Nature\'s Fynd', category: 'ingredient', description: 'Born from NASA research, cultivates Fy Protein from an extremophile fungus with minimal resources, ideal for resource-scarce environments and resilient food systems.' },
+                { name: 'MycoTechnology', category: 'bioconversion', description: 'Uses mycelial fermentation to improve plant-based foods, such as blocking bitterness in pea protein, making plant-based agriculture more palatable.' },
+                { name: 'Infinite Roots', category: 'meat-analog', description: 'A well-funded startup targeting whole-muscle meat alternatives using mycelium to mimic textures, expanding food options.' },
+                { name: 'Mush&', category: 'bioconversion', description: 'South Korean startup cultivating various mushroom strains in vertical bioreactors for food and feed applications, demonstrating advanced agricultural methods.' },
+            ];
+
+            const innovatorsGrid = document.getElementById('innovators-grid');
+            const filterBtns = document.querySelectorAll('.innovator-filter-btn');
+
+            function displayInnovators(filter) {
+                innovatorsGrid.innerHTML = '';
+                const filteredData = (filter === 'all')
+                    ? innovatorsData
+                    : innovatorsData.filter(item => item.category === filter);
+
+                filteredData.forEach(item => {
+                    const card = `
+                        <div class="innovator-card card bg-white p-6 rounded-lg shadow-md" data-category="${item.category}">
+                            <h4 class="text-xl font-bold mb-2 text-gray-800">${item.name}</h4>
+                            <p class="text-gray-600">${item.description}</p>
+                        </div>
+                    `;
+                    innovatorsGrid.innerHTML += card;
+                });
+            }
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const filter = btn.dataset.filter;
+                    displayInnovators(filter);
+                    
+                    filterBtns.forEach(b => {
+                        b.classList.remove('btn-primary');
+                        b.classList.add('bg-gray-200', 'text-gray-700');
+                    });
+                    btn.classList.add('btn-primary');
+                    btn.classList.remove('bg-gray-200', 'text-gray-700');
+                });
+            });
+
+            displayInnovators('all');
+
+        });
+    </script>
+</body>
+</html>
